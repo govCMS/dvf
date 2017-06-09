@@ -1,0 +1,10 @@
+services:
+  plugin.manager.visualisation:
+    class: Drupal\dvf\Plugin\VisualisationManager
+    arguments: ['@container.namespaces', '@cache.discovery', '@module_handler']
+  plugin.manager.visualisation.source:
+    class: Drupal\dvf\Plugin\VisualisationSourceManager
+    arguments: ['@container.namespaces', '@cache.discovery', '@module_handler']
+  plugin.manager.visualisation.style:
+    class: Drupal\dvf\Plugin\VisualisationStyleManager
+    arguments: ['@container.namespaces', '@cache.discovery', '@module_handler']

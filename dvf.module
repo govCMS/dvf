@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Data Visualisation Framework module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function dvf_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.dvf':
+      $output = '<p>' . t('The <a href=":dvf_url">Data Visualisation Framework</a> module makes it easy to generate visualisations from different data sources.', [':dvf_url' => 'https://www.drupal.org/project/dvf']) . '</p>';
+      return $output;
+  }
+}
