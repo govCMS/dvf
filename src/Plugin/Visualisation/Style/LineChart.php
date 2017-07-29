@@ -44,6 +44,25 @@ class LineChart extends AxisChart {
       '#title' => $this->t('Line chart settings'),
       '#tree' => TRUE,
     ];
+    
+    $form['line_chart']['stacked'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Stacked'),
+      '#description' => $this->t('Check to stack the lines on top of each other.'),
+      '#default_value' => $this->config('line_chart', 'stacked'),
+    ];
+    
+    $form['line_chart']['data']['order'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Stacked data order'),
+      '#description' => $this->t('Define the order of the stacked data.'),
+      '#options' => [
+        'asc' => $this->t('Ascending'),
+        'desc' => $this->t('Descending'),
+        '' => $this->t('Order defined in the dataset'),
+      ],
+      '#default_value' => $this->config('line_chart', 'data', 'order'),
+    ];
 
     $form['line_chart']['data']['points']['show'] = [
       '#type' => 'checkbox',
@@ -65,10 +84,29 @@ class LineChart extends AxisChart {
   /**
    * {@inheritdoc}
    */
+  public static function afterBuildSettingsForm(array $element, FormStateInterface $form_state) {
+    $element = parent::afterBuildSettingsForm($element, $form_state);
+
+    $selectors = [
+      'stacked' => self::formElementSelector($element['line_chart']['stacked'], 'input'),
+    ];
+
+    $element['line_chart']['data']['order']['#states'] = [
+      'visible' => [$selectors['stacked'] => ['checked' => TRUE]],
+    ];
+
+    return $element;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function chartBuildSettings(array $records) {
     $settings = parent::chartBuildSettings($records);
 
     $settings['chart']['data']['type'] = $this->config('line_chart', 'area', 'enabled') ? 'area' : 'line';
+    $settings['chart']['data']['stacked'] = $this->config('line_chart', 'stacked');
+    $settings['chart']['data']['groups'] = $this->config('data', 'fields');
     $settings['point']['show'] = $this->config('line_chart', 'data', 'points', 'show');
 
     return $settings;

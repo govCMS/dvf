@@ -31,7 +31,7 @@ class VisualisationUrlWidget extends WidgetBase {
     $element['uri'] = [
       '#type' => 'url',
       '#title' => $this->t('URL'),
-      '#description' => $this->t('This must be an external URL such as %url.', ['%url' => 'http://example.com']),
+      '#description' => $this->t('This must be an external URL in the format %url.', ['%url' => 'http://{CKAN_URL}/dataset/{package_id}/resource/{resource_id}']),
       '#default_value' => isset($items[$delta]->uri) ? $items[$delta]->uri : NULL,
       '#maxlength' => 2048,
       '#required' => $element['#required'],
