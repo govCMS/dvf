@@ -1,0 +1,8 @@
+name: CKAN Data Visualisation
+description: 'CKAN integration for the Data Visualisation Framework module.'
+type: module
+package: Data Visualisation Framework
+core: 8.x
+dependencies:
+  - ckan_connect
+  - dvf

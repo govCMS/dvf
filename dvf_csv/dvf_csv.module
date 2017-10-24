@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * CSV Data Visualisation module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function dvf_csv_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.dvf_csv':
+      $output = '<p>' . t('The <a href=":dvf_csv_url">CSV Data Visualisation</a> module integrates with the Data Visualisation Framework module providing CSV support.', [':dvf_csv_url' => 'https://www.drupal.org/project/dvf_csv']) . '</p>';
+      return $output;
+  }
+}
