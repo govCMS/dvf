@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * CKAN Data Visualisation module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function dvf_ckan_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.dvf_ckan':
+      $output = '<p>' . t('The <a href=":dvf_ckan_url">CKAN Data Visualisation</a> module integrates with the Data Visualisation Framework module providing CKAN support.', [':dvf_ckan_url' => 'https://www.drupal.org/project/dvf_ckan']) . '</p>';
+      return $output;
+  }
+}

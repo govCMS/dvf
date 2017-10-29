@@ -1,0 +1,7 @@
+name: CSV Data Visualisation
+description: 'CSV integration for the Data Visualisation Framework module.'
+type: module
+package: Data Visualisation Framework
+core: 8.x
+dependencies:
+  - dvf
