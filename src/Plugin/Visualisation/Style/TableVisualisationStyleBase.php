@@ -177,7 +177,7 @@ abstract class TableVisualisationStyleBase extends VisualisationStyleBase {
   }
 
   /**
-   * Returns table options as required by the library.
+   * Returns table options as required by Datatable library.
    *
    * @return array
    *    table options.

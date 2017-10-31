@@ -112,7 +112,10 @@ class Table extends TableVisualisationStyleBase {
   }
 
   /**
-   * {@inheritdoc}
+   * Returns Page length options.
+   *
+   * @return array
+   *    Page length options.
    */
   protected function getPageLengthOptions() {
     return [10 => 10, 25 => 25, 50 => 50, 100 => 100];
