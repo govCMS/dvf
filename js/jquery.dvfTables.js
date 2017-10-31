@@ -28,6 +28,7 @@
       this
         .parseData()
         .parseColumns()
+        .getTableOptions()
         .generateTable();
     },
 
@@ -64,6 +65,11 @@
 
       this.config.columns = columns;
 
+      return this;
+    },
+
+    getTableOptions: function () {
+      this.config = $.extend(this.config, this.options.tableOptions);
       return this;
     }
 
