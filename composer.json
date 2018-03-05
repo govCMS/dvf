@@ -1,0 +1,21 @@
+{
+  "name": "drupal/dvf",
+  "description": "The govCMS-CKAN module for Drupal 7, built by Doghouse for govCMS, brought a new dimension to dynamic data-driven content for Drupal websites.",
+  "type": "drupal-module",
+  "homepage": "http://drupal.org/project/dvf",
+  "authors": [
+    {
+      "name": "Jorge Castro",
+      "homepage": "https://www.drupal.org/u/jorgegc"
+    },
+    {
+      "name": "Toby Bellwood",
+      "homepage": "https://www.drupal.org/u/tobybellwood"
+    }
+  ],
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/dvf"
+  },
+  "license": "GPL-2.0+",
+  "require": { }
+}
