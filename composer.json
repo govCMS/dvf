@@ -1,5 +1,5 @@
 {
-  "name": "drupal/dvf",
+  "name": "govcms/dvf",
   "description": "The govCMS-CKAN module for Drupal 7, built by Doghouse for govCMS, brought a new dimension to dynamic data-driven content for Drupal websites.",
   "type": "drupal-module",
   "homepage": "http://drupal.org/project/dvf",
