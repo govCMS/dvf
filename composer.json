@@ -17,5 +17,8 @@
     "issues": "https://www.drupal.org/project/issues/dvf"
   },
   "license": "GPL-2.0+",
+  "version": "0.0.1",
+  "minimum-stability": "alpha",
+  "prefer-stable": true,
   "require": { }
 }
