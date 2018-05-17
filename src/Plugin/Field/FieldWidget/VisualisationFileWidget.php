@@ -7,19 +7,20 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\dvf\FieldWidgetTrait;
+use Drupal\file\Element\ManagedFile;
 
 /**
- * Plugin implementation of the 'dvf_url_default' field widget.
+ * Plugin implementation of the 'dvf_file_default' field widget.
  *
  * @FieldWidget(
- *   id = "dvf_url_default",
- *   label = @Translation("Visualisation URL"),
+ *   id = "dvf_file_default",
+ *   label = @Translation("Visualisation File"),
  *   field_types = {
- *     "dvf_url"
+ *     "dvf_file"
  *   }
  * )
  */
-class VisualisationUrlWidget extends WidgetBase {
+class VisualisationFileWidget extends WidgetBase {
 
   use FieldWidgetTrait;
 
@@ -27,18 +28,37 @@ class VisualisationUrlWidget extends WidgetBase {
    * {@inheritdoc}
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
+    $cardinality = $this->fieldDefinition->getFieldStorageDefinition()->getCardinality();
+    $values = $this->getFieldValue($items, $delta, $form, $form_state);
+
     $element['#type'] = 'fieldset';
     $element['#tree'] = TRUE;
 
-    $element['uri'] = [
-      '#type' => 'url',
-      '#title' => $this->t('URL'),
-      '#description' => $this->t('External url to dataset.'),
-      '#default_value' => isset($items[$delta]->uri) ? $items[$delta]->uri : NULL,
-      '#maxlength' => 2048,
-      '#required' => $element['#required'],
+    // File upload.
+    $element['file'] = [
+      '#type' => 'managed_file',
+      '#upload_location' => $items[$delta]->getUploadLocation(),
+      '#upload_validators' => $items[$delta]->getUploadValidators(),
+      '#value_callback' => [get_class($this), 'value'],
+      '#progress_indicator' => 'throbber',
+      // Allows this field to return an array instead of a single value.
+      '#extended' => TRUE,
     ];
 
+    $file_upload_help = [
+      '#theme' => 'file_upload_help',
+      '#upload_validators' => $element['file']['#upload_validators'],
+      '#cardinality' => $cardinality,
+    ];
+
+    $element['file']['#description'] = \Drupal::service('renderer')->renderPlain($file_upload_help);
+
+    // Default value for managed file expects an array of fids.
+    if (!empty($values[$delta]['file'])) {
+      $element['file']['#default_value'] = $values[$delta]['file'];
+    }
+
+    // Visualisation options.
     $element['options'] = [
       '#type' => 'details',
       '#title' => $this->t('Settings'),
@@ -79,6 +99,44 @@ class VisualisationUrlWidget extends WidgetBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function massageFormValues(array $values, array $form, FormStateInterface $form_state) {
+    // See FileWidget::massageFormValues() for the main reason for this
+    // method. It also restructures the values to suit the database schema.
+    $new_values = [];
+    $file_defaults = ['display' => 1, 'description' => ''];
+    foreach ($values as &$value) {
+      if (is_array($value) && isset($value['file'])) {
+        foreach ($value['file']['fids'] as $fid) {
+          $new_value = array_merge($file_defaults, $value);
+          $new_value['target_id'] = $fid;
+          unset($new_value['file']);
+          $new_values[] = $new_value;
+        }
+      }
+    }
+
+    return !empty($new_values) ? $new_values : $values;
+  }
+
+  /**
+   * Form API callback. Retrieves the value for the file_generic field element.
+   *
+   * This method is assigned as a #value_callback in formElement() method.
+   */
+  public static function value($element, $input, FormStateInterface $form_state) {
+    $return = ManagedFile::valueCallback($element, $input, $form_state);
+
+    // Ensure that all the required properties are returned even if empty.
+    $return += [
+      'fids' => [],
+    ];
+
+    return $return;
+  }
+
+  /**
    * Gets the visualisation plugin.
    *
    * @param \Drupal\Core\Field\FieldItemListInterface $items
@@ -109,6 +167,11 @@ class VisualisationUrlWidget extends WidgetBase {
         'plugin_id' => $this->getElementOptions($items, $delta, $form, $form_state, 'visualisation_style'),
       ],
     ];
+
+    if (!isset($values[$delta]['uri'])) {
+      $values = $this->massageFormValues($values, $form, $form_state);
+      $values[$delta]['uri'] = $items[$delta]->getFileUrl($values[$delta]['target_id']);
+    }
 
     if (!empty($values[$delta]['uri'])) {
       $plugin_configuration['uri'] = $values[$delta]['uri'];

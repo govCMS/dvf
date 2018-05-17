@@ -167,7 +167,8 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
    */
   protected function getSourceFieldOptions() {
     $fields = $this->visualisation->getSourcePlugin()->getFields();
-    return array_map('\Drupal\Component\Utility\Html::escape', $fields);
+    $options = array_map('\Drupal\Component\Utility\Html::escape', $fields);
+    return !empty($options) ? $options : [];
   }
 
   /**
@@ -182,7 +183,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
   protected function getSourceFieldValues($field_id) {
     $values = [];
 
-    foreach ($this->getSourceRecords() as $group_key => $group_records) {
+    foreach ($this->getSourceRecords() as $group_records) {
       foreach ($group_records as $record) {
         if (property_exists($record, $field_id)) {
           $values[] = $record->{$field_id};

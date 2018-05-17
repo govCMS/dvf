@@ -7,7 +7,7 @@ use Drupal\Component\Annotation\Plugin;
 /**
  * Defines a Visualisation annotation object.
  *
- * Plugin Namespace: Plugin\Visualisation
+ * Plugin Namespace: Plugin\Visualisation.
  *
  * @see \Drupal\dvf\Plugin\VisualisationInterface
  * @see \Drupal\dvf\Plugin\VisualisationManager

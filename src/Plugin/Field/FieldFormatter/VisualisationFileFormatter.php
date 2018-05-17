@@ -6,17 +6,17 @@ use Drupal\Core\Field\FormatterBase;
 use Drupal\dvf\FieldFormatterTrait;
 
 /**
- * Plugin implementation of the 'dvf_url_default' field formatter.
+ * Plugin implementation of the 'dvf_file_default' field formatter.
  *
  * @FieldFormatter(
- *   id = "dvf_url_default",
- *   label = @Translation("URL to visualisation"),
+ *   id = "dvf_file_default",
+ *   label = @Translation("File to visualisation"),
  *   field_types = {
- *     "dvf_url"
+ *     "dvf_file"
  *   }
  * )
  */
-class VisualisationUrlFormatter extends FormatterBase {
+class VisualisationFileFormatter extends FormatterBase {
 
   use FieldFormatterTrait;
 

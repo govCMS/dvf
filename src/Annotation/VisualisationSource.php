@@ -7,7 +7,7 @@ use Drupal\Component\Annotation\Plugin;
 /**
  * Defines a VisualisationSource annotation object.
  *
- * Plugin Namespace: Plugin\Visualisation\Source
+ * Plugin Namespace: Plugin\Visualisation\Source.
  *
  * @see \Drupal\dvf\Plugin\VisualisationSourceInterface
  * @see \Drupal\dvf\Plugin\VisualisationSourceManagerInterface
@@ -26,18 +26,18 @@ class VisualisationSource extends Plugin {
   /**
    * The label.
    *
-   * @ingroup plugin_translatable
-   *
    * @var \Drupal\Core\Annotation\Translation
+   *
+   * @ingroup plugin_translatable
    */
   public $label;
 
   /**
    * The category.
    *
-   * @ingroup plugin_translatable
-   *
    * @var \Drupal\Core\Annotation\Translation
+   *
+   * @ingroup plugin_translatable
    */
   public $category;
 

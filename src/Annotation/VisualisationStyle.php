@@ -7,7 +7,7 @@ use Drupal\Component\Annotation\Plugin;
 /**
  * Defines a VisualisationStyle annotation object.
  *
- * Plugin Namespace: Plugin\Visualisation\Style
+ * Plugin Namespace: Plugin\Visualisation\Style.
  *
  * @see \Drupal\dvf\Plugin\VisualisationStyleInterface
  * @see \Drupal\dvf\Plugin\VisualisationStyleManagerInterface
@@ -26,9 +26,9 @@ class VisualisationStyle extends Plugin {
   /**
    * The label.
    *
-   * @ingroup plugin_translatable
-   *
    * @var \Drupal\Core\Annotation\Translation
+   *
+   * @ingroup plugin_translatable
    */
   public $label;
 

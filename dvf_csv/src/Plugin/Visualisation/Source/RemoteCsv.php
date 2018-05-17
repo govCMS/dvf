@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @VisualisationSource(
  *   id = "dvf_csv_remote",
- *   label = @Translation("Remote CSV file"),
+ *   label = @Translation("CSV file"),
  *   category = @Translation("CSV"),
  *   type = "url"
  * )
@@ -145,7 +145,7 @@ class RemoteCsv extends VisualisationSourceBase implements ContainerFactoryPlugi
    */
   protected function getHeaders() {
     $data = $this->getData();
-    return array_shift($data);
+    return !empty($data) ? array_shift($data) : [];
   }
 
   /**

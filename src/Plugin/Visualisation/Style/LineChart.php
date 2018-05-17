@@ -44,14 +44,14 @@ class LineChart extends AxisChart {
       '#title' => $this->t('Line chart settings'),
       '#tree' => TRUE,
     ];
-    
+
     $form['line_chart']['stacked'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Stacked'),
       '#description' => $this->t('Check to stack the lines on top of each other.'),
       '#default_value' => $this->config('line_chart', 'stacked'),
     ];
-    
+
     $form['line_chart']['data']['order'] = [
       '#type' => 'select',
       '#title' => $this->t('Stacked data order'),
