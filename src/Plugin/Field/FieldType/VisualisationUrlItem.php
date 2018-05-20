@@ -8,6 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\TypedData\DataDefinition;
 use Drupal\Core\TypedData\MapDataDefinition;
 use Drupal\dvf\FieldTypeTrait;
+use Drupal\dvf\Plugin\VisualisationItemInterface;
 
 /**
  * Plugin implementation of the 'dvf_url' field type.
@@ -21,7 +22,7 @@ use Drupal\dvf\FieldTypeTrait;
  *   default_formatter = "dvf_url_default"
  * )
  */
-class VisualisationUrlItem extends FieldItemBase {
+class VisualisationUrlItem extends FieldItemBase implements VisualisationItemInterface {
 
   use FieldTypeTrait;
 

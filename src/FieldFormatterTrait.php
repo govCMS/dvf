@@ -24,7 +24,7 @@ trait FieldFormatterTrait {
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $element = [];
 
-    /** @var \Drupal\dvf\Plugin\Field\FieldType\VisualisationUrlItem $item */
+    /** @var \Drupal\dvf\Plugin\VisualisationItemInterface $item */
     foreach ($items as $delta => $item) {
       $element[$delta] = $item
         ->getVisualisationPlugin()

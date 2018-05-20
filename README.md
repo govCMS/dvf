@@ -45,7 +45,7 @@ this field type, see related modules above for modules currently available.
 * Then visit `Manage fields` for the entity type you want to add the 
   visualisation to eg `/admin/structure/types/manage/page/fields`
 * Click `Add field` and select either `Visualisation URL` or 
-  `Visualisation File` depeing on if the data source will be local or remote, 
+  `Visualisation File` depending on if the data source will be local or remote, 
   provide a name for the field and save.
 * Select the `Source type` for the field based on the type of data (requires a 
   data source module like `dvf_ckan` or `dvf_csv`).

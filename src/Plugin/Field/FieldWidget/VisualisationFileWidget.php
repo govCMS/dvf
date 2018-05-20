@@ -106,6 +106,7 @@ class VisualisationFileWidget extends WidgetBase {
     // method. It also restructures the values to suit the database schema.
     $new_values = [];
     $file_defaults = ['display' => 1, 'description' => ''];
+
     foreach ($values as &$value) {
       if (is_array($value) && isset($value['file'])) {
         foreach ($value['file']['fids'] as $fid) {
@@ -121,9 +122,19 @@ class VisualisationFileWidget extends WidgetBase {
   }
 
   /**
-   * Form API callback. Retrieves the value for the file_generic field element.
+   * Let ManagedFile deal with the value on the file element.
    *
    * This method is assigned as a #value_callback in formElement() method.
+   *
+   * @param array $element
+   *   Form element.
+   * @param array $input
+   *   Form input.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   Form state.
+   *
+   * @return array
+   *   An array containing the key `fids` which is an array of file entity ids.
    */
   public static function value($element, $input, FormStateInterface $form_state) {
     $return = ManagedFile::valueCallback($element, $input, $form_state);

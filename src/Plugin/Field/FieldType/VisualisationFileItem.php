@@ -8,6 +8,7 @@ use Drupal\Core\TypedData\MapDataDefinition;
 use Drupal\file\Plugin\Field\FieldType\FileItem;
 use Drupal\dvf\FieldTypeTrait;
 use Drupal\file\Entity\File;
+use Drupal\dvf\Plugin\VisualisationItemInterface;
 
 /**
  * Plugin implementation of the 'dvf_file' field type.
@@ -21,7 +22,7 @@ use Drupal\file\Entity\File;
  *   default_formatter = "dvf_file_default"
  * )
  */
-class VisualisationFileItem extends FileItem {
+class VisualisationFileItem extends FileItem implements VisualisationItemInterface {
 
   use FieldTypeTrait;
 
