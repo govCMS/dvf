@@ -2,27 +2,28 @@
 
 namespace Drupal\dvf\Plugin\Field\FieldType;
 
-use Drupal\Core\Field\FieldItemBase;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\TypedData\DataDefinition;
 use Drupal\Core\TypedData\MapDataDefinition;
+use Drupal\file\Plugin\Field\FieldType\FileItem;
 use Drupal\dvf\FieldTypeTrait;
+use Drupal\file\Entity\File;
 use Drupal\dvf\Plugin\VisualisationItemInterface;
 
 /**
- * Plugin implementation of the 'dvf_url' field type.
+ * Plugin implementation of the 'dvf_file' field type.
  *
  * @FieldType(
- *   id = "dvf_url",
- *   label = @Translation("Visualisation URL"),
- *   description = @Translation("Stores a URL string, and options to display a visualisation."),
+ *   id = "dvf_file",
+ *   label = @Translation("Visualisation File"),
+ *   description = @Translation("Saves a file locally, and options to display a visualisation."),
  *   category = @Translation("Data Visualisation Framework"),
- *   default_widget = "dvf_url_default",
- *   default_formatter = "dvf_url_default"
+ *   default_widget = "dvf_file_default",
+ *   default_formatter = "dvf_file_default",
+ *   list_class = "\Drupal\file\Plugin\Field\FieldType\FileFieldItemList"
  * )
  */
-class VisualisationUrlItem extends FieldItemBase implements VisualisationItemInterface {
+class VisualisationFileItem extends FileItem implements VisualisationItemInterface {
 
   use FieldTypeTrait;
 
@@ -39,8 +40,7 @@ class VisualisationUrlItem extends FieldItemBase implements VisualisationItemInt
    * {@inheritdoc}
    */
   public static function propertyDefinitions(FieldStorageDefinitionInterface $field_definition) {
-    $properties['uri'] = DataDefinition::create('uri')
-      ->setLabel(t('URI'));
+    $properties = parent::propertyDefinitions($field_definition);
 
     $properties['options'] = MapDataDefinition::create()
       ->setLabel(t('Options'));
@@ -52,57 +52,34 @@ class VisualisationUrlItem extends FieldItemBase implements VisualisationItemInt
    * {@inheritdoc}
    */
   public static function schema(FieldStorageDefinitionInterface $field_definition) {
-    return [
-      'columns' => [
-        'uri' => [
-          'description' => 'The URI of the source.',
-          'type' => 'varchar',
-          'length' => 2048,
-        ],
-        'options' => [
-          'description' => 'Serialized array of style options.',
-          'type' => 'blob',
-          'size' => 'big',
-          'serialize' => TRUE,
-        ],
-      ],
-      'indexes' => [
-        'uri' => [['uri', 30]],
-      ],
+    $schema = parent::schema($field_definition);
+
+    $schema['columns']['options'] = [
+      'description' => 'Serialized array of style options.',
+      'type' => 'blob',
+      'size' => 'big',
+      'serialize' => TRUE,
     ];
+
+    return $schema;
   }
 
   /**
    * {@inheritdoc}
    */
   public function fieldSettingsForm(array $form, FormStateInterface $form_state) {
-    $element = [];
-
-    $element['source_type'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Source type'),
-      '#description' => $this->t('Specify the source type allowed in this field.'),
-      '#options' => $this->getVisualisationSourceOptions(),
-      '#default_value' => $this->getSetting('source_type'),
-      '#required' => TRUE,
-    ];
+    $element = [
+      'source_type' => [
+        '#type' => 'select',
+        '#title' => $this->t('Source type'),
+        '#description' => $this->t('Specify the source type allowed in this field.'),
+        '#options' => $this->getVisualisationSourceOptions(),
+        '#default_value' => $this->getSetting('source_type'),
+        '#required' => TRUE,
+      ],
+    ] + parent::fieldSettingsForm($form, $form_state);
 
     return $element;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function isEmpty() {
-    $value = $this->get('uri')->getValue();
-    return ($value === NULL || $value === '');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function mainPropertyName() {
-    return 'uri';
   }
 
   /**
@@ -124,6 +101,41 @@ class VisualisationUrlItem extends FieldItemBase implements VisualisationItemInt
     }
 
     parent::setValue($values, $notify);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getValue() {
+    $values = parent::getValue();
+
+    $values['uri'] = '';
+    $values['file']['fids'] = [];
+
+    if (!empty($values['target_id'])) {
+      $values['uri'] = $this->getFileUrl($values['target_id']);
+      $values['file']['fids'] = [$values['target_id']];
+    }
+
+    return $values;
+  }
+
+  /**
+   * Return the full url to the file.
+   *
+   * @param int $fid
+   *   The entity id for the file.
+   *
+   * @return string
+   *   URL srting or NULL if no fid.
+   */
+  public function getFileUrl($fid = NULL) {
+    if (empty($fid)) {
+      return NULL;
+    }
+
+    $file = File::load($fid);
+    return !empty($file) ? file_create_url($file->getFileUri()) : NULL;
   }
 
   /**

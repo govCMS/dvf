@@ -4,4 +4,4 @@ type: module
 package: Data Visualisation Framework
 core: 8.x
 dependencies:
-  - dvf
+  - dvf:dvf

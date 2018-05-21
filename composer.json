@@ -1,0 +1,10 @@
+{
+  "name": "drupal/dvf",
+  "description": "Data Visualisation Framework makes it easy to generate visualisations from different data sources.",
+  "type": "drupal-module",
+  "license": "GPL-2.0+",
+  "minimum-stability": "dev",
+  "require": {
+    "drupal/core": "~8"
+  }
+}
