@@ -19,7 +19,8 @@ use Drupal\dvf\Plugin\VisualisationItemInterface;
  *   description = @Translation("Saves a file locally, and options to display a visualisation."),
  *   category = @Translation("Data Visualisation Framework"),
  *   default_widget = "dvf_file_default",
- *   default_formatter = "dvf_file_default"
+ *   default_formatter = "dvf_file_default",
+ *   list_class = "\Drupal\file\Plugin\Field\FieldType\FileFieldItemList"
  * )
  */
 class VisualisationFileItem extends FileItem implements VisualisationItemInterface {
