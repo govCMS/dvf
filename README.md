@@ -79,10 +79,10 @@ Submit pull requests [here](https://github.com/govCMS/dvf/pulls).
 
 ### Primary Developers
 
-[Doghouse Agency](https://www.drupal.org/doghouse-agency)
+[Doghouse Agency](http://doghouse.agency)
 
 ### Sponsors 
 
 * [govCMS](https://www.govcms.gov.au/)
-* [Dept of Environment](http://www.environment.gov.au/)
-* [Essential Services Commission](https://www.esc.vic.gov.au/)
+* [Department of Environment and Energy](http://www.environment.gov.au/)
+* [Essential Services Commission (Victoria)](https://www.esc.vic.gov.au/)
