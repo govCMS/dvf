@@ -77,7 +77,7 @@ class VisualisationFileWidget extends WidgetBase {
       '#required' => $element['#required'],
       '#ajax' => [
         'callback' => [$this, 'updateVisualisationOptions'],
-        'wrapper' => Html::cleanCssIdentifier('dvf-visualisation-options-' . $this->fieldDefinition->getName() . '-' . $delta),
+        'wrapper' => $this->getAjaxWrapperId($form, $this->fieldDefinition->getName(), $delta),
       ],
     ];
 

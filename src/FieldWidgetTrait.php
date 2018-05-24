@@ -106,4 +106,23 @@ trait FieldWidgetTrait {
     return !empty($form_values) ? $form_values : $item_values;
   }
 
+  /**
+   * Return a unique ID for the DVF options wrapper.
+   *
+   * @param array $form
+   *   The form array.
+   * @param $field_name
+   *   The field name.
+   * @param $delta
+   *   The delta of the field.
+   *
+   * @return string
+   *   A unique ID suitable for ajax wrappers.
+   */
+  protected function getAjaxWrapperId(array $form, $field_name, $delta) {
+    $parents = !empty($form['#parents']) ? $form['#parents'] : [];
+    $id_prefix = implode('-', array_merge($parents, [$field_name, $delta]));
+    return Html::getUniqueId($id_prefix . '-dvf-options');
+  }
+
 }
