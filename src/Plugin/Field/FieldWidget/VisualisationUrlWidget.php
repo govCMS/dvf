@@ -108,6 +108,7 @@ class VisualisationUrlWidget extends WidgetBase {
       'style' => [
         'plugin_id' => $this->getElementOptions($items, $delta, $form, $form_state, 'visualisation_style'),
       ],
+      'entity' => $items->getEntity(),
     ];
 
     if (!empty($values[$delta]['uri'])) {

@@ -177,6 +177,7 @@ class VisualisationFileWidget extends WidgetBase {
       'style' => [
         'plugin_id' => $this->getElementOptions($items, $delta, $form, $form_state, 'visualisation_style'),
       ],
+      'entity' => $items->getEntity(),
     ];
 
     if (!isset($values[$delta]['uri'])) {

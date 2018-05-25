@@ -107,4 +107,11 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
     return ($iterator instanceof \Countable) ? $iterator->count() : iterator_count($this->initializeIterator());
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getVisualisation() {
+    return $this->visualisation;
+  }
+
 }

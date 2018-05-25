@@ -61,6 +61,13 @@ abstract class VisualisationBase extends PluginBase implements VisualisationInte
   protected $stylePluginManager;
 
   /**
+   * The entity this visualisation is attached to.
+   *
+   * @var \Drupal\Core\Entity\EntityInterface
+   */
+  protected $entity;
+
+  /**
    * Constructs a new VisualisationBase.
    *
    * @param array $configuration
@@ -80,6 +87,7 @@ abstract class VisualisationBase extends PluginBase implements VisualisationInte
     $this->stylePluginManager = $style_plugin_manager;
     $this->source = $configuration['source'];
     $this->style = $configuration['style'];
+    $this->entity = $configuration['entity'];
   }
 
   /**
@@ -131,6 +139,13 @@ abstract class VisualisationBase extends PluginBase implements VisualisationInte
    */
   public function getStyleConfiguration() {
     return $this->style;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getEntity() {
+    return $this->entity;
   }
 
 }

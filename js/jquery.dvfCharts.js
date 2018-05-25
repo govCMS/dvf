@@ -61,6 +61,10 @@
 
       this.config.interaction = { enabled: this.options.chart.interaction };
 
+      if (plugin.options.chart.palette) {
+        this.config.color = {pattern: plugin.options.chart.palette.split(',')};
+      }
+
       return this;
     },
 

@@ -2,9 +2,6 @@
 
 namespace Drupal\dvf\Plugin\Field\FieldFormatter;
 
-use Drupal\Core\Field\FormatterBase;
-use Drupal\dvf\FieldFormatterTrait;
-
 /**
  * Plugin implementation of the 'dvf_file_default' field formatter.
  *
@@ -16,8 +13,4 @@ use Drupal\dvf\FieldFormatterTrait;
  *   }
  * )
  */
-class VisualisationFileFormatter extends FormatterBase {
-
-  use FieldFormatterTrait;
-
-}
+class VisualisationFileFormatter extends VisualisationUrlFormatter { }

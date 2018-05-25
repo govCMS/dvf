@@ -41,7 +41,13 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
    * {@inheritdoc}
    */
   public function getConfiguration() {
-    return NestedArray::mergeDeep($this->defaultConfiguration(), $this->configuration);
+    $configuration = NestedArray::mergeDeep($this->defaultConfiguration(), $this->configuration);
+
+    // Allow other modules to alter style configuration before build via
+    // hook_dvf_style_configuration_alter().
+    \Drupal::moduleHandler()->alter('dvf_style_configuration', $configuration, $this);
+
+    return $configuration;
   }
 
   /**
@@ -212,6 +218,9 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       }
     }
 
+    // Allow other modules to alter records via hook_dvf_records_alter().
+    \Drupal::moduleHandler()->alter('dvf_records', $records, $this);
+
     return $records;
   }
 
@@ -276,6 +285,24 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
    */
   protected function splitField() {
     return $this->config('data', 'split_field');
+  }
+
+  /**
+   * Post build tasks.
+   *
+   * @param array $build
+   *   The built style visualisation.
+   */
+  protected function postBuild(&$build) {
+    // Allow other modules to alter pre render via hook_dvf_build_alter().
+    \Drupal::moduleHandler()->alter('dvf_build', $build, $this);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getVisualisation() {
+    return $this->visualisation;
   }
 
 }
