@@ -22,6 +22,10 @@ class Table extends TableVisualisationStyleBase {
       'table' => [
         'table_header_field' => '',
         'row_header_field' => '',
+        'table_options' => [
+          'page_length' => 10,
+          'enable_searching' => TRUE,
+          ],
       ],
     ] + parent::defaultConfiguration();
   }
@@ -58,6 +62,21 @@ class Table extends TableVisualisationStyleBase {
       '#default_value' => $this->config('table', 'row_header_field'),
     ];
 
+    $form['table']['table_options']['page_length'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Page length'),
+      '#options' => $this->getPageLengthOptions(),
+      '#description' => $this->t('Number of rows to display on a single page when using pagination.'),
+      '#default_value' => $this->config('table', 'table_options', 'page_length'),
+    ];
+
+    $form['table']['table_options']['enable_searching'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable Searching'),
+      '#description' => $this->t('Allows the search abilities of DataTables.'),
+      '#default_value' => $this->config('table', 'table_options', 'enable_searching'),
+    ];
+
     return $form;
   }
 
@@ -92,6 +111,23 @@ class Table extends TableVisualisationStyleBase {
    */
   protected function rowHeaderField() {
     return $this->config('table', 'row_header_field');
+  }
+
+  /**
+   * Returns Page length options.
+   *
+   * @return array
+   *    Page length options.
+   */
+  protected function getPageLengthOptions() {
+    return [10 => 10, 25 => 25, 50 => 50, 100 => 100];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getTableOptions() {
+    return $this->config('table', 'table_options');
   }
 
 }
