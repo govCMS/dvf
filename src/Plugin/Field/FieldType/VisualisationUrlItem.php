@@ -19,7 +19,7 @@ use Drupal\dvf\Plugin\VisualisationItemInterface;
  *   description = @Translation("Stores a URL string, and options to display a visualisation."),
  *   category = @Translation("Data Visualisation Framework"),
  *   default_widget = "dvf_url_default",
- *   default_formatter = "dvf_url_default"
+ *   default_formatter = "dvf_default"
  * )
  */
 class VisualisationUrlItem extends FieldItemBase implements VisualisationItemInterface {
@@ -124,32 +124,6 @@ class VisualisationUrlItem extends FieldItemBase implements VisualisationItemInt
     }
 
     parent::setValue($values, $notify);
-  }
-
-  /**
-   * Gets the visualisation plugin.
-   *
-   * @return \Drupal\dvf\Plugin\VisualisationInterface
-   *   The visualisation plugin.
-   */
-  public function getVisualisationPlugin() {
-    $item = $this->getValue();
-
-    /** @var \Drupal\dvf\Plugin\VisualisationManagerInterface $plugin_manager */
-    $plugin_manager = \Drupal::service('plugin.manager.visualisation');
-
-    $plugin_id = $this->getFieldDefinition()->getType();
-    $plugin_configuration = [
-      'uri' => $item['uri'],
-      'options' => $item['options']['visualisation_options'],
-      'source' => ['plugin_id' => $this->getFieldDefinition()->getSetting('source_type')],
-      'style' => ['plugin_id' => $item['options']['visualisation_style']],
-    ];
-
-    /** @var \Drupal\dvf\Plugin\VisualisationInterface $plugin */
-    $plugin = $plugin_manager->createInstance($plugin_id, $plugin_configuration);
-
-    return $plugin;
   }
 
 }

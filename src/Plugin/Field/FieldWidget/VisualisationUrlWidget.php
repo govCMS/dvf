@@ -2,7 +2,6 @@
 
 namespace Drupal\dvf\Plugin\Field\FieldWidget;
 
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -57,7 +56,7 @@ class VisualisationUrlWidget extends WidgetBase {
       '#required' => $element['#required'],
       '#ajax' => [
         'callback' => [$this, 'updateVisualisationOptions'],
-        'wrapper' => Html::cleanCssIdentifier('dvf-visualisation-options-' . $this->fieldDefinition->getName() . '-' . $delta),
+        'wrapper' => $this->getAjaxWrapperId($form, $this->fieldDefinition->getName(), $delta),
       ],
     ];
 
@@ -108,6 +107,7 @@ class VisualisationUrlWidget extends WidgetBase {
       'style' => [
         'plugin_id' => $this->getElementOptions($items, $delta, $form, $form_state, 'visualisation_style'),
       ],
+      'entity' => $items->getEntity(),
     ];
 
     if (!empty($values[$delta]['uri'])) {

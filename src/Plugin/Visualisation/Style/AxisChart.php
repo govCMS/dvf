@@ -672,6 +672,8 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       ];
     }
 
+    $this->postBuild($build);
+
     return $build;
   }
 

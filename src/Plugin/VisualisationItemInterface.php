@@ -12,9 +12,12 @@ interface VisualisationItemInterface extends PluginInspectionInterface {
   /**
    * Gets the visualisation plugin.
    *
+   * @param array $default_options
+   *   Provide default options for the visualisation.
+   *
    * @return \Drupal\dvf\Plugin\VisualisationInterface
-   *   The visualisation plugin.
+   *   An instance of the visualisation plugin.
    */
-  public function getVisualisationPlugin();
+  public function getVisualisationPlugin(array $default_options = []);
 
 }

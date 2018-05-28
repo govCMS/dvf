@@ -31,4 +31,12 @@ interface VisualisationStyleInterface extends ConfigurablePluginInterface {
    */
   public function build();
 
+  /**
+   * Return an the current visualisation.
+   *
+   * @return \Drupal\dvf\Plugin\VisualisationInterface
+   *   Current visualisation instance.
+   */
+  public function getVisualisation();
+
 }

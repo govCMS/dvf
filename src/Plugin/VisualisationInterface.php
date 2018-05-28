@@ -41,4 +41,12 @@ interface VisualisationInterface extends PluginInspectionInterface {
    */
   public function getStyleConfiguration();
 
+  /**
+   * Gets the entity the DVF field is attached to.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface|null
+   *   Entity object or null if not available.
+   */
+  public function getEntity();
+
 }
