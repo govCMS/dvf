@@ -2,7 +2,6 @@
 
 namespace Drupal\dvf\Plugin\Field\FieldWidget;
 
-use Drupal\Component\Utility\Html;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -128,7 +127,7 @@ class VisualisationFileWidget extends WidgetBase {
    *
    * @param array $element
    *   Form element.
-   * @param array $input
+   * @param mixed $input
    *   Form input.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   Form state.
@@ -136,7 +135,7 @@ class VisualisationFileWidget extends WidgetBase {
    * @return array
    *   An array containing the key `fids` which is an array of file entity ids.
    */
-  public static function value($element, $input, FormStateInterface $form_state) {
+  public static function value(array $element, $input, FormStateInterface $form_state) {
     $return = ManagedFile::valueCallback($element, $input, $form_state);
 
     // Ensure that all the required properties are returned even if empty.

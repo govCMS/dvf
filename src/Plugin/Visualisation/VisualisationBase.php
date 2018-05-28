@@ -8,6 +8,7 @@ use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\VisualisationSourceManagerInterface;
 use Drupal\dvf\Plugin\VisualisationStyleManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Provides a base class for Visualisation plugins.
@@ -61,6 +62,13 @@ abstract class VisualisationBase extends PluginBase implements VisualisationInte
   protected $stylePluginManager;
 
   /**
+   * Module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  public $moduleHandler;
+
+  /**
    * The entity this visualisation is attached to.
    *
    * @var \Drupal\Core\Entity\EntityInterface
@@ -80,14 +88,24 @@ abstract class VisualisationBase extends PluginBase implements VisualisationInte
    *   The source plugin manager.
    * @param \Drupal\dvf\Plugin\VisualisationStyleManagerInterface $style_plugin_manager
    *   The style plugin manager.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   Instance of the module handler.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, VisualisationSourceManagerInterface $source_plugin_manager, VisualisationStyleManagerInterface $style_plugin_manager) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    VisualisationSourceManagerInterface $source_plugin_manager,
+    VisualisationStyleManagerInterface $style_plugin_manager,
+    ModuleHandlerInterface $module_handler
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->sourcePluginManager = $source_plugin_manager;
     $this->stylePluginManager = $style_plugin_manager;
     $this->source = $configuration['source'];
     $this->style = $configuration['style'];
-    $this->entity = $configuration['entity'];
+    $this->moduleHandler = $module_handler;
+    $this->entity = isset($configuration['entity']) ? $configuration['entity'] : NULL;
   }
 
   /**
@@ -99,7 +117,8 @@ abstract class VisualisationBase extends PluginBase implements VisualisationInte
       $plugin_id,
       $plugin_definition,
       $container->get('plugin.manager.visualisation.source'),
-      $container->get('plugin.manager.visualisation.style')
+      $container->get('plugin.manager.visualisation.style'),
+      $container->get('module_handler')
     );
   }
 

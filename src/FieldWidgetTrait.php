@@ -111,9 +111,9 @@ trait FieldWidgetTrait {
    *
    * @param array $form
    *   The form array.
-   * @param $field_name
+   * @param string $field_name
    *   The field name.
-   * @param $delta
+   * @param int $delta
    *   The delta of the field.
    *
    * @return string
@@ -122,6 +122,7 @@ trait FieldWidgetTrait {
   protected function getAjaxWrapperId(array $form, $field_name, $delta) {
     $parents = !empty($form['#parents']) ? $form['#parents'] : [];
     $id_prefix = implode('-', array_merge($parents, [$field_name, $delta]));
+
     return Html::getUniqueId($id_prefix . '-dvf-options');
   }
 

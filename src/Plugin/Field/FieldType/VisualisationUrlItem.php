@@ -19,7 +19,7 @@ use Drupal\dvf\Plugin\VisualisationItemInterface;
  *   description = @Translation("Stores a URL string, and options to display a visualisation."),
  *   category = @Translation("Data Visualisation Framework"),
  *   default_widget = "dvf_url_default",
- *   default_formatter = "dvf_url_default"
+ *   default_formatter = "dvf_default"
  * )
  */
 class VisualisationUrlItem extends FieldItemBase implements VisualisationItemInterface {

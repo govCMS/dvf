@@ -21,6 +21,13 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
   protected $visualisation;
 
   /**
+   * Module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
    * Constructs a new VisualisationStyleBase.
    *
    * @param array $configuration
@@ -35,6 +42,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
   public function __construct(array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->visualisation = $visualisation;
+    $this->moduleHandler = $visualisation->moduleHandler;
   }
 
   /**
@@ -45,7 +53,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
 
     // Allow other modules to alter style configuration before build via
     // hook_dvf_style_configuration_alter().
-    \Drupal::moduleHandler()->alter('dvf_style_configuration', $configuration, $this);
+    $this->moduleHandler->alter('dvf_style_configuration', $configuration, $this);
 
     return $configuration;
   }
@@ -174,6 +182,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
   protected function getSourceFieldOptions() {
     $fields = $this->visualisation->getSourcePlugin()->getFields();
     $options = array_map('\Drupal\Component\Utility\Html::escape', $fields);
+
     return !empty($options) ? $options : [];
   }
 
@@ -219,7 +228,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
     }
 
     // Allow other modules to alter records via hook_dvf_records_alter().
-    \Drupal::moduleHandler()->alter('dvf_records', $records, $this);
+    $this->moduleHandler->alter('dvf_records', $records, $this);
 
     return $records;
   }
@@ -293,9 +302,9 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
    * @param array $build
    *   The built style visualisation.
    */
-  protected function postBuild(&$build) {
+  protected function postBuild(array &$build) {
     // Allow other modules to alter pre render via hook_dvf_build_alter().
-    \Drupal::moduleHandler()->alter('dvf_build', $build, $this);
+    $this->moduleHandler->alter('dvf_build', $build, $this);
   }
 
   /**

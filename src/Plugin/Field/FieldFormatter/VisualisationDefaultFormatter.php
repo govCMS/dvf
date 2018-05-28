@@ -7,27 +7,28 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 
 /**
- * Plugin implementation of the 'dvf_url_default' field formatter.
+ * Plugin implementation of the 'dvf_default' field formatter.
  *
  * @FieldFormatter(
- *   id = "dvf_url_default",
- *   label = @Translation("URL to visualisation"),
+ *   id = "dvf_default",
+ *   label = @Translation("Visualisation"),
  *   field_types = {
- *     "dvf_url"
+ *     "dvf_url",
+ *     "dvf_file"
  *   }
  * )
  */
-class VisualisationUrlFormatter extends FormatterBase {
+class VisualisationDefaultFormatter extends FormatterBase {
 
   /**
    * {@inheritdoc}
    */
   public static function defaultSettings() {
     return [
-        'chart' => [
-          'palette' => ''
-        ],
-      ] + parent::defaultSettings();
+      'chart' => [
+        'palette' => '',
+      ],
+    ] + parent::defaultSettings();
   }
 
   /**
@@ -42,11 +43,12 @@ class VisualisationUrlFormatter extends FormatterBase {
     ];
 
     $element['chart']['palette'] = [
-      '#title' => t('Visualisation Palette'),
+      '#title' => $this->t('Visualisation Palette'),
       '#type' => 'textfield',
       '#default_value' => $settings['chart']['palette'],
-      '#description' => t('Palette is a comma separated list of hex values. If not set, default palette is applied. Not all visualisations will support this.'),
+      '#description' => $this->t('Palette is a comma separated list of hex values. If not set, default palette is applied. Not all visualisations will support this.'),
     ];
+
     return $element;
   }
 
@@ -56,7 +58,8 @@ class VisualisationUrlFormatter extends FormatterBase {
   public function settingsSummary() {
     $settings = $this->getSettings();
     $summary = [];
-    $summary[] = t('Visualisation palette @palette', ['@palette' => $settings['chart']['palette']]);
+    $summary[] = $this->t('Visualisation palette @palette', ['@palette' => $settings['chart']['palette']]);
+
     return $summary;
   }
 
@@ -73,6 +76,7 @@ class VisualisationUrlFormatter extends FormatterBase {
         ->getStylePlugin()
         ->build();
     }
+
     return $element;
   }
 

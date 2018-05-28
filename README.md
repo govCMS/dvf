@@ -84,5 +84,5 @@ Submit pull requests [here](https://github.com/govCMS/dvf/pulls).
 ### Sponsors 
 
 * [govCMS](https://www.govcms.gov.au/)
-* [Department of Environment and Energy](http://www.environment.gov.au/)
+* [Department of the Environment and Energy](http://www.environment.gov.au/)
 * [Essential Services Commission (Victoria)](https://www.esc.vic.gov.au/)
