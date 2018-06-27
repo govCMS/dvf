@@ -88,6 +88,10 @@
         data.order = this.options.chart.data.order;
       }
 
+      if (this.options.chart.data.names) {
+        data.names = this.options.chart.data.names;
+      }
+
       this.config.data = data;
 
       return this;

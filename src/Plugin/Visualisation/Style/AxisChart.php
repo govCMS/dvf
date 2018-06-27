@@ -738,6 +738,11 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       $settings['chart']['data']['columns'][] = array_merge([$field], $this->getSourceFieldValues($field));
     }
 
+    // Override fields labels if set in chart options.
+    if (!empty($this->configuration['data']['field_labels'])) {
+      $settings['chart']['data']['names'] = $this->fieldLabels();
+    }
+
     return $settings;
   }
 
