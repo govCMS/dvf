@@ -33,6 +33,7 @@
         .parseLegendOptions()
         .parsePointOptions()
         .parseBarOptions()
+        .parseGaugeOptions()
         .generateChart();
     },
 
@@ -276,6 +277,48 @@
       }
 
       this.config.bar = $.isEmptyObject(bar) ? null : bar;
+
+      return this;
+    },
+
+    parseGaugeOptions: function () {
+      var gauge = {},
+        gaugeLabelShow = this.getDeepProperty(this.options, 'gauge.label.show'),
+        gaugePercentage = this.getDeepProperty(this.options, 'gauge.label.percentage'),
+        gaugeMin = this.getDeepProperty(this.options, 'gauge.min'),
+        gaugeMax = this.getDeepProperty(this.options, 'gauge.max'),
+        gaugeUnits = this.getDeepProperty(this.options, 'gauge.units'),
+        gaugeWidth = this.getDeepProperty(this.options, 'gauge.width');
+        gauge.label = {
+          format: false,
+          show: false
+        };
+
+      if (gaugeLabelShow) {
+        gauge.label.show = gaugeLabelShow;
+      }
+
+      if (!gaugePercentage) {
+        gauge.label.format = function(value, ratio) { return value; }
+      }
+
+      if (gaugeMin) {
+        gauge.min = gaugeMin;
+      }
+
+      if (gaugeMax) {
+        gauge.max = gaugeMax;
+      }
+
+      if (gaugeUnits) {
+        gauge.units = gaugeUnits;
+      }
+
+      if (gaugeWidth) {
+        gauge.width = gaugeWidth;
+      }
+
+      this.config.gauge = $.isEmptyObject(gauge) ? null : gauge;
 
       return this;
     },
