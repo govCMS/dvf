@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * JSON Data Visualisation module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function dvf_json_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.dvf_json':
+      $output = '<p>' . t('The <a href=":dvf_json_url">JSON Data Visualisation</a> module integrates with the Data Visualisation Framework module providing JSON support.', [':dvf_json_url' => 'https://github.com/govCMS/dvf']) . '</p>';
+      return $output;
+  }
+}

@@ -7,7 +7,7 @@
  * @ingroup svf
  */
 
-use Drupal\dvf\Plugin\VisualisationStyleInterface;
+use Drupal\dvf\Plugin\VisualisationInterface;
 
 /**
  * @addtogroup hooks
@@ -15,29 +15,14 @@ use Drupal\dvf\Plugin\VisualisationStyleInterface;
  */
 
 /**
- * Alter the configuration settings prior to building visualisation.
- *
- * @param array $configuration
- *   An array of configuration options.
- * @param \Drupal\dvf\Plugin\VisualisationStyleInterface $visualisation_style
- *   Visualisation style instance.
- */
-function hook_dvf_style_configuration_alter(array &$configuration, VisualisationStyleInterface $visualisation_style) {
-  // Show a title only on a 'page' bundle.
-  if ($visualisation_style->getVisualisation()->getEntity()->bundle() == 'page') {
-    $configuration['chart']['title']['show'] = TRUE;
-  }
-}
-
-/**
- * Alter the built visualisation array pre render.
+ * Alter the visualisation render array pre render.
  *
  * @param array $build
- *   The built visualisation array pre render..
- * @param \Drupal\dvf\Plugin\VisualisationStyleInterface $visualisation_style
- *   Visualisation style instance.
+ *   The built visualisation render array.
+ * @param \Drupal\dvf\Plugin\VisualisationInterface $visualisation
+ *   The Visualisation instance.
  */
-function hook_dvf_build_alter(array &$build, VisualisationStyleInterface $visualisation_style) {
+function hook_dvf_visualisation_build_alter(array &$build, VisualisationInterface $visualisation) {
   // Add a custom class to all tables.
   foreach ($build as $group_id => &$item) {
     $item['table']['#attributes']['class'][] = 'my-table-' . $group_id;
@@ -45,17 +30,17 @@ function hook_dvf_build_alter(array &$build, VisualisationStyleInterface $visual
 }
 
 /**
- * Alter the records returned from the source plugin.
+ * Alter the visualisation data pre render.
  *
- * @param array $records
+ * @param array $data
  *   The parsed records from the data set.
- * @param \Drupal\dvf\Plugin\VisualisationStyleInterface $visualisation_style
- *   Visualisation style instance.
+ * @param \Drupal\dvf\Plugin\VisualisationInterface $visualisation
+ *   The Visualisation instance.
  */
-function hook_dvf_records_alter(array &$records, VisualisationStyleInterface $visualisation_style) {
+function hook_dvf_visualisation_data_alter(array &$data, VisualisationInterface $visualisation) {
   // Count all rows.
   $count = 0;
-  foreach ($records as $record) {
+  foreach ($data as $record) {
     foreach ($record as $value) {
       $count++;
     }

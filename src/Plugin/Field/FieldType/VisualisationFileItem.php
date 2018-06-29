@@ -32,7 +32,8 @@ class VisualisationFileItem extends FileItem implements VisualisationItemInterfa
    */
   public static function defaultFieldSettings() {
     return [
-      'source_type' => '',
+      'visualisation_source' => '',
+      'visualisation_source_options' => [],
     ] + parent::defaultFieldSettings();
   }
 
@@ -68,16 +69,8 @@ class VisualisationFileItem extends FileItem implements VisualisationItemInterfa
    * {@inheritdoc}
    */
   public function fieldSettingsForm(array $form, FormStateInterface $form_state) {
-    $element = [
-      'source_type' => [
-        '#type' => 'select',
-        '#title' => $this->t('Source type'),
-        '#description' => $this->t('Specify the source type allowed in this field.'),
-        '#options' => $this->getVisualisationSourceOptions(),
-        '#default_value' => $this->getSetting('source_type'),
-        '#required' => TRUE,
-      ],
-    ] + parent::fieldSettingsForm($form, $form_state);
+    $element = $this->fieldSettingsFormBase($form, $form_state);
+    $element += parent::fieldSettingsForm($form, $form_state);
 
     return $element;
   }
@@ -135,6 +128,7 @@ class VisualisationFileItem extends FileItem implements VisualisationItemInterfa
     }
 
     $file = File::load($fid);
+
     return !empty($file) ? file_create_url($file->getFileUri()) : NULL;
   }
 

@@ -3,15 +3,21 @@
 namespace Drupal\dvf\Plugin\Visualisation\Style;
 
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
+use Drupal\dvf\ConfigurablePluginTrait;
 use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\VisualisationStyleInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a base class for VisualisationStyle plugins.
  */
-abstract class VisualisationStyleBase extends PluginBase implements VisualisationStyleInterface {
+abstract class VisualisationStyleBase extends PluginBase implements VisualisationStyleInterface, ContainerFactoryPluginInterface {
+
+  use ConfigurablePluginTrait;
 
   /**
    * The visualisation.
@@ -21,7 +27,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
   protected $visualisation;
 
   /**
-   * Module handler.
+   * The module handler.
    *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
@@ -38,24 +44,47 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
    *   The plugin implementation definition.
    * @param \Drupal\dvf\Plugin\VisualisationInterface $visualisation
    *   The visualisation context in which the plugin will run.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation = NULL, ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->visualisation = $visualisation;
-    $this->moduleHandler = $visualisation->moduleHandler;
+    $this->moduleHandler = $module_handler;
+  }
+
+  /**
+   * Creates an instance of the plugin.
+   *
+   * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+   *   The container to pull out services used in the plugin.
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin ID for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\dvf\Plugin\VisualisationInterface $visualisation
+   *   The visualisation context in which the plugin will run.
+   *
+   * @return static
+   *   Returns an instance of this plugin.
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation = NULL) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $visualisation,
+      $container->get('module_handler')
+    );
   }
 
   /**
    * {@inheritdoc}
    */
   public function getConfiguration() {
-    $configuration = NestedArray::mergeDeep($this->defaultConfiguration(), $this->configuration);
-
-    // Allow other modules to alter style configuration before build via
-    // hook_dvf_style_configuration_alter().
-    $this->moduleHandler->alter('dvf_style_configuration', $configuration, $this);
-
-    return $configuration;
+    return NestedArray::mergeDeep($this->defaultConfiguration(), $this->configuration);
   }
 
   /**
@@ -76,36 +105,6 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
         'split_field' => '',
       ],
     ];
-  }
-
-  /**
-   * Gets deeply nested configuration for this plugin.
-   *
-   * @param string ...
-   *   The ordered set of keys (e.g. 'key1, key2, key3').
-   *
-   * @return mixed
-   *   The value of the last element in the key path if found, NULL otherwise.
-   */
-  protected function config() {
-    $key_path = func_get_args();
-    $haystack = $this->getConfiguration();
-
-    while ($key_path) {
-      $key = array_shift($key_path);
-
-      if (!array_key_exists($key, $haystack)) {
-        return NULL;
-      }
-
-      if (empty($key_path)) {
-        return $haystack[$key];
-      }
-
-      $haystack = $haystack[$key];
-    }
-
-    return NULL;
   }
 
   /**
@@ -218,7 +217,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
   public function getSourceRecords() {
     $records = [];
 
-    foreach ($this->visualisation->getSourcePlugin() as $record) {
+    foreach ($this->getVisualisation()->data() as $record) {
       if ($this->splitField() && property_exists($record, $this->splitField())) {
         $records[$record->{$this->splitField()}][] = $record;
       }
@@ -226,9 +225,6 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
         $records['all'][] = $record;
       }
     }
-
-    // Allow other modules to alter records via hook_dvf_records_alter().
-    $this->moduleHandler->alter('dvf_records', $records, $this);
 
     return $records;
   }
@@ -294,17 +290,6 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
    */
   protected function splitField() {
     return $this->config('data', 'split_field');
-  }
-
-  /**
-   * Post build tasks.
-   *
-   * @param array $build
-   *   The built style visualisation.
-   */
-  protected function postBuild(array &$build) {
-    // Allow other modules to alter pre render via hook_dvf_build_alter().
-    $this->moduleHandler->alter('dvf_build', $build, $this);
   }
 
   /**

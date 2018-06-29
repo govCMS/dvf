@@ -42,10 +42,10 @@ class VisualisationSource extends Plugin {
   public $category;
 
   /**
-   * The type.
+   * The visualisation types this plugins supports.
    *
    * @var string
    */
-  public $type;
+  public $visualisation_types;
 
 }

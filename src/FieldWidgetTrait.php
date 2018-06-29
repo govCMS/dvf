@@ -59,7 +59,7 @@ trait FieldWidgetTrait {
     $triggering_element = $form_state->getTriggeringElement();
     $elements = NestedArray::getValue($form, array_slice($triggering_element['#array_parents'], 0, -1));
 
-    return $elements['visualisation_options'];
+    return $elements['visualisation_style_options'];
   }
 
   /**

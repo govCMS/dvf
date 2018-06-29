@@ -32,7 +32,7 @@ class VisualisationSourceManager extends VisualisationPluginManager implements V
     $plugins = [];
 
     foreach ($this->getDefinitions() as $plugin_id => $plugin) {
-      if ($plugin['type'] === $type) {
+      if (in_array($type, $plugin['visualisation_types'])) {
         $plugins[$plugin_id] = $plugin;
       }
     }

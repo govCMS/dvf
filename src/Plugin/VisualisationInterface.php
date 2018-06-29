@@ -2,12 +2,13 @@
 
 namespace Drupal\dvf\Plugin;
 
+use Drupal\Component\Plugin\ConfigurablePluginInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 
 /**
  * Provides an interface defining a Visualisation plugin.
  */
-interface VisualisationInterface extends PluginInspectionInterface {
+interface VisualisationInterface extends ConfigurablePluginInterface, PluginInspectionInterface {
 
   /**
    * Returns the source plugin.
@@ -48,5 +49,22 @@ interface VisualisationInterface extends PluginInspectionInterface {
    *   Entity object or null if not available.
    */
   public function getEntity();
+
+  /**
+   * Returns the data records used by this visualisation.
+   *
+   * @return array
+   *   An array of data records.
+   */
+  public function data();
+
+  /**
+   * Renders this visualisation.
+   *
+   * @return array
+   *   A render array as expected by
+   *   \Drupal\Core\Render\RendererInterface::render().
+   */
+  public function render();
 
 }
