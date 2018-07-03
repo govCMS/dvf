@@ -739,9 +739,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     }
 
     // Override fields labels if set in chart options.
-    if (!empty($this->configuration['data']['field_labels'])) {
-      $settings['chart']['data']['names'] = $this->fieldLabels();
-    }
+    $settings['chart']['data']['names'] = $this->fieldLabels();
 
     return $settings;
   }
