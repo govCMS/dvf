@@ -41,7 +41,7 @@ class Table extends TableVisualisationStyleBase {
     $form['table']['table_header_field'] = [
       '#type' => 'select',
       '#title' => $this->t('Table header field'),
-      '#description' => $this->t('What field contains the table header.'),
+      '#description' => $this->t("Optionally select a field to use it's values as the table headers."),
       '#options' => $this->getSourceFieldOptions(),
       '#empty_option' => $this->t('- None -'),
       '#empty_value' => '',
@@ -51,7 +51,7 @@ class Table extends TableVisualisationStyleBase {
     $form['table']['row_header_field'] = [
       '#type' => 'select',
       '#title' => $this->t('Row header field'),
-      '#description' => $this->t('What field contains the row header. This option is ignored if table header field is selected.'),
+      '#description' => $this->t("Optionally select a field to use it's values as the row headers. This option is ignored if the above table header field is selected."),
       '#options' => $this->getSourceFieldOptions(),
       '#empty_option' => $this->t('- None -'),
       '#empty_value' => '',

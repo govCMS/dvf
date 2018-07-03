@@ -130,7 +130,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
     $form['data']['fields'] = [
       '#type' => 'select',
       '#title' => $this->t('Fields'),
-      '#description' => $this->t('What fields to include in the visualisation.'),
+      '#description' => $this->t("What fields to include in the visualisation. Select at least one field to display it's data. A field is typically a column in a CSV."),
       '#options' => $this->getSourceFieldOptions(),
       '#multiple' => TRUE,
       '#size' => 5,
@@ -143,12 +143,13 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       '#description' => $this->t('Optionally override one or more field labels. Add one original_label|new_label per line and separate with a pipe.'),
       '#rows' => 2,
       '#default_value' => $this->config('data', 'field_labels'),
+      '#placeholder' => 'Old label|New label',
     ];
 
     $form['data']['split_field'] = [
       '#type' => 'select',
       '#title' => $this->t('Split field'),
-      '#description' => $this->t('Optionally split into multiple visualisations based on the value of this field.'),
+      '#description' => $this->t('Optionally split into multiple visualisations based on the value of this field. A new visualisation will be made for each unique value in this field.'),
       '#options' => $this->getSourceFieldOptions(),
       '#empty_option' => $this->t('- None -'),
       '#empty_value' => '',

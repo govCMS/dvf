@@ -47,14 +47,14 @@ class SplineChart extends AxisChart {
     $form['spline_chart']['data']['points']['show'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Show data points'),
-      '#description' => $this->t('Check to show the points along the lines.'),
+      '#description' => $this->t('Check to show the data-value points along the lines.'),
       '#default_value' => $this->config('spline_chart', 'data', 'points', 'show'),
     ];
 
     $form['spline_chart']['area']['enabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable area'),
-      '#description' => $this->t('Check to fill in the area between the X axis and the lines.'),
+      '#description' => $this->t('Check to fill in the area between the X axis and the lines with colour.'),
       '#default_value' => $this->config('spline_chart', 'area', 'enabled'),
     ];
 
