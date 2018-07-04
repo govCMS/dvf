@@ -15,6 +15,36 @@ use Drupal\dvf\Plugin\VisualisationInterface;
  */
 
 /**
+ * Alter the visualisation source configuration.
+ *
+ * @param array $configuration
+ *   The configuration options.
+ * @param \Drupal\dvf\Plugin\VisualisationInterface $visualisation
+ *   The Visualisation instance.
+ */
+function hook_dvf_source_configuration_alter(array &$configuration, VisualisationInterface $visualisation) {
+  // Change the JSON expression for entity whose id is '12345'.
+  if ($visualisation->getEntity()->id() == '12345') {
+    $configuration['json']['expression'] = '$.books[?(@.price > 10)]';
+  }
+}
+
+/**
+ * Alter the visualisation style configuration.
+ *
+ * @param array $configuration
+ *   The configuration options.
+ * @param \Drupal\dvf\Plugin\VisualisationInterface $visualisation
+ *   The Visualisation instance.
+ */
+function hook_dvf_style_configuration_alter(array &$configuration, VisualisationInterface $visualisation) {
+  // Show a title only on a 'page' bundle.
+  if ($visualisation->getEntity()->bundle() == 'page') {
+    $configuration['chart']['title']['show'] = TRUE;
+  }
+}
+
+/**
  * Alter the visualisation render array pre render.
  *
  * @param array $build

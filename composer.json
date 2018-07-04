@@ -5,6 +5,10 @@
     "homepage": "https://github.com/govCMS/dvf",
     "authors": [
         {
+            "name": "Jeremy Graham",
+            "homepage": "https://www.drupal.org/u/jez500"
+        },
+        {
             "name": "Jorge Castro",
             "homepage": "https://www.drupal.org/u/jorgegc"
         },

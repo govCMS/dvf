@@ -160,6 +160,10 @@ abstract class VisualisationBase extends PluginBase implements VisualisationInte
   public function getSourcePlugin() {
     if (!isset($this->sourcePlugin)) {
       $configuration = $this->getSourceConfiguration();
+
+      // Let other modules alter the source configuration.
+      $this->moduleHandler->alter('dvf_source_configuration', $configuration['options'], $this);
+
       $this->sourcePlugin = $this->sourcePluginManager->createInstance($configuration['plugin_id'], $configuration['options'], $this);
     }
 
@@ -172,6 +176,10 @@ abstract class VisualisationBase extends PluginBase implements VisualisationInte
   public function getStylePlugin() {
     if (!isset($this->stylePlugin)) {
       $configuration = $this->getStyleConfiguration();
+
+      // Let other modules alter the style configuration.
+      $this->moduleHandler->alter('dvf_style_configuration', $configuration['options'], $this);
+
       $this->stylePlugin = $this->stylePluginManager->createInstance($configuration['plugin_id'], $configuration['options'], $this);
     }
 

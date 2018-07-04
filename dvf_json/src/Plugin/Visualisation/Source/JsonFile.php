@@ -6,6 +6,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\Url;
 use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\Visualisation\Source\VisualisationSourceBase;
 use Flow\JSONPath\JSONPath;
@@ -133,7 +134,7 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
     $form['json']['expression'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Expression'),
-      '#description' => 'JSONPath expression used to extract the data (e.g. $.store.book[*]).',
+      '#description' => $this->t('JSONPath expression used to extract the data. Visit the <a href="https://github.com/govCMS/dvf/tree/8.x-1.x/dvf_json">online documentation</a> for more information on how to use JSONPath expressions.'),
       '#default_value' => $this->config('json', 'expression'),
     ];
 

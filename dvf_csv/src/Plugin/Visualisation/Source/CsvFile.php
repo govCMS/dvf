@@ -252,7 +252,7 @@ class CsvFile extends VisualisationSourceBase implements ContainerFactoryPluginI
       $enclosure = $this->config('csv', 'enclosure');
       $escape = $this->config('csv', 'escape');
 
-      foreach (explode(PHP_EOL, $response) as $line) {
+      foreach (preg_split('/\r\n|\r|\n/', $response) as $line) {
         $data[] = str_getcsv($line, $delimiter, $enclosure, $escape);
       }
     }
