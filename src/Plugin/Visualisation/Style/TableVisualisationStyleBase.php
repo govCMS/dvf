@@ -44,7 +44,6 @@ abstract class TableVisualisationStyleBase extends VisualisationStyleBase {
     return [
       'data' => $this->getTableRows($records),
       'columns' => $this->getTableHeader(),
-      'tableOptions' => $this->parseTableOptions(),
     ];
   }
 
@@ -63,14 +62,6 @@ abstract class TableVisualisationStyleBase extends VisualisationStyleBase {
    *   The row header field.
    */
   abstract protected function rowHeaderField();
-
-  /**
-   * Gets the table options.
-   *
-   * @return array
-   *   The table options.
-   */
-  abstract protected function getTableOptions();
 
   /**
    * Gets the table header.
@@ -173,20 +164,6 @@ abstract class TableVisualisationStyleBase extends VisualisationStyleBase {
     return [
       'data' => $value,
       'header' => FALSE,
-    ];
-  }
-
-  /**
-   * Returns table options as required by Datatable library.
-   *
-   * @return array
-   *   table options.
-   */
-  protected function parseTableOptions() {
-    $options = $this->getTableOptions();
-    return [
-      'pageLength' => $options['page_length'],
-      'searching' => $options['enable_searching'],
     ];
   }
 

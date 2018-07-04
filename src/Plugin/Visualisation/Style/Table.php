@@ -22,9 +22,9 @@ class Table extends TableVisualisationStyleBase {
       'table' => [
         'table_header_field' => '',
         'row_header_field' => '',
-        'table_options' => [
+        'options' => [
           'page_length' => 10,
-          'enable_searching' => TRUE,
+          'searching' => TRUE,
         ],
       ],
     ] + parent::defaultConfiguration();
@@ -62,19 +62,25 @@ class Table extends TableVisualisationStyleBase {
       '#default_value' => $this->config('table', 'row_header_field'),
     ];
 
-    $form['table']['table_options']['page_length'] = [
+    $form['table']['options'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Table options'),
+      '#tree' => TRUE,
+    ];
+
+    $form['table']['options']['page_length'] = [
       '#type' => 'select',
       '#title' => $this->t('Page length'),
       '#options' => $this->getPageLengthOptions(),
-      '#description' => $this->t('Number of rows to display on a single page when using pagination.'),
-      '#default_value' => $this->config('table', 'table_options', 'page_length'),
+      '#description' => $this->t('Number of rows per page.'),
+      '#default_value' => $this->config('table', 'options', 'page_length'),
     ];
 
-    $form['table']['table_options']['enable_searching'] = [
+    $form['table']['options']['searching'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Enable Searching'),
+      '#title' => $this->t('Enable searching'),
       '#description' => $this->t('Allows the search abilities of DataTables.'),
-      '#default_value' => $this->config('table', 'table_options', 'enable_searching'),
+      '#default_value' => $this->config('table', 'options', 'searching'),
     ];
 
     return $form;
@@ -114,20 +120,25 @@ class Table extends TableVisualisationStyleBase {
   }
 
   /**
-   * Returns Page length options.
-   *
-   * @return array
-   *   Page length options.
+   * {@inheritdoc}
    */
-  protected function getPageLengthOptions() {
-    return [10 => 10, 25 => 25, 50 => 50, 100 => 100];
+  protected function tableBuildSettings(array $records) {
+    $settings = parent::tableBuildSettings($records);
+
+    $settings['tableOptions']['pageLength'] = (int) $this->config('table', 'options', 'page_length');
+    $settings['tableOptions']['searching'] = $this->config('table', 'options', 'searching');
+
+    return $settings;
   }
 
   /**
-   * {@inheritdoc}
+   * Returns page length options.
+   *
+   * @return array
+   *   An array of page length options.
    */
-  protected function getTableOptions() {
-    return $this->config('table', 'table_options');
+  protected function getPageLengthOptions() {
+    return [10 => 10, 25 => 25, 50 => 50, 100 => 100];
   }
 
 }

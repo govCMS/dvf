@@ -9,7 +9,7 @@
     attach: function (context) {
       $('[data-dvftables]', context).each(function () {
         var $table = $(this),
-          tableId = $table.data('dvftables');
+            tableId = $table.data('dvftables');
         $table.dvfTables(drupalSettings.dvf.tables[tableId]);
       });
     }

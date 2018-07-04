@@ -28,7 +28,7 @@
       this
         .parseData()
         .parseColumns()
-        .getTableOptions()
+        .parseTableOptions()
         .generateTable();
     },
 
@@ -68,8 +68,11 @@
       return this;
     },
 
-    getTableOptions: function () {
-      this.config = $.extend(this.config, this.options.tableOptions);
+    parseTableOptions: function () {
+      if (this.options.tableOptions) {
+        this.config = $.extend(this.config, this.options.tableOptions);
+      }
+
       return this;
     }
 
