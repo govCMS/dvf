@@ -15,7 +15,7 @@ d3:
   remote: https://github.com/d3/d3
   version: "3.5.17"
   license:
-    name: MIT
+    name: BSD-3
     url: https://github.com/d3/d3/blob/master/LICENSE
     gpl-compatible: true
   js:
