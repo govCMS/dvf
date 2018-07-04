@@ -281,6 +281,14 @@
       return this;
     },
 
+    /**
+     * Parse user settings into object suitable for use with C3 Gauge Chart.
+     *
+     * @example https://c3js.org/samples/chart_gauge.html
+     * @see https://c3js.org/reference.html#gauge-label-show
+     *
+     * @returns {Plugin}
+     */
     parseGaugeOptions: function () {
       var gauge = {},
         gaugeLabelShow = this.getDeepProperty(this.options, 'gauge.label.show'),
