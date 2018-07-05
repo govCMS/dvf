@@ -31,7 +31,8 @@ class VisualisationUrlItem extends FieldItemBase implements VisualisationItemInt
    */
   public static function defaultFieldSettings() {
     return [
-      'source_type' => '',
+      'visualisation_source' => '',
+      'visualisation_source_options' => [],
     ] + parent::defaultFieldSettings();
   }
 
@@ -76,18 +77,7 @@ class VisualisationUrlItem extends FieldItemBase implements VisualisationItemInt
    * {@inheritdoc}
    */
   public function fieldSettingsForm(array $form, FormStateInterface $form_state) {
-    $element = [];
-
-    $element['source_type'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Source type'),
-      '#description' => $this->t('Specify the source type allowed in this field.'),
-      '#options' => $this->getVisualisationSourceOptions(),
-      '#default_value' => $this->getSetting('source_type'),
-      '#required' => TRUE,
-    ];
-
-    return $element;
+    return $this->fieldSettingsFormBase($form, $form_state);
   }
 
   /**

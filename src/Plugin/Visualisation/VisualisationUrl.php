@@ -15,20 +15,10 @@ class VisualisationUrl extends VisualisationBase {
    * {@inheritdoc}
    */
   public function getSourceConfiguration() {
-    $configuration = parent::getSourceConfiguration();
-    $configuration['uri'] = $this->configuration['uri'];
+    $source = parent::getSourceConfiguration();
+    $source['options']['uri'] = $this->config('options', 'uri');
 
-    return $configuration;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getStyleConfiguration() {
-    $configuration = parent::getStyleConfiguration();
-    $configuration += $this->configuration['options'];
-
-    return $configuration;
+    return $source;
   }
 
 }

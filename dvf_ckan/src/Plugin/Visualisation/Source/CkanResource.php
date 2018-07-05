@@ -5,6 +5,7 @@ namespace Drupal\dvf_ckan\Plugin\Visualisation\Source;
 use Drupal\ckan_connect\Client\CkanClientInterface;
 use Drupal\ckan_connect\Parser\CkanResourceUrlParserInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\Visualisation\Source\VisualisationSourceBase;
@@ -17,7 +18,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "dvf_ckan_resource",
  *   label = @Translation("CKAN resource"),
  *   category = @Translation("CKAN"),
- *   type = "url"
+ *   visualisation_types = {
+ *     "dvf_file",
+ *     "dvf_url"
+ *   }
  * )
  */
 class CkanResource extends VisualisationSourceBase implements ContainerFactoryPluginInterface {
@@ -58,7 +62,7 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
   protected $records;
 
   /**
-   * Constructs a new CkanSource.
+   * Constructs a new CkanResource.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
@@ -68,6 +72,8 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
    *   The plugin implementation definition.
    * @param \Drupal\dvf\Plugin\VisualisationInterface $visualisation
    *   The visualisation context in which the plugin will run.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The cache backend.
    * @param \Drupal\ckan_connect\Client\CkanClientInterface $ckan_client
@@ -75,8 +81,8 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
    * @param \Drupal\ckan_connect\Parser\CkanResourceUrlParserInterface $ckan_resource_url_parser
    *   The CKAN resource URL parser.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation, CacheBackendInterface $cache, CkanClientInterface $ckan_client, CkanResourceUrlParserInterface $ckan_resource_url_parser) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $visualisation);
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation = NULL, ModuleHandlerInterface $module_handler, CacheBackendInterface $cache, CkanClientInterface $ckan_client, CkanResourceUrlParserInterface $ckan_resource_url_parser) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $visualisation, $module_handler);
     $this->cache = $cache;
     $this->ckanClient = $ckan_client;
     $this->ckanResourceUrlParser = $ckan_resource_url_parser;
@@ -105,17 +111,11 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
       $plugin_id,
       $plugin_definition,
       $visualisation,
+      $container->get('module_handler'),
       $container->get('cache.dvf_ckan'),
       $container->get('ckan_connect.client'),
       $container->get('ckan_connect.resource_url_parser')
     );
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function initializeIterator() {
-    return new \ArrayIterator($this->getRecords());
   }
 
   /**
@@ -166,10 +166,7 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
   }
 
   /**
-   * Returns the records.
-   *
-   * @return array
-   *   An array of CKAN resource records.
+   * {@inheritdoc}
    */
   public function getRecords() {
     $cache_key = $this->getCacheKey('records');
@@ -244,7 +241,7 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
    *   The CKAN resource ID.
    */
   protected function getResourceId() {
-    return $this->ckanResourceUrlParser->getResourceId($this->configuration['uri']);
+    return $this->ckanResourceUrlParser->getResourceId($this->config('uri'));
   }
 
   /**

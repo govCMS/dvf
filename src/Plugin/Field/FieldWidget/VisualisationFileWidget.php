@@ -80,7 +80,7 @@ class VisualisationFileWidget extends WidgetBase {
       ],
     ];
 
-    $element['options']['visualisation_options'] = [
+    $element['options']['visualisation_style_options'] = [
       '#type' => 'container',
       '#attributes' => ['id' => $element['options']['visualisation_style']['#ajax']['wrapper']],
     ];
@@ -88,10 +88,10 @@ class VisualisationFileWidget extends WidgetBase {
     $style_id = $this->getElementOptions($items, $delta, $form, $form_state, 'visualisation_style');
 
     if ($style_id) {
-      $element['options']['visualisation_options'] += $this
+      $element['options']['visualisation_style_options'] += $this
         ->getVisualisationPlugin($items, $delta, $form, $form_state)
         ->getStylePlugin()
-        ->settingsForm($element['options']['visualisation_options'], $form_state);
+        ->settingsForm($element['options']['visualisation_style_options'], $form_state);
     }
 
     return $element;
@@ -162,19 +162,23 @@ class VisualisationFileWidget extends WidgetBase {
    *   The visualisation plugin.
    */
   protected function getVisualisationPlugin(FieldItemListInterface $items, $delta, array $form, FormStateInterface $form_state) {
+    $values = $this->getFieldValue($items, $delta, $form, $form_state);
+
     /** @var \Drupal\dvf\Plugin\VisualisationManagerInterface $plugin_manager */
     $plugin_manager = \Drupal::service('plugin.manager.visualisation');
-    $values = $this->getFieldValue($items, $delta, $form, $form_state);
 
     $plugin_id = $this->fieldDefinition->getType();
     $plugin_configuration = [
-      'uri' => '',
-      'options' => [],
+      'options' => [
+        'uri' => '',
+      ],
       'source' => [
-        'plugin_id' => $this->fieldDefinition->getSetting('source_type'),
+        'plugin_id' => $this->fieldDefinition->getSetting('visualisation_source'),
+        'options' => $this->fieldDefinition->getSetting('visualisation_source_options'),
       ],
       'style' => [
         'plugin_id' => $this->getElementOptions($items, $delta, $form, $form_state, 'visualisation_style'),
+        'options' => [],
       ],
       'entity' => $items->getEntity(),
     ];
@@ -185,11 +189,11 @@ class VisualisationFileWidget extends WidgetBase {
     }
 
     if (!empty($values[$delta]['uri'])) {
-      $plugin_configuration['uri'] = $values[$delta]['uri'];
+      $plugin_configuration['options']['uri'] = $values[$delta]['uri'];
     }
 
-    if (!empty($values[$delta]['options']['visualisation_options'])) {
-      $plugin_configuration['options'] += $values[$delta]['options']['visualisation_options'];
+    if (!empty($values[$delta]['options']['visualisation_style_options'])) {
+      $plugin_configuration['style']['options'] = $values[$delta]['options']['visualisation_style_options'];
     }
 
     /** @var \Drupal\dvf\Plugin\VisualisationInterface $plugin */

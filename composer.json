@@ -1,10 +1,29 @@
 {
-  "name": "drupal/dvf",
-  "description": "Data Visualisation Framework makes it easy to generate visualisations from different data sources.",
-  "type": "drupal-module",
-  "license": "GPL-2.0+",
-  "minimum-stability": "dev",
-  "require": {
-    "drupal/core": "~8"
-  }
+    "name": "drupal/dvf",
+    "description": "Data Visualisation Framework makes it easy to generate visualisations from different data sources.",
+    "type": "drupal-module",
+    "homepage": "https://github.com/govCMS/dvf",
+    "authors": [
+        {
+            "name": "Jeremy Graham",
+            "homepage": "https://www.drupal.org/u/jez500"
+        },
+        {
+            "name": "Jorge Castro",
+            "homepage": "https://www.drupal.org/u/jorgegc"
+        },
+        {
+            "name": "Toby Bellwood",
+            "homepage": "https://www.drupal.org/u/tobybellwood"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/govCMS/dvf/issues",
+        "source": "https://github.com/govCMS/dvf"
+    },
+    "license": "GPL-2.0+",
+    "minimum-stability": "dev",
+    "require": {
+        "flow/jsonpath": "^0.4.0",
+    }
 }

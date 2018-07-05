@@ -8,14 +8,14 @@ namespace Drupal\dvf\Plugin;
 interface VisualisationSourceManagerInterface extends VisualisationPluginManagerInterface {
 
   /**
-   * Returns a list of plugin definitions by type.
+   * Returns a list of plugin definitions for a visualisation type.
    *
-   * @param string $type
-   *   The type.
+   * @param string $visualisation_type
+   *   The visualisation type.
    *
    * @return array
    *   An array of plugin definitions.
    */
-  public function getDefinitionsByType($type);
+  public function getDefinitionsByType($visualisation_type);
 
 }

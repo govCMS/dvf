@@ -75,8 +75,6 @@ class Table extends TableVisualisationStyleBase {
       ];
     }
 
-    $this->postBuild($build);
-
     return $build;
   }
 

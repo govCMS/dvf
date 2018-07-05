@@ -2,18 +2,22 @@
 
 namespace Drupal\dvf\Plugin\Visualisation;
 
+use Drupal\Component\Utility\NestedArray;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
+use Drupal\dvf\ConfigurablePluginTrait;
 use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\VisualisationSourceManagerInterface;
 use Drupal\dvf\Plugin\VisualisationStyleManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
  * Provides a base class for Visualisation plugins.
  */
 abstract class VisualisationBase extends PluginBase implements VisualisationInterface, ContainerFactoryPluginInterface {
+
+  use ConfigurablePluginTrait;
 
   /**
    * The source configuration, with at least a 'plugin_id' key.
@@ -125,10 +129,42 @@ abstract class VisualisationBase extends PluginBase implements VisualisationInte
   /**
    * {@inheritdoc}
    */
+  public function getConfiguration() {
+    return NestedArray::mergeDeep($this->defaultConfiguration(), $this->configuration);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setConfiguration(array $configuration) {
+    $this->configuration = $configuration;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function defaultConfiguration() {
+    return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function calculateDependencies() {
+    return [];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getSourcePlugin() {
     if (!isset($this->sourcePlugin)) {
       $configuration = $this->getSourceConfiguration();
-      $this->sourcePlugin = $this->sourcePluginManager->createInstance($configuration['plugin_id'], $configuration, $this);
+
+      // Let other modules alter the source configuration.
+      $this->moduleHandler->alter('dvf_source_configuration', $configuration['options'], $this);
+
+      $this->sourcePlugin = $this->sourcePluginManager->createInstance($configuration['plugin_id'], $configuration['options'], $this);
     }
 
     return $this->sourcePlugin;
@@ -140,7 +176,11 @@ abstract class VisualisationBase extends PluginBase implements VisualisationInte
   public function getStylePlugin() {
     if (!isset($this->stylePlugin)) {
       $configuration = $this->getStyleConfiguration();
-      $this->stylePlugin = $this->stylePluginManager->createInstance($configuration['plugin_id'], $configuration, $this);
+
+      // Let other modules alter the style configuration.
+      $this->moduleHandler->alter('dvf_style_configuration', $configuration['options'], $this);
+
+      $this->stylePlugin = $this->stylePluginManager->createInstance($configuration['plugin_id'], $configuration['options'], $this);
     }
 
     return $this->stylePlugin;
@@ -165,6 +205,30 @@ abstract class VisualisationBase extends PluginBase implements VisualisationInte
    */
   public function getEntity() {
     return $this->entity;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function data() {
+    $data = $this->getSourcePlugin()->getRecords();
+
+    // Let other modules alter the data.
+    $this->moduleHandler->alter('dvf_visualisation_data', $data, $this);
+
+    return $data;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function render() {
+    $build = $this->getStylePlugin()->build();
+
+    // Let other modules alter the render array.
+    $this->moduleHandler->alter('dvf_visualisation_build', $build, $this);
+
+    return $build;
   }
 
 }

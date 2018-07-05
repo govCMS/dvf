@@ -3,12 +3,13 @@
 namespace Drupal\dvf\Plugin;
 
 use Drupal\Component\Plugin\ConfigurablePluginInterface;
+use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Provides an interface defining a VisualisationStyle plugin.
  */
-interface VisualisationStyleInterface extends ConfigurablePluginInterface {
+interface VisualisationStyleInterface extends ConfigurablePluginInterface, PluginInspectionInterface {
 
   /**
    * Returns a form to configure settings for this plugin.
@@ -32,7 +33,7 @@ interface VisualisationStyleInterface extends ConfigurablePluginInterface {
   public function build();
 
   /**
-   * Return an the current visualisation.
+   * Returns the current visualisation.
    *
    * @return \Drupal\dvf\Plugin\VisualisationInterface
    *   Current visualisation instance.

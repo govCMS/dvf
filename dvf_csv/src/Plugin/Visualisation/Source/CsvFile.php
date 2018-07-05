@@ -3,6 +3,8 @@
 namespace Drupal\dvf_csv\Plugin\Visualisation\Source;
 
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\Visualisation\Source\VisualisationSourceBase;
@@ -10,16 +12,19 @@ use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Plugin implementation of the 'dvf_csv_remote' visualisation source.
+ * Plugin implementation of the 'dvf_csv_file' visualisation source.
  *
  * @VisualisationSource(
- *   id = "dvf_csv_remote",
+ *   id = "dvf_csv_file",
  *   label = @Translation("CSV file"),
  *   category = @Translation("CSV"),
- *   type = "url"
+ *   visualisation_types = {
+ *     "dvf_file",
+ *     "dvf_url"
+ *   }
  * )
  */
-class RemoteCsv extends VisualisationSourceBase implements ContainerFactoryPluginInterface {
+class CsvFile extends VisualisationSourceBase implements ContainerFactoryPluginInterface {
 
   /**
    * The cache backend.
@@ -36,21 +41,21 @@ class RemoteCsv extends VisualisationSourceBase implements ContainerFactoryPlugi
   protected $httpClient;
 
   /**
-   * The CKAN resource fields.
+   * The CSV file fields.
    *
    * @var array
    */
   protected $fields;
 
   /**
-   * The CKAN resource records.
+   * The CSV file records.
    *
    * @var array
    */
   protected $records;
 
   /**
-   * Constructs a new CkanSource.
+   * Constructs a new CsvFile.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.
@@ -60,13 +65,15 @@ class RemoteCsv extends VisualisationSourceBase implements ContainerFactoryPlugi
    *   The plugin implementation definition.
    * @param \Drupal\dvf\Plugin\VisualisationInterface $visualisation
    *   The visualisation context in which the plugin will run.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The cache backend.
    * @param \GuzzleHttp\Client $http_client
    *   The HTTP client.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation, CacheBackendInterface $cache, Client $http_client) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $visualisation);
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation = NULL, ModuleHandlerInterface $module_handler, CacheBackendInterface $cache, Client $http_client) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $visualisation, $module_handler);
     $this->cache = $cache;
     $this->httpClient = $http_client;
   }
@@ -94,6 +101,7 @@ class RemoteCsv extends VisualisationSourceBase implements ContainerFactoryPlugi
       $plugin_id,
       $plugin_definition,
       $visualisation,
+      $container->get('module_handler'),
       $container->get('cache.dvf_csv'),
       $container->get('http_client')
     );
@@ -102,8 +110,49 @@ class RemoteCsv extends VisualisationSourceBase implements ContainerFactoryPlugi
   /**
    * {@inheritdoc}
    */
-  protected function initializeIterator() {
-    return new \ArrayIterator($this->getRecords());
+  public function defaultConfiguration() {
+    return [
+      'csv' => [
+        'delimiter' => ',',
+        'enclosure' => '"',
+        'escape' => '\\',
+      ],
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function settingsForm(array $form, FormStateInterface $form_state) {
+    $form['csv'] = [
+      '#type' => 'details',
+      '#title' => $this->t('CSV file settings'),
+      '#open' => TRUE,
+      '#tree' => TRUE,
+    ];
+
+    $form['csv']['delimiter'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Delimiter'),
+      '#description' => $this->t('Set the field delimiter (one character only).'),
+      '#default_value' => $this->config('csv', 'delimiter'),
+    ];
+
+    $form['csv']['enclosure'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Enclosure'),
+      '#description' => $this->t('Set the field enclosure character (one character only).'),
+      '#default_value' => $this->config('csv', 'enclosure'),
+    ];
+
+    $form['csv']['escape'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Escape'),
+      '#description' => $this->t('Set the escape character (one character only).'),
+      '#default_value' => $this->config('csv', 'escape'),
+    ];
+
+    return $form;
   }
 
   /**
@@ -117,10 +166,7 @@ class RemoteCsv extends VisualisationSourceBase implements ContainerFactoryPlugi
   }
 
   /**
-   * Returns the records.
-   *
-   * @return array
-   *   An array of CKAN resource records.
+   * {@inheritdoc}
    */
   public function getRecords() {
     $records = [];
@@ -192,7 +238,8 @@ class RemoteCsv extends VisualisationSourceBase implements ContainerFactoryPlugi
    */
   protected function fetchData() {
     try {
-      $response = $this->httpClient->get($this->configuration['uri'])->getBody()->getContents();
+      $uri = $this->config('uri');
+      $response = $this->httpClient->get($uri)->getBody()->getContents();
     }
     catch (\Exception $e) {
       $response = NULL;
@@ -201,8 +248,12 @@ class RemoteCsv extends VisualisationSourceBase implements ContainerFactoryPlugi
     $data = [];
 
     if ($response) {
-      foreach (explode(PHP_EOL, $response) as $line) {
-        $data[] = str_getcsv($line);
+      $delimiter = $this->config('csv', 'delimiter');
+      $enclosure = $this->config('csv', 'enclosure');
+      $escape = $this->config('csv', 'escape');
+
+      foreach (preg_split('/\r\n|\r|\n/', $response) as $line) {
+        $data[] = str_getcsv($line, $delimiter, $enclosure, $escape);
       }
     }
 
@@ -217,7 +268,7 @@ class RemoteCsv extends VisualisationSourceBase implements ContainerFactoryPlugi
    */
   protected function getCacheKey() {
     $plugin_id = hash('sha256', $this->getPluginId());
-    $uri = $this->configuration['uri'];
+    $uri = $this->config('uri');
 
     return $plugin_id . ':' . $uri;
   }

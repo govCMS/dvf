@@ -57,6 +57,7 @@ class VisualisationDefaultFormatter extends FormatterBase {
    */
   public function settingsSummary() {
     $settings = $this->getSettings();
+
     $summary = [];
     $summary[] = $this->t('Visualisation palette @palette', ['@palette' => $settings['chart']['palette']]);
 
@@ -72,9 +73,8 @@ class VisualisationDefaultFormatter extends FormatterBase {
     /** @var \Drupal\dvf\Plugin\VisualisationItemInterface $item */
     foreach ($items as $delta => $item) {
       $element[$delta] = $item
-        ->getVisualisationPlugin($this->getSettings())
-        ->getStylePlugin()
-        ->build();
+        ->getVisualisationPlugin([], ['options' => $this->getSettings()])
+        ->render();
     }
 
     return $element;
