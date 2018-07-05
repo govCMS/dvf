@@ -48,7 +48,7 @@ class LineChart extends AxisChart {
     $form['line_chart']['stacked'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Stacked'),
-      '#description' => $this->t('Check to stack the lines on top of each other.'),
+      '#description' => $this->t('Check to stack the lines on top of each other. (E.g. Lines will not overlap if this option is enabled.)'),
       '#default_value' => $this->config('line_chart', 'stacked'),
     ];
 
@@ -67,14 +67,14 @@ class LineChart extends AxisChart {
     $form['line_chart']['data']['points']['show'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Show data points'),
-      '#description' => $this->t('Check to show the points along the lines.'),
+      '#description' => $this->t('Check to show the data-value points along the lines.'),
       '#default_value' => $this->config('line_chart', 'data', 'points', 'show'),
     ];
 
     $form['line_chart']['area']['enabled'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable area'),
-      '#description' => $this->t('Check to fill in the area between the X axis and the lines.'),
+      '#description' => $this->t('Check to fill in the area between the X axis and the lines with colour.'),
       '#default_value' => $this->config('line_chart', 'area', 'enabled'),
     ];
 

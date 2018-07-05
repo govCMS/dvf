@@ -52,7 +52,7 @@ class BarChart extends AxisChart {
     $form['bar_chart']['stacked'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Stacked'),
-      '#description' => $this->t('Check to stack the bars on top of each other.'),
+      '#description' => $this->t('Check to stack the bars on top of each other (E.g. Show one bar per data-set row.)'),
       '#default_value' => $this->config('bar_chart', 'stacked'),
     ];
 

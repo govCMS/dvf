@@ -42,7 +42,7 @@ class ScatterPlotChart extends AxisChart {
     $form['scatter_plot_chart']['point']['size'] = [
       '#type' => 'number',
       '#title' => $this->t('Point size'),
-      '#description' => $this->t('Define the size of each point.'),
+      '#description' => $this->t('Define the size of each point on the scatter plot chart. Defaults to 2.5.'),
       '#default_value' => $this->config('scatter_plot_chart', 'point', 'size'),
       '#step' => '0.1',
     ];

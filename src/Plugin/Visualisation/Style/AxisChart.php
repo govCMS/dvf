@@ -155,7 +155,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $form['axis']['x']['type'] = [
       '#type' => 'select',
       '#title' => $this->t('Axis type'),
-      '#description' => $this->t('Force interpretation of the X axis labels as a specific type.'),
+      '#description' => $this->t('Set the data type for the X axis values. E.g. If the X axis contains numbers, select "Indexed (numeric)".'),
       '#options' => [
         'indexed' => $this->t('Indexed (numeric)'),
         'category' => $this->t('Category (non-numeric)'),
@@ -166,8 +166,8 @@ abstract class AxisChart extends TableVisualisationStyleBase {
 
     $form['axis']['x']['label']['text'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Axis label'),
-      '#description' => $this->t('Add a label to the X axis to describe what the data values relate to.'),
+      '#title' => $this->t('Axis title'),
+      '#description' => $this->t('Add a X axis title to describe what the data values relate to.'),
       '#default_value' => $this->config('axis', 'x', 'label', 'text'),
     ];
 
@@ -188,7 +188,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $form['axis']['x']['tick']['values']['field'] = [
       '#type' => 'select',
       '#title' => $this->t('Tick values field'),
-      '#description' => $this->t('Override the X axis tick values using data from a field.'),
+      '#description' => $this->t('Override the individual X axis data-label values using data from a field.'),
       '#options' => $this->getSourceFieldOptions(),
       '#empty_option' => $this->t('- None -'),
       '#empty_value' => '',
@@ -198,7 +198,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $form['axis']['x']['tick']['values']['custom'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Tick values'),
-      '#description' => $this->t('Override the X axis tick values. Separate values with a comma.'),
+      '#description' => $this->t('Override the individual X axis data-label values manually. Separate values with a comma.'),
       '#default_value' => $this->config('axis', 'x', 'tick', 'values', 'custom'),
     ];
 
@@ -233,6 +233,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $form['axis']['x']['styles'] = [
       '#type' => 'details',
       '#title' => $this->t('X axis styles'),
+      '#description' => t('Enter whole numbers (E.g. 320). Values are set as pixels unless otherwise indicated.<br/><br/>'),
       '#tree' => TRUE,
     ];
 
@@ -247,8 +248,8 @@ abstract class AxisChart extends TableVisualisationStyleBase {
 
     $form['axis']['x']['styles']['label']['position'] = [
       '#type' => 'select',
-      '#title' => $this->t('Axis label position'),
-      '#description' => $this->t('Define the label position on the X axis.'),
+      '#title' => $this->t('Axis title position'),
+      '#description' => $this->t('Define the title position on the X axis.'),
       '#options' => [
         'inner-right' => $this->t('Inner right'),
         'inner-center' => $this->t('Inner center'),
@@ -263,21 +264,21 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $form['axis']['x']['styles']['tick']['rotate'] = [
       '#type' => 'number',
       '#title' => $this->t('Tick label rotation'),
-      '#description' => $this->t('Define how many degrees the X axis tick label will be rotated.'),
+      '#description' => $this->t('Optionally rotate the X axis labels, by setting how many degrees the X axis tick label should be rotated here.'),
       '#default_value' => $this->config('axis', 'x', 'styles', 'tick', 'rotate'),
     ];
 
     $form['axis']['x']['styles']['tick']['width'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Tick label width'),
-      '#description' => $this->t('Define the width of an X axis tick label.'),
+      '#description' => $this->t('Define the width of the X axis tick labels.'),
       '#size' => 20,
       '#default_value' => $this->config('axis', 'x', 'styles', 'tick', 'width'),
     ];
 
     $form['axis']['x']['styles']['tick']['centered'] = [
       '#title' => $this->t('Tick label centered'),
-      '#description' => $this->t('Check to display tick directly above the label on he X axis.'),
+      '#description' => $this->t('Check to display tick directly above the label on the X axis.'),
       '#type' => 'checkbox',
       '#default_value' => $this->config('axis', 'x', 'styles', 'tick', 'centered'),
     ];
@@ -298,7 +299,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $form['axis']['y']['type'] = [
       '#type' => 'select',
       '#title' => $this->t('Axis type'),
-      '#description' => $this->t('Force interpretation of the Y axis labels as a specific type.'),
+      '#description' => $this->t('Set the data type for the Y axis values. E.g. If the Y axis contains numbers, select "Indexed (numeric)".'),
       '#options' => [
         'indexed' => $this->t('Indexed (numeric)'),
         'category' => $this->t('Category (non-numeric)'),
@@ -309,8 +310,8 @@ abstract class AxisChart extends TableVisualisationStyleBase {
 
     $form['axis']['y']['label']['text'] = [
       '#type' => 'textfield',
-      '#title' => $this->t('Axis label'),
-      '#description' => $this->t('Add a label to the Y axis to describe what the data values relate to.'),
+      '#title' => $this->t('Axis title'),
+      '#description' => $this->t('Add a Y axis title to describe what the data values relate to.'),
       '#default_value' => $this->config('axis', 'y', 'label', 'text'),
     ];
 
@@ -324,7 +325,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $form['axis']['y']['tick']['values']['custom'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Tick values'),
-      '#description' => $this->t('Override the Y axis tick values. Separate values with a comma.'),
+      '#description' => $this->t('Override the individual Y axis data-label values manually. Separate values with a comma.'),
       '#default_value' => $this->config('axis', 'y', 'tick', 'values', 'custom'),
     ];
 
@@ -357,6 +358,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $form['axis']['y']['styles'] = [
       '#type' => 'details',
       '#title' => $this->t('Y axis styles'),
+      '#description' => t('Enter whole numbers (E.g. 320). Values are set as pixels unless otherwise indicated.<br/><br/>'),
       '#tree' => TRUE,
     ];
 
@@ -371,7 +373,8 @@ abstract class AxisChart extends TableVisualisationStyleBase {
 
     $form['axis']['y']['styles']['label']['position'] = [
       '#type' => 'select',
-      '#title' => $this->t('Axis label position'),
+      '#title' => $this->t('Axis title position'),
+      '#description' => $this->t('Define the title position on the Y axis.'),
       '#options' => [
         'inner-top' => $this->t('Inner top'),
         'inner-middle' => $this->t('Inner middle'),
@@ -392,14 +395,14 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $form['grid']['x']['show'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Show X axis grid'),
-      '#description' => $this->t('Check to show grids along the X axis.'),
+      '#description' => $this->t('Check to show thin dashed lines along the X axis grid points.'),
       '#default_value' => $this->config('grid', 'x', 'show'),
     ];
 
     $form['grid']['y']['show'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Show Y axis grid'),
-      '#description' => $this->t('Check to show grids along the Y axis.'),
+      '#description' => $this->t('Check to show thin dashed lines along the Y axis grid points.'),
       '#default_value' => $this->config('grid', 'y', 'show'),
     ];
 
@@ -415,9 +418,13 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $form['grid']['lines'] = [
       '#type' => 'details',
       '#title' => $this->t('Grid lines'),
+      '#description' => t('Show additional grid lines along X or Y axis.'),
       '#open' => ($grid_lines_count > 0),
       '#tree' => TRUE,
-      '#attributes' => ['id' => Html::getUniqueId('dvf-options-grid-lines')],
+      '#attributes' => [
+        'id' => Html::getUniqueId('dvf-options-grid-lines'),
+        'title' => t('E.g. If a dataset contains values between 1 & 40, indicate the average numeric value by adding a Y axis line with a value of 20, and a label "Average number".'),
+      ],
     ];
 
     for ($i = 0; $i < $grid_lines_count; $i++) {
@@ -464,7 +471,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       ];
 
       $form['grid']['lines'][$i]['class'] = [
-        '#title' => $this->t('CSS Class'),
+        '#title' => $this->t('CSS Class (optional)'),
         '#type' => 'textfield',
         '#size' => 20,
         '#default_value' => $this->config('grid', 'lines', $i, 'class'),
@@ -514,7 +521,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $form['chart']['interaction'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable chart interaction'),
-      '#description' => $this->t('Check to enable all of interactions (selection, mouse events, etc).'),
+      '#description' => $this->t('Check to enable all of interactions (E.g. Showing / hiding the tooltip when hovering on labels, etc).'),
       '#default_value' => $this->config('chart', 'interaction'),
     ];
 
@@ -528,13 +535,14 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $form['chart']['data']['legends']['interaction'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable legends interaction'),
-      '#description' => $this->t('Check to enable all of interactions (selection, mouse events, etc).'),
+      '#description' => $this->t('Check to enable interactions for the legend (E.g. Hover on legend labels).'),
       '#default_value' => $this->config('chart', 'data', 'legends', 'interaction'),
     ];
 
     $form['chart']['styles'] = [
       '#type' => 'details',
       '#title' => $this->t('Chart styles'),
+      '#description' => t('Enter whole numbers (E.g. 320). Values are set as pixels unless otherwise indicated.<br/><br/>'),
       '#tree' => TRUE,
     ];
 
