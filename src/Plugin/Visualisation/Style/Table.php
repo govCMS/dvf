@@ -22,6 +22,10 @@ class Table extends TableVisualisationStyleBase {
       'table' => [
         'table_header_field' => '',
         'row_header_field' => '',
+        'options' => [
+          'page_length' => 10,
+          'searching' => TRUE,
+        ],
       ],
     ] + parent::defaultConfiguration();
   }
@@ -58,6 +62,27 @@ class Table extends TableVisualisationStyleBase {
       '#default_value' => $this->config('table', 'row_header_field'),
     ];
 
+    $form['table']['options'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Table options'),
+      '#tree' => TRUE,
+    ];
+
+    $form['table']['options']['page_length'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Page length'),
+      '#options' => $this->getPageLengthOptions(),
+      '#description' => $this->t('Number of rows per page.'),
+      '#default_value' => $this->config('table', 'options', 'page_length'),
+    ];
+
+    $form['table']['options']['searching'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable searching'),
+      '#description' => $this->t('Allows the search abilities of DataTables.'),
+      '#default_value' => $this->config('table', 'options', 'searching'),
+    ];
+
     return $form;
   }
 
@@ -90,6 +115,28 @@ class Table extends TableVisualisationStyleBase {
    */
   protected function rowHeaderField() {
     return $this->config('table', 'row_header_field');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function tableBuildSettings(array $records) {
+    $settings = parent::tableBuildSettings($records);
+
+    $settings['tableOptions']['pageLength'] = (int) $this->config('table', 'options', 'page_length');
+    $settings['tableOptions']['searching'] = $this->config('table', 'options', 'searching');
+
+    return $settings;
+  }
+
+  /**
+   * Returns page length options.
+   *
+   * @return array
+   *   An array of page length options.
+   */
+  protected function getPageLengthOptions() {
+    return [10 => 10, 25 => 25, 50 => 50, 100 => 100];
   }
 
 }

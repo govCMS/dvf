@@ -28,6 +28,7 @@
       this
         .parseData()
         .parseColumns()
+        .parseTableOptions()
         .generateTable();
     },
 
@@ -63,6 +64,14 @@
       });
 
       this.config.columns = columns;
+
+      return this;
+    },
+
+    parseTableOptions: function () {
+      if (this.options.tableOptions) {
+        this.config = $.extend(this.config, this.options.tableOptions);
+      }
 
       return this;
     }
