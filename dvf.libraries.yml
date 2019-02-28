@@ -34,9 +34,19 @@ datatables:
     component:
       https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.15/css/jquery.dataTables.css: { type: external, minified: true }
 
+filesaver:
+  remote: https://github.com/eligrey/FileSaver.js
+  version: "1.3.8"
+  license:
+    name: MIT
+    url: https://github.com/eligrey/FileSaver.js/blob/master/LICENSE.md
+  js:
+    https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js: { type: external, minified: true }
+
 jquery.dvfCharts:
   version: "1.0.0"
   js:
+    js/jquery.chart_export.js: {}
     js/jquery.dvfCharts.js: {}
   dependencies:
     - core/jquery
@@ -44,6 +54,7 @@ jquery.dvfCharts:
     - core/drupalSettings
     - dvf/d3
     - dvf/c3
+    - dvf/filesaver
 
 dvfCharts:
   version: "1.0.0"

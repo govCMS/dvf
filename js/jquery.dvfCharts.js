@@ -34,11 +34,13 @@
         .parsePointOptions()
         .parseBarOptions()
         .parseGaugeOptions()
-        .generateChart();
+        .generateChart()
+        .addDownloadButtons();
     },
 
     generateChart: function () {
       c3.generate(this.config);
+      return this;
     },
 
     parseChartOptions: function () {
@@ -331,6 +333,40 @@
       }
 
       this.config.gauge = $.isEmptyObject(gauge) ? null : gauge;
+
+      return this;
+    },
+
+    /**
+     * Adds the various download buttons below the chart.
+     *
+     * @returns {Plugin}
+     */
+    addDownloadButtons: function () {
+      if (typeof $.fn.chartExport !== 'function') {
+        return this;
+      }
+
+      var buttonTypes = ['png', 'svg'],
+          $buttonWrapper = $('<div/>')
+            .addClass('table-chart--actions');
+
+      $(buttonTypes).each(function (i, format) {
+        $('<button/>')
+          .html('Download as ' + format)
+          .addClass(this.options.chart.component + '--download')
+          .chartExport($.extend({
+            format: format,
+            svg: $(this.element).is('svg') ? $(this.element) : $(this.element).find('svg'),
+          }, {
+            // Add optional settings if they exist.
+            width: this.options.chart.styles.width || undefined,
+            height: this.options.chart.styles.height || undefined,
+          }))
+          .appendTo($buttonWrapper);
+      }.bind(this));
+
+      $buttonWrapper.insertAfter(this.element);
 
       return this;
     },
