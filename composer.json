@@ -24,6 +24,6 @@
     "license": "GPL-2.0+",
     "minimum-stability": "dev",
     "require": {
-        "flow/jsonpath": "^0.4.0",
+        "flow/jsonpath": "^0.4.0"
     }
 }
