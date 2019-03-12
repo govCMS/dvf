@@ -117,6 +117,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
             'left' => '',
           ],
         ],
+        'component' => 'table-chart',
       ],
     ] + parent::defaultConfiguration();
   }
