@@ -224,7 +224,7 @@ class CsvFile extends VisualisationSourceBase implements ContainerFactoryPluginI
     }
     else {
       $data = $this->fetchData();
-      $this->cache->set($cache_key, $data);
+      $this->cache->set($cache_key, $data, $this->getCacheExpiry());
     }
 
     return $data;
