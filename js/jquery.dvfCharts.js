@@ -348,8 +348,9 @@
       }
 
       var buttonTypes = ['png', 'svg'],
-          $buttonWrapper = $('<div/>')
-            .addClass('table-chart--actions');
+          $buttonWrapper = $(this.element)
+            .closest('.dvf-chart')
+            .nextAll('.table-chart--actions');
 
       $(buttonTypes).each(function (i, format) {
         $('<button/>')
@@ -365,8 +366,6 @@
           }))
           .appendTo($buttonWrapper);
       }.bind(this));
-
-      $buttonWrapper.insertAfter(this.element);
 
       return this;
     },

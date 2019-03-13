@@ -679,6 +679,12 @@ abstract class AxisChart extends TableVisualisationStyleBase {
         '#attributes' => ['class' => ['dvf-table', 'visually-hidden']],
         'content' => $this->buildTable($group_records),
       ];
+
+      // A wrapper for the action buttons (toggle, download etc).
+      $build[$group_key]['actions'] = [
+        '#type' => 'container',
+        '#attributes' => ['class' => ['table-chart--actions']],
+      ];
     }
 
     return $build;
