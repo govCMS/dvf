@@ -8,3 +8,6 @@ services:
   plugin.manager.visualisation.style:
     class: Drupal\dvf\Plugin\VisualisationStyleManager
     arguments: ['@container.namespaces', '@cache.discovery', '@module_handler']
+  dvf.helpers:
+    class: Drupal\dvf\DvfHelpers
+    arguments: []
