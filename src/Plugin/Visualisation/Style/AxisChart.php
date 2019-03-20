@@ -685,6 +685,21 @@ abstract class AxisChart extends TableVisualisationStyleBase {
         '#type' => 'container',
         '#attributes' => ['class' => ['table-chart--actions']],
       ];
+
+      // If $file_uri is empty/false, do not display download data button.
+      $file_uri = $this->getDatasetDownloadUri($this->visualisation->getEntity());
+      if (!empty($file_uri)) {
+        $build[$group_key]['actions']['file_uri'] = [
+          '#type' => 'html_tag',
+          '#tag' => 'button',
+          '#value' => $this->t('Download data'),
+          '#attributes' => [
+            'class' => ['download-data'],
+            'data-file-uri' => $file_uri,
+          ],
+        ];
+      }
+
     }
 
     return $build;
@@ -787,7 +802,14 @@ abstract class AxisChart extends TableVisualisationStyleBase {
    *   An array of column override settings.
    */
   protected function getColumnOverrides() {
-    $allowed_overrides = ['color', 'type', 'legend', 'style', 'weight', 'class'];
+    $allowed_overrides = [
+      'color',
+      'type',
+      'legend',
+      'style',
+      'weight',
+      'class',
+    ];
     $column_overrides_sorted = [];
     $pair = 2;
 
