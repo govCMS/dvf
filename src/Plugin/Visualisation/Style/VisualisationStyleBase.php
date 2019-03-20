@@ -11,6 +11,7 @@ use Drupal\dvf\ConfigurablePluginTrait;
 use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\VisualisationStyleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Component\Render\FormattableMarkup;
 
 /**
  * Provides a base class for VisualisationStyle plugins.
@@ -104,6 +105,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
         'field_labels' => '',
         'split_field' => '',
         'cache_expiry' => '',
+        'column_overrides' => [],
       ],
     ];
   }
@@ -163,6 +165,32 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       '#options' => $this->getCacheOptions(),
       '#default_value' => $this->config('data', 'cache_expiry'),
     ];
+
+    $column_override_examples = [
+      'type|line', 'color|#000000', 'legend|hide', 'style|dashed', 'weight|20', 'class|hide-points',
+    ];
+    $form['data']['column_overrides'] = [
+      '#prefix' => '<div>',
+      '#suffix' => '</div>',
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      '#type' => 'details',
+      '#title' => t('Column/Group overrides'),
+      '#description' => '<p>' . t('Optionally override a style for a specific column, add one key|value per line and separate key value with a pipe. @help.<br />Examples: <strong>@examples</strong>.',
+        [
+          '@examples' => new FormattableMarkup(implode('</strong> or <strong>', $column_override_examples), []),
+          '@help' => new FormattableMarkup(\Drupal::service('dvf.helpers')->getHelpPageLink('column-overrides'), []),
+        ]) . '</p>',
+    ];
+
+    foreach ($this->fieldLabelsUnique() as $label) {
+      $form['data']['column_overrides'][$label] = [
+        '#type' => 'textarea',
+        '#rows' => 2,
+        '#title' => $label,
+        '#default_value' => $this->config('data', 'column_overrides', $label),
+      ];
+    }
 
     return $form;
   }
@@ -291,6 +319,16 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
     }
 
     return $labels;
+  }
+
+  /**
+   * Gets the field labels without duplicates.
+   *
+   * @return array
+   *   The unique field labels.
+   */
+  protected function fieldLabelsUnique() {
+    return array_unique($this->fieldLabels(), SORT_REGULAR);
   }
 
   /**

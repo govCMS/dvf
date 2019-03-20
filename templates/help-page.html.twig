@@ -1,0 +1,5 @@
+{% if topic is not empty %}
+  {% include '@dvf/help/' ~ topic ~ '.html.twig' %}
+{% else %}
+  <p>DVF help page not found. Please check the URL and try again.</p>
+{% endif %}

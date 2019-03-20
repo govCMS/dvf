@@ -1,0 +1,8 @@
+
+dvf.dvf_help_controller_help:
+  path: '/dvf/help/{topic}'
+  defaults:
+    _controller: '\Drupal\dvf\Controller\DvfHelpController::helpPage'
+    _title_callback: '\Drupal\dvf\Controller\DvfHelpController::getHelpPageTitle'
+  requirements:
+    _permission: 'administer site configuration'
