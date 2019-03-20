@@ -49,4 +49,12 @@ interface VisualisationSourceInterface extends \Countable, \Iterator, Configurab
    */
   public function getVisualisation();
 
+  /**
+   * Gets the cache expiry time from the DVF visualisation configuration.
+   *
+   * @return int
+   *   The time the cache object expires.
+   */
+  public function getCacheExpiry();
+
 }

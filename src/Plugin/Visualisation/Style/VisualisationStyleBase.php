@@ -103,6 +103,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
         'fields' => [],
         'field_labels' => '',
         'split_field' => '',
+        'cache_expiry' => '',
       ],
     ];
   }
@@ -155,7 +156,36 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       '#default_value' => $this->config('data', 'split_field'),
     ];
 
+    $form['data']['cache_expiry'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Cache expiry'),
+      '#description' => $this->t('How long the results for this dataset will be cached.'),
+      '#options' => $this->getCacheOptions(),
+      '#default_value' => $this->config('data', 'cache_expiry'),
+    ];
+
     return $form;
+  }
+
+  /**
+   * Gets the options array for caching.
+   *
+   * @return array
+   *   The options array.
+   */
+  protected function getCacheOptions() {
+
+    return [
+      '_global_default' => 'Global default',
+      '0' => 'No cache',
+      '1800' => '30 minutes',
+      '3600' => '1 hour',
+      '21600' => '6 hours',
+      '86400' => '1 day',
+      '604800' => '1 week',
+      '2592000' => '1 month',
+      '15552000' => '6 months',
+    ];
   }
 
   /**

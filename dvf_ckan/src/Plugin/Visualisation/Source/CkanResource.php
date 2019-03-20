@@ -130,7 +130,7 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
     }
     else {
       $raw_fields = $this->fetchFields();
-      $this->cache->set($cache_key, $raw_fields);
+      $this->cache->set($cache_key, $raw_fields, $this->getCacheExpiry());
     }
 
     $fields = [];
@@ -177,7 +177,7 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
     }
     else {
       $raw_records = $this->fetchRecords();
-      $this->cache->set($cache_key, $raw_records);
+      $this->cache->set($cache_key, $raw_records, $this->getCacheExpiry());
     }
 
     $records = [];
