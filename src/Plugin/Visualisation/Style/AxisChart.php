@@ -97,6 +97,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       'chart' => [
         'title' => [
           'show' => TRUE,
+          'text' => '',
         ],
         'interaction' => TRUE,
         'data' => [
@@ -760,6 +761,9 @@ abstract class AxisChart extends TableVisualisationStyleBase {
 
     // Override fields labels if set in chart options.
     $settings['chart']['data']['names'] = $this->fieldLabels();
+
+    // Set the chart title.
+    $settings['chart']['title']['text'] = $this->visualisation->getEntity()->label();
 
     return $settings;
   }

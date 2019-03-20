@@ -68,6 +68,11 @@
         this.config.color = {pattern: plugin.options.chart.palette.split(',')};
       }
 
+      // Display chart title is title.show is true.
+      if (plugin.options.chart.title.show) {
+        this.config.title = { text: plugin.options.chart.title.text };
+      }
+
       return this;
     },
 
