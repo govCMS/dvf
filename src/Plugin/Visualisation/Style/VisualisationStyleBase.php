@@ -122,6 +122,8 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
     $form['#after_build'][] = [get_called_class(), 'afterBuildSettingsForm'];
+    $form['#attached']['library'][] = 'dvf/dvfAdmin';
+    $dvf_helpers = \Drupal::service('dvf.helpers');
 
     $form['data'] = [
       '#type' => 'details',
@@ -132,7 +134,8 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
     $form['data']['fields'] = [
       '#type' => 'select',
       '#title' => $this->t('Fields'),
-      '#description' => $this->t("What fields to include in the visualisation. Select at least one field to display it's data. A field is typically a column in a CSV."),
+      '#description' => $this->t('What fields to include in the visualisation. Select at least one field to display its data. A field is typically a column in a CSV. @help',
+        ['@help' => $dvf_helpers->getHelpPageLink('keys')]),
       '#options' => $this->getSourceFieldOptions(),
       '#multiple' => TRUE,
       '#size' => 5,
@@ -142,7 +145,8 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
     $form['data']['field_labels'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Field label overrides'),
-      '#description' => $this->t('Optionally override one or more field labels. Add one original_label|new_label per line and separate with a pipe.'),
+      '#description' => $this->t('Optionally override one or more field labels. Add one original_label|new_label per line and separate with a pipe. @help',
+        ['@help' => $dvf_helpers->getHelpPageLink('label-overrides')]),
       '#rows' => 2,
       '#default_value' => $this->config('data', 'field_labels'),
       '#placeholder' => 'Old label|New label',
@@ -151,7 +155,8 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
     $form['data']['split_field'] = [
       '#type' => 'select',
       '#title' => $this->t('Split field'),
-      '#description' => $this->t('Optionally split into multiple visualisations based on the value of this field. A new visualisation will be made for each unique value in this field.'),
+      '#description' => $this->t('Optionally split into multiple visualisations based on the value of this field. A new visualisation will be made for each unique value in this field. @help',
+        ['@help' => $dvf_helpers->getHelpPageLink('split')]),
       '#options' => $this->getSourceFieldOptions(),
       '#empty_option' => $this->t('- None -'),
       '#empty_value' => '',
@@ -179,7 +184,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       '#description' => '<p>' . t('Optionally override a style for a specific column, add one key|value per line and separate key value with a pipe. @help.<br />Examples: <strong>@examples</strong>.',
         [
           '@examples' => new FormattableMarkup(implode('</strong> or <strong>', $column_override_examples), []),
-          '@help' => new FormattableMarkup(\Drupal::service('dvf.helpers')->getHelpPageLink('column-overrides'), []),
+          '@help' => $dvf_helpers->getHelpPageLink('column-overrides'),
         ]) . '</p>',
     ];
 

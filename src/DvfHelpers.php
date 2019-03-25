@@ -4,6 +4,7 @@ namespace Drupal\dvf;
 
 use Drupal\Core\Link;
 use Drupal\Core\Url;
+use Drupal\Component\Render\FormattableMarkup;
 
 /**
  * Class DvfHelpers.
@@ -40,15 +41,17 @@ class DvfHelpers {
   /**
    * Returns a help page link, using the base path defined above.
    *
-   * @param string $title
-   *   The title of the link.
+   * @param string $template_name
+   *   The name of the template to link to.
+   *
+   *   E.g. "label-overrides" loads templates/help/label-overrides.html.twig.
    *
    * @return string
    *   The link.
    */
-  public function getHelpPageLink($title) {
-    $link = Link::fromTextAndUrl('Help', Url::fromUserInput($this->helpPageBasePath . $title));
-    return $link->toString();
+  public function getHelpPageLink($template_name) {
+    $link = Link::fromTextAndUrl('Help', Url::fromUserInput($this->helpPageBasePath . $template_name));
+    return new FormattableMarkup('<span class="dvf-admin-popup">' . $link->toString() . ' &#x29c9;</span>', []);
   }
 
 }
