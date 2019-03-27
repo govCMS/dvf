@@ -54,4 +54,17 @@ class DvfHelpers {
     return new FormattableMarkup('<span class="dvf-admin-popup">' . $link->toString() . ' &#x29c9;</span>', []);
   }
 
+  /**
+   * Check if a value is correctly formatted JSON.
+   *
+   * @param string $raw_json
+   *   The JSON string.
+   *
+   * @return bool
+   *   True if JSON, false if not.
+   */
+  public function validateJson($raw_json) {
+    return (json_decode($raw_json, TRUE) == NULL) ? FALSE : TRUE;
+  }
+
 }
