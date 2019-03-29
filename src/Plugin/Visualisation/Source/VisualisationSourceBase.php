@@ -196,4 +196,25 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
     return $this->visualisation;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheExpiry() {
+    // Get the cache time set from visualisation.
+    $configuration_options = $this->visualisation->getConfiguration('style');
+    $cache_object_expire = FALSE;
+
+    if (!empty($configuration_options['style']['options']['data']['cache_expiry'])) {
+      $cache_object_expire = $configuration_options['style']['options']['data']['cache_expiry'];
+    }
+
+    // If not numeric (e.g. global_default, false) get the global default.
+    if (!is_numeric($cache_object_expire)) {
+      $cache_global_config = \Drupal::config('system.performance')->get('cache');
+      $cache_object_expire = $cache_global_config['page']['max_age'];
+    }
+
+    return \Drupal::time()->getRequestTime() + $cache_object_expire;
+  }
+
 }

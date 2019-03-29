@@ -765,6 +765,8 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     // Set the chart title.
     $settings['chart']['title']['text'] = $this->visualisation->getEntity()->label();
 
+    $settings['chart']['data']['column_overrides'] = $this->getColumnOverrides();
+
     return $settings;
   }
 
@@ -780,6 +782,62 @@ abstract class AxisChart extends TableVisualisationStyleBase {
    */
   protected function rowHeaderField() {
     return $this->config('axis', 'x', 'tick', 'values', 'field');
+  }
+
+  /**
+   * Gets the column overrides settings in a nicely formatted array.
+   *
+   * @return array
+   *   An array of column override settings.
+   */
+  protected function getColumnOverrides() {
+    $allowed_overrides = ['color', 'type', 'legend', 'style', 'weight', 'class'];
+    $column_overrides_sorted = [];
+    $pair = 2;
+
+    foreach ($this->config('data', 'column_overrides') as $field_name => $column_override) {
+      $field_overrides = explode(PHP_EOL, $column_override);
+
+      foreach ($field_overrides as $field_override) {
+        $field_override_array = explode('|', trim($field_override), $pair);
+
+        if (count($field_override_array) === $pair && in_array($field_override_array[0], $allowed_overrides)) {
+          $column_overrides_sorted[$field_name][$field_override_array[0]] = $field_override_array[1];
+        }
+      }
+    }
+
+    $column_overrides_sorted = array_merge(array_fill_keys($this->fieldLabelsUnique(), []), $column_overrides_sorted);
+    return $this->setArrayOrder($column_overrides_sorted);
+  }
+
+  /**
+   * Re-orders the keys as per provided order array.
+   *
+   * @param array $array_to_order
+   *   An array keyed by the key (original) name, the value for each should be
+   *   an array containing a weight key. The lower the weight the higher it
+   *   appears in the list. If no weight found, default order is used.
+   * @param string $weight_key
+   *   The key that contains the weight.
+   *
+   * @return array
+   *   An ordered array.
+   */
+  protected function setArrayOrder(array $array_to_order, $weight_key = 'weight') {
+    $i = 0;
+    foreach ($array_to_order as $key => $value) {
+      $array_to_order[$key][$weight_key] = isset($value[$weight_key]) ? (int) $value[$weight_key] : $i;
+      $i++;
+    }
+
+    $weights = [];
+    foreach ($array_to_order as $key => $row) {
+      $weights[$key] = $row[$weight_key];
+    }
+    array_multisort($weights, SORT_ASC, $array_to_order);
+
+    return $array_to_order;
   }
 
 }

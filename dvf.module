@@ -17,3 +17,16 @@ function dvf_help($route_name, RouteMatchInterface $route_match) {
       return $output;
   }
 }
+
+/**
+ * Implements hook_theme().
+ */
+function dvf_theme($existing, $type, $theme, $path) {
+  return [
+    'help_page' => [
+      'variables' => [
+        'topic' => '',
+      ],
+    ],
+  ];
+}

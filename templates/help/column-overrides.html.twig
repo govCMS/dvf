@@ -1,0 +1,55 @@
+<h2>Column/Group overrides</h2>
+
+<p>Column overrides allow you to change the style of a specific data column group. This can be useful for combining
+    different graph styles eg. lines and bars, overriding a colour, changing the order or applying a class so further
+    styling options can be defined in css.</p>
+
+<p>There is a text area for each column and you can add multiple settings per column. Add each setting on a new
+    line and separate setting name and value with a pipe (|). Eg.</p>
+
+<pre>
+type|line
+color|#cccccc
+weight|20
+legend|hide
+</pre>
+
+<h3>Available overrides</h3>
+
+<h4>type</h4>
+
+<p>Eg. If your graph is bar chart, you could use this to set one of the columns to be a line for something
+    like an average, or representing data that is slightly different than the rest.</p>
+
+<p><strong>Available options:</strong> line, spline, bar, area, area-spline or scatter</p>
+
+<h4>color</h4>
+
+<p>Override the colour on a specific column. Use a <a href="http://www.color-hex.com/" target="_blank">hex value</a>.
+    Eg. #000000 = black.</p>
+
+<h4>legend</h4>
+
+<p>Hide the legend for a specific column. This only has one option <em>hide</em>.</p>
+
+<h4>weight</h4>
+
+<p>Weighting (ordering) allows you to change the position of column/groups without having to update the
+    source dataset. Heaver items sink to the end of lists, lighter items float to the top.</p>
+
+<p>If you wanted an column to appear first, you could set a really low weight of <strong>-50</strong>.
+    Alternatively if you wanted a column to appear last you could set a high weight of <strong>50</strong>.
+    Any positive or negative integer is valid.</p>
+
+<h4>style</h4>
+
+<p>This currently only applies to line graphs and it allows you to set the line to be <strong>dashed</strong>.</p>
+
+<h4>class</h4>
+
+<p>Adding a css class to a column allows additional custom styling. Currently there is one 'out of the box' style
+    available <strong>hide-points</strong> that hide the points for a specific column.</p>
+
+<p>You can add any classes you like and then define those styles is your custom css.</p>
+
+<p>&nbsp;</p>

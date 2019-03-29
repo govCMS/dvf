@@ -11,6 +11,7 @@ use Drupal\dvf\ConfigurablePluginTrait;
 use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\VisualisationStyleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Component\Render\FormattableMarkup;
 
 /**
  * Provides a base class for VisualisationStyle plugins.
@@ -103,6 +104,8 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
         'fields' => [],
         'field_labels' => '',
         'split_field' => '',
+        'cache_expiry' => '',
+        'column_overrides' => [],
       ],
     ];
   }
@@ -155,7 +158,62 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       '#default_value' => $this->config('data', 'split_field'),
     ];
 
+    $form['data']['cache_expiry'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Cache expiry'),
+      '#description' => $this->t('How long the results for this dataset will be cached.'),
+      '#options' => $this->getCacheOptions(),
+      '#default_value' => $this->config('data', 'cache_expiry'),
+    ];
+
+    $column_override_examples = [
+      'type|line', 'color|#000000', 'legend|hide', 'style|dashed', 'weight|20', 'class|hide-points',
+    ];
+    $form['data']['column_overrides'] = [
+      '#prefix' => '<div>',
+      '#suffix' => '</div>',
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      '#type' => 'details',
+      '#title' => t('Column/Group overrides'),
+      '#description' => '<p>' . t('Optionally override a style for a specific column, add one key|value per line and separate key value with a pipe. @help.<br />Examples: <strong>@examples</strong>.',
+        [
+          '@examples' => new FormattableMarkup(implode('</strong> or <strong>', $column_override_examples), []),
+          '@help' => new FormattableMarkup(\Drupal::service('dvf.helpers')->getHelpPageLink('column-overrides'), []),
+        ]) . '</p>',
+    ];
+
+    foreach ($this->fieldLabelsUnique() as $label) {
+      $form['data']['column_overrides'][$label] = [
+        '#type' => 'textarea',
+        '#rows' => 2,
+        '#title' => $label,
+        '#default_value' => $this->config('data', 'column_overrides', $label),
+      ];
+    }
+
     return $form;
+  }
+
+  /**
+   * Gets the options array for caching.
+   *
+   * @return array
+   *   The options array.
+   */
+  protected function getCacheOptions() {
+
+    return [
+      '_global_default' => 'Global default',
+      '0' => 'No cache',
+      '1800' => '30 minutes',
+      '3600' => '1 hour',
+      '21600' => '6 hours',
+      '86400' => '1 day',
+      '604800' => '1 week',
+      '2592000' => '1 month',
+      '15552000' => '6 months',
+    ];
   }
 
   /**
@@ -261,6 +319,16 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
     }
 
     return $labels;
+  }
+
+  /**
+   * Gets the field labels without duplicates.
+   *
+   * @return array
+   *   The unique field labels.
+   */
+  protected function fieldLabelsUnique() {
+    return array_unique($this->fieldLabels(), SORT_REGULAR);
   }
 
   /**
