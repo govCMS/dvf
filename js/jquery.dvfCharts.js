@@ -105,7 +105,6 @@
       }
 
       data.type = this.options.chart.data.type;
-      data.labels = this.options.chart.data.labels.show;
 
       if (this.options.chart.data.stacked) {
         data.groups = [$.map(this.options.chart.data.groups, function(g, group) { return [group]; })];
@@ -115,6 +114,8 @@
       if (this.options.chart.data.names) {
         data.names = this.options.chart.data.names;
       }
+
+      data.labels = !!this.options.chart.data.labels.show;
 
       this.config.data = data;
 

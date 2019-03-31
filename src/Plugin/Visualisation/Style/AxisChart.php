@@ -143,7 +143,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
 
     $form['axis']['styles']['rotated'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Rotated'),
+      '#title' => $this->t('Rotate orientation'),
       '#description' => $this->t('Check to switch the X and Y axis position.'),
       '#default_value' => $this->config('axis', 'styles', 'rotated'),
     ];
