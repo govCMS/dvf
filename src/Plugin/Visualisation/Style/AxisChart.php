@@ -420,7 +420,8 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $form['grid']['lines'] = [
       '#type' => 'details',
       '#title' => $this->t('Grid lines'),
-      '#description' => t('Show additional grid lines along X or Y axis.'),
+      '#description' => t('Show additional grid lines along X or Y axis. @help',
+        ['@help' => \Drupal::service('dvf.helpers')->getHelpPageLink('grid-lines')]),
       '#open' => ($grid_lines_count > 0),
       '#tree' => TRUE,
       '#attributes' => [

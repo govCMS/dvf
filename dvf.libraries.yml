@@ -79,3 +79,11 @@ jquery.dvfTables:
     - core/drupal
     - core/drupalSettings
     - dvf/datatables
+
+dvfAdmin:
+  version: "1.0.0"
+  js:
+    js/dvfAdmin.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
