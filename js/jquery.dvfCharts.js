@@ -414,6 +414,11 @@
           .appendTo($buttonWrapper);
       }.bind(this));
 
+      // Set download data click listener.
+      $('.download-data', $buttonWrapper).on('click', function() {
+        window.open($(this).data('file-uri'));
+      });
+
       return this;
     },
 
