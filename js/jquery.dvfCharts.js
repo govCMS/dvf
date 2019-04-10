@@ -95,11 +95,6 @@
     parseDataOptions: function () {
       var data = { columns: this.options.chart.data.columns };
 
-      if (this.options.axis.x.tick.values.custom) {
-        data.x = 'x';
-        data.columns.push(['x'].concat(this.options.axis.x.tick.values.custom));
-      }
-
       if (this.options.axis.x.type === 'timeseries' && this.options.axis.x.tick.format.timeseries.input) {
         data.xFormat = this.options.axis.x.tick.format.timeseries.input;
       }
@@ -107,8 +102,19 @@
       data.type = this.options.chart.data.type;
 
       if (this.options.chart.data.stacked) {
-        data.groups = [$.map(this.options.chart.data.groups, function(g, group) { return [group]; })];
+
+        // Assign data groups depending on x axis grouping value.
+        data.groups =
+          this.options.axis.x.x_axis_grouping === 'values' ?
+          [$.map(data.columns, function(group) { return group[0]; })] :
+          [$.map(this.options.chart.data.groups, function(g, group) { return [group]; })];
+
         data.order = this.options.chart.data.order;
+      }
+
+      if (this.options.axis.x.tick.values.custom) {
+        data.x = 'x';
+        data.columns.unshift(['x'].concat(this.options.axis.x.tick.values.custom));
       }
 
       if (this.options.chart.data.names) {
