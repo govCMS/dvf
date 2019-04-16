@@ -10,6 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\dvf\ConfigurablePluginTrait;
+use Drupal\dvf\DvfHelpers;
 use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\VisualisationStyleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -37,6 +38,13 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
   protected $moduleHandler;
 
   /**
+   * DVF Helpers.
+   *
+   * @var \Drupal\dvf\DvfHelpers
+   */
+  protected $dvfHelpers;
+
+  /**
    * Constructs a new VisualisationStyleBase.
    *
    * @param array $configuration
@@ -49,11 +57,21 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
    *   The visualisation context in which the plugin will run.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Drupal\dvf\DvfHelpers $dvf_helpers
+   *   The DVF helpers.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation = NULL, ModuleHandlerInterface $module_handler) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    VisualisationInterface $visualisation = NULL,
+    ModuleHandlerInterface $module_handler,
+    DvfHelpers $dvf_helpers
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->visualisation = $visualisation;
     $this->moduleHandler = $module_handler;
+    $this->dvfHelpers = $dvf_helpers;
   }
 
   /**
@@ -73,13 +91,21 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
    * @return static
    *   Returns an instance of this plugin.
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation = NULL) {
+  public static function create(
+    ContainerInterface $container,
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    VisualisationInterface $visualisation = NULL
+  ) {
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
       $visualisation,
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('dvf.helpers')
+
     );
   }
 
@@ -125,7 +151,6 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
   public function settingsForm(array $form, FormStateInterface $form_state) {
     $form['#after_build'][] = [get_called_class(), 'afterBuildSettingsForm'];
     $form['#attached']['library'][] = 'dvf/dvfAdmin';
-    $dvf_helpers = \Drupal::service('dvf.helpers');
 
     $form['data'] = [
       '#type' => 'details',
@@ -137,7 +162,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       '#type' => 'select',
       '#title' => $this->t('Fields'),
       '#description' => $this->t('What fields to include in the visualisation. Select at least one field to display its data. A field is typically a column in a CSV. @help',
-        ['@help' => $dvf_helpers->getHelpPageLink('keys')]),
+        ['@help' => $this->dvfHelpers->getHelpPageLink('keys')]),
       '#options' => $this->getSourceFieldOptions(),
       '#multiple' => TRUE,
       '#size' => 5,
@@ -148,7 +173,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       '#type' => 'textarea',
       '#title' => $this->t('Field label overrides'),
       '#description' => $this->t('Optionally override one or more field labels. Add one original_label|new_label per line and separate with a pipe. @help',
-        ['@help' => $dvf_helpers->getHelpPageLink('label-overrides')]),
+        ['@help' => $this->dvfHelpers->getHelpPageLink('label-overrides')]),
       '#rows' => 2,
       '#default_value' => $this->config('data', 'field_labels'),
       '#placeholder' => 'Old label|New label',
@@ -158,7 +183,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       '#type' => 'select',
       '#title' => $this->t('Split field'),
       '#description' => $this->t('Optionally split into multiple visualisations based on the value of this field. A new visualisation will be made for each unique value in this field. @help',
-        ['@help' => $dvf_helpers->getHelpPageLink('split')]),
+        ['@help' => $this->dvfHelpers->getHelpPageLink('split')]),
       '#options' => $this->getSourceFieldOptions(),
       '#empty_option' => $this->t('- None -'),
       '#empty_value' => '',
@@ -177,7 +202,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       'type|line', 'color|#000000', 'legend|hide', 'style|dashed', 'weight|20', 'class|hide-points',
     ];
     $form['data']['column_overrides'] = [
-      '#prefix' => '<div>',
+      '#prefix' => '<div id="column-overrides">',
       '#suffix' => '</div>',
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
@@ -186,16 +211,16 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       '#description' => '<p>' . t('Optionally override a style for a specific column, add one key|value per line and separate key value with a pipe. @help.<br />Examples: <strong>@examples</strong>.',
         [
           '@examples' => new FormattableMarkup(implode('</strong> or <strong>', $column_override_examples), []),
-          '@help' => $dvf_helpers->getHelpPageLink('column-overrides'),
+          '@help' => $this->dvfHelpers->getHelpPageLink('column-overrides'),
         ]) . '</p>',
     ];
 
-    foreach ($this->fieldLabelsUnique() as $label) {
-      $form['data']['column_overrides'][$label] = [
+    foreach ($this->getColumnOverrideValues() as $override) {
+      $form['data']['column_overrides'][$override] = [
         '#type' => 'textarea',
         '#rows' => 2,
-        '#title' => $label,
-        '#default_value' => $this->config('data', 'column_overrides', $label),
+        '#title' => $override,
+        '#default_value' => $this->config('data', 'column_overrides', $override),
       ];
     }
 
@@ -407,6 +432,25 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
    */
   public function isValidDownloadUri($uri) {
     return (UrlHelper::isValid($uri) || filter_var($uri, FILTER_VALIDATE_URL)) ? $uri : FALSE;
+  }
+
+  /**
+   * Returns the column override values to make a form array.
+   *
+   * @return array
+   *   The array of column override values.
+   */
+  protected function getColumnOverrideValues() {
+
+    if ($this->config('axis', 'x', 'x_axis_grouping') === 'values' && $this->config('axis', 'x', 'tick', 'values', 'field')) {
+      $x_tick_field = $this->config('axis', 'x', 'tick', 'values', 'field');
+      return array_map(function ($e) use ($x_tick_field) {
+        return $e->{$x_tick_field};
+      }, $this->getVisualisation()->data());
+    }
+    else {
+      return $this->fieldLabelsUnique();
+    }
   }
 
 }

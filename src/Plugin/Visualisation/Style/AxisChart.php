@@ -195,6 +195,10 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       '#empty_option' => $this->t('- None -'),
       '#empty_value' => '',
       '#default_value' => $this->config('axis', 'x', 'tick', 'values', 'field'),
+      '#ajax' => [
+        'callback' => [$this, 'updateAxisGrouping'],
+        'wrapper' => 'x-axis-grouping',
+      ],
     ];
 
     $form['axis']['x']['tick']['values']['custom'] = [
@@ -203,6 +207,29 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       '#description' => $this->t('Override the individual X axis data-label values manually. Separate values with a comma.'),
       '#default_value' => $this->config('axis', 'x', 'tick', 'values', 'custom'),
     ];
+
+    $form['axis']['x']['x_axis_grouping'] = [
+      '#prefix' => '<div id="x-axis-grouping">',
+      '#suffix' => '</div>',
+      '#type' => 'select',
+      '#title' => $this->t('X Axis Grouping'),
+      '#options' => [
+        'keys' => $this->t('Group by keys'),
+        'values' => $this->t('Group by label values'),
+      ],
+      '#default_value' => $this->config('axis', 'x', 'x_axis_grouping'),
+      '#description' => t(
+        'The X axis can use <em>keys</em> or the <em>label key value</em> as tick values. Changing this swaps what is displayed on the X axis (or table header if viewed as a table). <em>Tick values field</em> must be set for "labels" options to work correctly. @help.',
+        ['@help' => $this->dvfHelpers->getHelpPageLink('x-axis-grouping')]),
+      '#ajax' => [
+        'callback' => [$this, 'updateColumnOverrides'],
+        'wrapper' => 'column-overrides',
+      ],
+    ];
+
+    if (!$this->config('axis', 'x', 'tick', 'values', 'field')) {
+      $form['axis']['x']['x_axis_grouping']['#attributes']['disabled'] = 'disabled';
+    }
 
     $form['axis']['x']['tick']['format']['indexed'] = [
       '#type' => 'select',
@@ -421,7 +448,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       '#type' => 'details',
       '#title' => $this->t('Grid lines'),
       '#description' => t('Show additional grid lines along X or Y axis. @help',
-        ['@help' => \Drupal::service('dvf.helpers')->getHelpPageLink('grid-lines')]),
+        ['@help' => $this->dvfHelpers->getHelpPageLink('grid-lines')]),
       '#open' => ($grid_lines_count > 0),
       '#tree' => TRUE,
       '#attributes' => [
@@ -663,6 +690,36 @@ abstract class AxisChart extends TableVisualisationStyleBase {
   }
 
   /**
+   * Ajax callback that updates the column overrides options.
+   *
+   * @param array $form
+   *   The form structure.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return array
+   *   The updated form element.
+   */
+  public function updateColumnOverrides(array $form, FormStateInterface $form_state) {
+    return $form['field_visualisation_url']['widget'][0]['options']['visualisation_style_options']['data']['column_overrides'];
+  }
+
+  /**
+   * Ajax callback that updates the x axis grouping options.
+   *
+   * @param array $form
+   *   The form structure.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return array
+   *   The updated form element.
+   */
+  public function updateAxisGrouping(array $form, FormStateInterface $form_state) {
+    return $form['field_visualisation_url']['widget'][0]['options']['visualisation_style_options']['axis']['x']['x_axis_grouping'];
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function build() {
@@ -781,7 +838,24 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     // Set the chart title.
     $settings['chart']['title']['text'] = $this->visualisation->getEntity()->label();
 
+    // Column overrides.
     $settings['chart']['data']['column_overrides'] = $this->getColumnOverrides();
+
+    // If X axis grouping occurs on labels, flip the values and the labels.
+    if ($this->config('axis', 'x', 'x_axis_grouping') === 'values') {
+      $column_labels = array_map('reset', $settings['chart']['data']['columns']);
+      $flipped_columns = [];
+
+      foreach ($records as $i => $record) {
+        $flipped_columns[] = array_merge(
+          [$settings['axis']['x']['tick']['values']['custom'][$i]],
+          array_values(array_intersect_key((array) $record, array_flip($column_labels)))
+        );
+      }
+
+      $settings['chart']['data']['columns'] = $flipped_columns;
+      $settings['axis']['x']['tick']['values']['custom'] = $column_labels;
+    }
 
     return $settings;
   }
@@ -861,6 +935,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     array_multisort($weights, SORT_ASC, $array_to_order);
 
     return $array_to_order;
+
   }
 
 }
