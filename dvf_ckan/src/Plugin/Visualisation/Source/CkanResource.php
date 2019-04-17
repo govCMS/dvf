@@ -88,6 +88,8 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
    *   The CKAN client.
    * @param \Drupal\ckan_connect\Parser\CkanResourceUrlParserInterface $ckan_resource_url_parser
    *   The CKAN resource URL parser.
+   * @param \Drupal\dvf\DvfHelpers $dvf_helpers
+   *   The DVF helpers.
    */
   public function __construct(
     array $configuration,

@@ -24,7 +24,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
           'rotated' => FALSE,
         ],
         'x' => [
-          'type' => 'indexed',
+          'type' => '',
           'label' => [
             'text' => '',
           ],
@@ -60,7 +60,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
           ],
         ],
         'y' => [
-          'type' => 'indexed',
+          'type' => '',
           'label' => [
             'text' => '',
           ],
@@ -160,6 +160,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       '#title' => $this->t('Axis type'),
       '#description' => $this->t('Set the data type for the X axis values. E.g. If the X axis contains numbers, select "Indexed (numeric)".'),
       '#options' => [
+        '' => $this->t('Automatic (Indexed if numeric, category if not)'),
         'indexed' => $this->t('Indexed (numeric)'),
         'category' => $this->t('Category (non-numeric)'),
         'timeseries' => $this->t('Date or time'),
@@ -331,6 +332,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       '#title' => $this->t('Axis type'),
       '#description' => $this->t('Set the data type for the Y axis values. E.g. If the Y axis contains numbers, select "Indexed (numeric)".'),
       '#options' => [
+        '' => $this->t('Automatic (Indexed if numeric, category if not)'),
         'indexed' => $this->t('Indexed (numeric)'),
         'category' => $this->t('Category (non-numeric)'),
         'timeseries' => $this->t('Date or time'),
@@ -830,14 +832,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
 
     // Data columns.
     foreach ($this->fields() as $field) {
-      if (!empty($this->splitField())) {
-        foreach ($records as $key => $record) {
-          $settings['chart']['data']['columns'][] = array_merge([$field], [$records[$key]->{$field}]);
-        }
-      }
-      else {
-        $settings['chart']['data']['columns'][] = array_merge([$field], $this->getSourceFieldValues($field));
-      }
+      $settings['chart']['data']['columns'][] = array_merge([$field], $this->getSourceFieldValues($field));
     }
 
     // Override fields labels if set in chart options.
@@ -863,6 +858,21 @@ abstract class AxisChart extends TableVisualisationStyleBase {
 
       $settings['chart']['data']['columns'] = $flipped_columns;
       $settings['axis']['x']['tick']['values']['custom'] = $column_labels;
+    }
+
+    // Check if values are auto.
+    $tick_values_field = $this->config('axis', 'x', 'tick', 'values', 'field');
+
+    if ($settings['axis']['x']['type'] === '') {
+      is_numeric($record->{$tick_values_field}) ?
+        $settings['axis']['x']['type'] = 'indexed' :
+        $settings['axis']['x']['type'] = 'category';
+    }
+
+    if ($settings['axis']['y']['type'] === '') {
+      is_numeric($record->{$field}) ?
+        $settings['axis']['y']['type'] = 'indexed' :
+        $settings['axis']['y']['type'] = 'category';
     }
 
     return $settings;
@@ -912,7 +922,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       }
     }
 
-    $column_overrides_sorted = array_merge(array_fill_keys($this->fieldLabelsUnique(), []), $column_overrides_sorted);
+    $column_overrides_sorted = array_merge(array_fill_keys($this->fieldLabelsOriginal(), []), $column_overrides_sorted);
     return $this->setArrayOrder($column_overrides_sorted);
   }
 

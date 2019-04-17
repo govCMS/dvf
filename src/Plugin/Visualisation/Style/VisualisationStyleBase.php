@@ -369,7 +369,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
     $label_overrides = preg_split('/\r\n|[\r\n]/', $label_overrides);
 
     foreach ($label_overrides as $label_override) {
-      $label_parts = explode('|', $label_override, 2);
+      $label_parts = explode('|', trim($label_override), 2);
 
       if (count($label_parts) === 2 && array_key_exists($label_parts[0], $labels)) {
         $labels[$label_parts[0]] = $label_parts[1];
@@ -380,13 +380,19 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
   }
 
   /**
-   * Gets the field labels without duplicates.
+   * Gets the original field labels without any overrides applied.
    *
    * @return array
    *   The unique field labels.
    */
-  protected function fieldLabelsUnique() {
-    return array_unique($this->fieldLabels(), SORT_REGULAR);
+  protected function fieldLabelsOriginal() {
+    $labels = $this->getSourceFieldOptions();
+
+    if (!empty($labels['_id'])) {
+      unset($labels['_id']);
+    }
+
+    return array_keys($labels);
   }
 
   /**
@@ -475,8 +481,28 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       }, $this->getVisualisation()->data());
     }
     else {
-      return $this->fieldLabelsUnique();
+      return $this->fieldLabelsOriginal();
     }
+  }
+
+  /**
+   * Checks to see if columns are numeric.
+   *
+   * @param array $array
+   *   The array of column values.
+   *
+   * @return bool
+   *   True if numeric, false if not.
+   */
+  public function columnsAreNumeric(array $array) {
+    $array = reset($array);
+    array_shift($array);
+
+    if (count($array) === count(array_filter($array, 'is_numeric'))) {
+      return TRUE;
+    }
+
+    return FALSE;
   }
 
 }
