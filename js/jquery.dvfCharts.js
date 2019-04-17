@@ -416,6 +416,7 @@
             // Add optional settings if they exist.
             width: this.options.chart.styles.width || undefined,
             height: this.options.chart.styles.height || undefined,
+            filename: this.config.title.text || undefined,
           }))
           .appendTo($buttonWrapper);
       }.bind(this));

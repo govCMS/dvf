@@ -97,6 +97,10 @@
      */
     addToggleButton: function () {
 
+      if (this.options.table.disable) {
+        return this;
+      }
+
       var self = this,
         $buttonWrapper = $(this.element)
           .closest('.dvf-table')

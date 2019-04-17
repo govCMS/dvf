@@ -41,9 +41,12 @@ abstract class TableVisualisationStyleBase extends VisualisationStyleBase {
    *   An array of table build settings.
    */
   protected function tableBuildSettings(array $records) {
+    $config = $this->getConfiguration();
+
     return [
       'data' => $this->getTableRows($records),
       'columns' => $this->getTableHeader(),
+      'table' => $config['chart']['table'],
     ];
   }
 

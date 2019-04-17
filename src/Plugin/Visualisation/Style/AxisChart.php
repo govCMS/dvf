@@ -100,6 +100,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
           'text' => '',
         ],
         'interaction' => TRUE,
+        'table' => [],
         'data' => [
           'labels' => [
             'show' => FALSE,
@@ -553,6 +554,13 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       '#title' => $this->t('Enable chart interaction'),
       '#description' => $this->t('Check to enable all of interactions (E.g. Showing / hiding the tooltip when hovering on labels, etc).'),
       '#default_value' => $this->config('chart', 'interaction'),
+    ];
+
+    $form['chart']['table']['disable'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Disable table'),
+      '#description' => $this->t('Disable the "Show table" toggle button on a chart / graph.'),
+      '#default_value' => $this->config('chart', 'table', 'disable'),
     ];
 
     $form['chart']['data']['labels']['show'] = [
