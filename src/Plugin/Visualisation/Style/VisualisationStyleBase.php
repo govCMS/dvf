@@ -134,6 +134,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
         'split_field' => '',
         'cache_expiry' => '',
         'column_overrides' => [],
+        'data_filters' => [],
       ],
     ];
   }
@@ -223,6 +224,31 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
         '#default_value' => $this->config('data', 'column_overrides', $override),
       ];
     }
+
+    $form['data']['data_filters'] = [
+      '#prefix' => '<div>',
+      '#suffix' => '</div>',
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      '#type' => 'details',
+      '#title' => t('CKAN data filters'),
+      '#description' => t('Filters can be used to refine/reduce the records returned from the CKAN datasource. @help',
+        ['@help' => $this->dvfHelpers->getHelpPageLink('data-filters')]),
+    ];
+
+    $form['data']['data_filters']['q'] = [
+      '#type' => 'textfield',
+      '#title' => t('Full text query'),
+      '#description' => t('Optionally query entire dataset for any string value.'),
+      '#default_value' => $this->config('data', 'data_filters', 'q'),
+    ];
+
+    $form['data']['data_filters']['filters'] = [
+      '#type' => 'textfield',
+      '#title' => t('Filters'),
+      '#description' => t('Filter on key/value dictionary. For example: {"code": "4000", "year": "2016"} or {"year": ["2014", "2015", "2015"]}. Case sensitive.'),
+      '#default_value' => $this->config('data', 'data_filters', 'filters'),
+    ];
 
     return $form;
   }
