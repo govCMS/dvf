@@ -102,15 +102,22 @@
       }
 
       var self = this,
+        processedClass = 'processed-toggle-button',
         $buttonWrapper = $(this.element)
           .closest('.dvf-table')
           .nextAll('.table-chart--actions');
+
+      if ($buttonWrapper.hasClass(processedClass)) {
+        return this;
+      }
 
       $('<button/>')
         .html('Show table')
         .addClass('table-chart--toggle')
         .click(self.toggleView.bind(self))
         .appendTo($buttonWrapper);
+
+      $buttonWrapper.addClass(processedClass);
 
       return this;
     },

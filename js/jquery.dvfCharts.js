@@ -304,9 +304,7 @@
           pointShow = this.getDeepProperty(this.options, 'point.show'),
           pointRadius = this.getDeepProperty(this.options, 'point.radius');
 
-      if (pointShow) {
-        point.show = pointShow;
-      }
+      point.show = !!pointShow;
 
       if (pointRadius) {
         point.r = pointRadius;
@@ -399,13 +397,18 @@
       if (typeof $.fn.chartExport !== 'function') {
         return this;
       }
-
       var buttonTypes = ['png', 'svg'],
+          processedClass = 'processed-download-buttons',
           $buttonWrapper = $(this.element)
             .closest('.dvf-chart')
             .nextAll('.table-chart--actions');
 
+      if ($buttonWrapper.hasClass(processedClass)) {
+        return this;
+      }
+
       $(buttonTypes).each(function (i, format) {
+
         $('<button/>')
           .html('Download as ' + format)
           .addClass(this.options.chart.component + '--download')
@@ -416,7 +419,7 @@
             // Add optional settings if they exist.
             width: this.options.chart.styles.width || undefined,
             height: this.options.chart.styles.height || undefined,
-            filename: this.config.title.text || undefined,
+            filename: (this.config.title && this.config.title.text) ? this.config.title.text : undefined,
           }))
           .appendTo($buttonWrapper);
       }.bind(this));
@@ -425,6 +428,8 @@
       $('.download-data', $buttonWrapper).on('click', function() {
         window.open($(this).data('file-uri'));
       });
+
+      $buttonWrapper.addClass(processedClass);
 
       return this;
     },
