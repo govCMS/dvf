@@ -55,9 +55,31 @@ this field type, see related modules above for modules currently available.
 
 * Create/edit an entity that contains the field you created above.
 * If using `Visualisation URL`, provide a URL to the remote data source
-* If using `Visualisation File`, upload a file containg the data (eg. CSV)
+* If using `Visualisation File`, upload a file containing the data (eg. CSV)
 * Open `Settings` to configure the visualisation style and the options
   available for that style. Eg. Graph type, axis settings, etc.
+
+## For developers: available hooks
+
+```php
+hook_dvf_source_configuration_alter();
+hook_dvf_visualisation_data_alter();
+hook_dvf_visualisation_build_alter();
+hook_dvf_style_configuration_alter();
+theme_dvf_style_configuration_alter();
+
+Example code:
+
+/**
+ * Implements theme_dvf_style_configuration_alter(). 
+ *
+ * Set a custom colour palette for all charts in a custom theme.
+ */
+function mytheme_dvf_style_configuration_alter(array &$configuration, VisualisationInterface $visualisation) {
+  $configuration['chart']['palette'] = '#000000,#aec7e8,#ff0000,#ffbb78,#fff000';
+  return $configuration;
+}
+```
 
 ## Development 
 

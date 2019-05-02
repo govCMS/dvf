@@ -76,7 +76,11 @@
       this.config.interaction = { enabled: this.options.chart.interaction };
 
       if (plugin.options.chart.palette) {
-        this.config.color = {pattern: plugin.options.chart.palette.split(',')};
+        this.config.color = {
+          pattern: plugin.options.chart.palette.split(',').map(function(color) {
+            return color.trim();
+          })
+        };
       }
 
       // Display chart title is title.show is true.
