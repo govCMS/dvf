@@ -49,7 +49,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
               'right' => '',
             ],
             'label' => [
-              'position' => 'inner-right',
+              'position' => '',
             ],
             'tick' => [
               'rotate' => '',
@@ -80,7 +80,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
               'bottom' => '',
             ],
             'label' => [
-              'position' => 'inner-top',
+              'position' => '',
             ],
           ],
         ],
@@ -290,6 +290,8 @@ abstract class AxisChart extends TableVisualisationStyleBase {
         'outer-left' => $this->t('Outer left'),
       ],
       '#default_value' => $this->config('axis', 'x', 'styles', 'label', 'position'),
+      '#empty_option' => $this->t('- Select -'),
+      '#empty_option_value' => '',
     ];
 
     $form['axis']['x']['styles']['tick']['rotate'] = [
@@ -416,6 +418,8 @@ abstract class AxisChart extends TableVisualisationStyleBase {
         'outer-bottom' => $this->t('Outer bottom'),
       ],
       '#default_value' => $this->config('axis', 'y', 'styles', 'label', 'position'),
+      '#empty_option' => $this->t('- Select -'),
+      '#empty_option_value' => '',
     ];
 
     $form['grid'] = [

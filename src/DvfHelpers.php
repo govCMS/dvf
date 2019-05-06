@@ -67,4 +67,27 @@ class DvfHelpers {
     return (json_decode($raw_json, TRUE) == NULL) ? FALSE : TRUE;
   }
 
+  /**
+   * Recursively removes empty elements from nested array.
+   *
+   * @param array $array
+   *   The array to remove the empty elements from.
+   *
+   * @return array
+   *   The filtered array.
+   */
+  public function filterArrayRecursive(array $array) {
+    foreach ($array as $key => $value) {
+      if (is_array($value)) {
+        $array[$key] = self::filterArrayRecursive($array[$key]);
+      }
+
+      if (empty($array[$key])) {
+        unset($array[$key]);
+      }
+    }
+
+    return $array;
+  }
+
 }
