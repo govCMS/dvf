@@ -33,7 +33,9 @@ trait ConfigurablePluginTrait {
         return $haystack[$key];
       }
 
-      $haystack = $haystack[$key];
+      if (!empty($haystack[$key])) {
+        $haystack = $haystack[$key];
+      }
     }
 
     return NULL;
