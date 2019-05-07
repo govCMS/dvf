@@ -18,8 +18,14 @@ abstract class TableVisualisationStyleBase extends VisualisationStyleBase {
    */
   protected function buildTable(array $records) {
     $table_id = hash('sha256', time() . mt_rand());
+    $configuration = $this->getConfiguration();
 
     $table = [
+      '#type' => 'container',
+      '#attributes' => ['class' => 'single-table'],
+    ];
+
+    $table['table'] = [
       '#type' => 'html_tag',
       '#tag' => 'table',
       '#attributes' => ['data-dvftables' => $table_id],
@@ -27,6 +33,25 @@ abstract class TableVisualisationStyleBase extends VisualisationStyleBase {
 
     $table['#attached']['library'] = ['dvf/dvfTables'];
     $table['#attached']['drupalSettings']['dvf']['tables'][$table_id] = $this->tableBuildSettings($records);
+
+    // If our table is not the primary visualisation, exit here.
+    if (!array_key_exists('table', $configuration)) {
+      return $table;
+    }
+
+    // If $file_uri is empty/false, do not display download data button to the table.
+    $file_uri = $this->getDatasetDownloadUri($this->visualisation->getEntity());
+    if (!empty($file_uri)) {
+      $table['actions']['file_uri'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'button',
+        '#value' => $this->t('Download data'),
+        '#attributes' => [
+          'class' => ['download-data'],
+          'data-file-uri' => $file_uri,
+        ],
+      ];
+    }
 
     return $table;
   }
@@ -46,7 +71,7 @@ abstract class TableVisualisationStyleBase extends VisualisationStyleBase {
     return [
       'data' => $this->getTableRows($records),
       'columns' => $this->getTableHeader(),
-      'table' => $config['chart']['table'],
+      'table' => !empty($config['chart']['table']) ? $config['chart']['table'] : '',
     ];
   }
 
@@ -120,12 +145,14 @@ abstract class TableVisualisationStyleBase extends VisualisationStyleBase {
       foreach ($records as $record) {
         $row = [];
 
-        if ($this->rowHeaderField()) {
+        if (property_exists($record, $this->rowHeaderField())) {
           $row[] = $this->createHeaderCell($record->{$this->rowHeaderField()}, 'row');
         }
 
         foreach ($this->fields() as $field) {
-          $row[] = $this->createRowCell($record->{$field});
+          if (property_exists($record, $field)) {
+            $row[] = $this->createRowCell($record->{$field});
+          }
         }
 
         $rows[] = $row;

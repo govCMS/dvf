@@ -119,6 +119,13 @@
 
       $buttonWrapper.addClass(processedClass);
 
+      // Set download data click listener.
+      if ($(this.element).is('table')) {
+        $('.download-data', $(this.element).closest('.dvf-table')).on('click', function() {
+          window.open($(this).data('file-uri'));
+        });
+      }
+
       return this;
     },
 

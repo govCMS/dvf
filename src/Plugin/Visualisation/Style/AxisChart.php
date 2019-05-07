@@ -818,6 +818,11 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       'chart' => $this->config('chart'),
     ];
 
+    if (empty($records)) {
+      $this->messenger->addError(t('Invalid records.'));
+      return [];
+    }
+
     // Axis X and Y tick values from user input.
     foreach (['x', 'y'] as $axis) {
       if ($this->config('axis', $axis, 'tick', 'values', 'custom')) {
@@ -830,7 +835,9 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       $settings['axis']['x']['tick']['values']['custom'] = [];
 
       foreach ($records as $record) {
-        $settings['axis']['x']['tick']['values']['custom'][] = trim($record->{$this->config('axis', 'x', 'tick', 'values', 'field')});
+        if (property_exists($record, $this->config('axis', 'x', 'tick', 'values', 'field'))) {
+          $settings['axis']['x']['tick']['values']['custom'][] = trim($record->{$this->config('axis', 'x', 'tick', 'values', 'field')});
+        }
       }
     }
 
@@ -867,13 +874,13 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     // Check if values are auto.
     $tick_values_field = $this->config('axis', 'x', 'tick', 'values', 'field');
 
-    if ($settings['axis']['x']['type'] === '') {
+    if ($settings['axis']['x']['type'] === '' && !empty($record) && property_exists($record, $tick_values_field)) {
       is_numeric($record->{$tick_values_field}) ?
         $settings['axis']['x']['type'] = 'indexed' :
         $settings['axis']['x']['type'] = 'category';
     }
 
-    if ($settings['axis']['y']['type'] === '') {
+    if ($settings['axis']['y']['type'] === '' && !empty($record) && property_exists($record, $field)) {
       is_numeric($record->{$field}) ?
         $settings['axis']['y']['type'] = 'indexed' :
         $settings['axis']['y']['type'] = 'category';

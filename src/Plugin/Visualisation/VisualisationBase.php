@@ -81,6 +81,8 @@ abstract class VisualisationBase extends PluginBase implements VisualisationInte
   protected $entity;
 
   /**
+   * The theme manager.
+   *
    * @var \Drupal\Core\Theme\ThemeManagerInterface
    */
   protected $themeManager;
@@ -100,6 +102,8 @@ abstract class VisualisationBase extends PluginBase implements VisualisationInte
    *   The style plugin manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Instance of the module handler.
+   * @param \Drupal\Core\Theme\ThemeManagerInterface $themeManager
+   *   The theme manager.
    */
   public function __construct(
     array $configuration,
