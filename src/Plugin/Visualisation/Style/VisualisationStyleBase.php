@@ -7,6 +7,7 @@ use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\dvf\ConfigurablePluginTrait;
@@ -45,6 +46,13 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
   protected $dvfHelpers;
 
   /**
+   * The Messenger service.
+   *
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  protected $messenger;
+
+  /**
    * Constructs a new VisualisationStyleBase.
    *
    * @param array $configuration
@@ -59,6 +67,8 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
    *   The module handler.
    * @param \Drupal\dvf\DvfHelpers $dvf_helpers
    *   The DVF helpers.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The Messenger service.
    */
   public function __construct(
     array $configuration,
@@ -66,12 +76,14 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
     $plugin_definition,
     VisualisationInterface $visualisation = NULL,
     ModuleHandlerInterface $module_handler,
-    DvfHelpers $dvf_helpers
+    DvfHelpers $dvf_helpers,
+    MessengerInterface $messenger
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->visualisation = $visualisation;
     $this->moduleHandler = $module_handler;
     $this->dvfHelpers = $dvf_helpers;
+    $this->messenger = $messenger;
   }
 
   /**
@@ -104,8 +116,8 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       $plugin_definition,
       $visualisation,
       $container->get('module_handler'),
-      $container->get('dvf.helpers')
-
+      $container->get('dvf.helpers'),
+      $container->get('messenger')
     );
   }
 

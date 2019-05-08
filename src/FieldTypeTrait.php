@@ -12,6 +12,13 @@ use Drupal\Core\Form\FormStateInterface;
 trait FieldTypeTrait {
 
   /**
+   * The default plugin ID to prevent errors if no visualisation style is selected.
+   *
+   * @var string
+   */
+  private $defaultPluginId = 'dvf_bar_chart';
+
+  /**
    * Returns a form base for the field-level settings.
    *
    * @param array $form
@@ -105,9 +112,15 @@ trait FieldTypeTrait {
     if (!empty($item['options']['visualisation_style'])) {
       $plugin_configuration['style']['plugin_id'] = $item['options']['visualisation_style'];
     }
+    else {
+      $plugin_configuration['style']['plugin_id'] = $this->defaultPluginId;
+    }
 
     if (!empty($item['options']['visualisation_style_options'])) {
       $plugin_configuration['style']['options'] = $item['options']['visualisation_style_options'];
+    }
+    else {
+      \Drupal::messenger()->addWarning(t('Insufficient style options detected for this visualisation. Please review the settings.'));
     }
 
     if ($default_source) {
