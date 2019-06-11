@@ -78,7 +78,7 @@ class CkanConvertBlob extends ProcessPluginBase {
               'tick' => [
                 'rotate' => $ckan_config['axis_settings']['x_tick_rotate'],
                 'width' => $ckan_config['axis_settings']['x_width'],
-                'multiline' => $ckan_config['axis_settings']['x_disable_multiline'],
+                'multiline' => $ckan_config['axis_settings']['x_disable_multiline'] ? FALSE : TRUE,
               ],
             ],
           ],
@@ -104,7 +104,7 @@ class CkanConvertBlob extends ProcessPluginBase {
               'tick' => [
                 'rotate' => $ckan_config['axis_settings']['y_tick_rotate'],
                 'width' => $ckan_config['axis_settings']['y_width'],
-                'multiline' => $ckan_config['axis_settings']['y_disable_multiline'],
+                'multiline' => $ckan_config['axis_settings']['y_disable_multiline'] ? FALSE : TRUE,
               ],
             ],
           ],
