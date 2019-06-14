@@ -179,16 +179,6 @@
         axis.x.tick.width = this.options.axis.x.styles.tick.width;
       }
 
-      if (this.options.axis.x.styles.padding.left) {
-        axis.x.padding = axis.x.padding || {};
-        axis.x.padding.left = parseInt(this.options.axis.x.styles.padding.left);
-      }
-
-      if (this.options.axis.x.styles.padding.right) {
-        axis.x.padding = axis.x.padding || {};
-        axis.x.padding.right = parseInt(this.options.axis.x.styles.padding.right);
-      }
-
       axis.x.label = {
         text: this.options.axis.x.label.text,
         position: (this.options.axis.styles.rotated) ? this.options.axis.y.styles.label.position : this.options.axis.x.styles.label.position
@@ -225,14 +215,12 @@
         axis.y.tick.values = this.options.axis.y.tick.values.custom;
       }
 
-      if (this.options.axis.x.styles.padding.top) {
-        axis.x.padding = axis.x.padding || {};
-        axis.x.padding.top = parseInt(this.options.axis.x.styles.padding.top);
+      if (this.options.axis.y.styles.padding && typeof(this.options.axis.y.styles.padding) == 'object') {
+        axis.y.padding = this.options.axis.y.styles.padding;
       }
 
-      if (this.options.axis.y.styles.padding.bottom) {
-        axis.y.padding = axis.y.padding || {};
-        axis.y.padding.bottom = parseInt(this.options.axis.y.styles.padding.bottom);
+      if (this.options.axis.x.styles.padding && typeof(this.options.axis.x.styles.padding) == 'object') {
+        axis.x.padding = this.options.axis.x.styles.padding;
       }
 
       axis.y.label = {
