@@ -1,19 +1,19 @@
 c3:
   remote: https://github.com/c3js/c3
-  version: "0.4.12"
+  version: "0.7.1"
   license:
     name: MIT
     url: https://github.com/c3js/c3/blob/master/LICENSE
     gpl-compatible: true
   js:
-    https://cdnjs.cloudflare.com/ajax/libs/c3/0.6.2/c3.min.js: { type: external, minified: true }
+    https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.1/c3.min.js: { type: external, minified: true }
   css:
     component:
-      https://cdnjs.cloudflare.com/ajax/libs/c3/0.6.2/c3.min.css: { type: external, minified: true }
+      https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.1/c3.min.css: { type: external, minified: true }
 
 d3:
   remote: https://github.com/d3/d3
-  version: "3.5.17"
+  version: "5.5.0"
   license:
     name: BSD-3
     url: https://github.com/d3/d3/blob/master/LICENSE

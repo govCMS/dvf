@@ -119,9 +119,6 @@ trait FieldTypeTrait {
     if (!empty($item['options']['visualisation_style_options'])) {
       $plugin_configuration['style']['options'] = $item['options']['visualisation_style_options'];
     }
-    else {
-      \Drupal::messenger()->addWarning(t('Insufficient style options detected for this visualisation. Please review the settings.'));
-    }
 
     if ($default_source) {
       $plugin_configuration['source'] = NestedArray::mergeDeep($plugin_configuration['source'], $default_source);
