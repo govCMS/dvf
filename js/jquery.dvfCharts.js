@@ -463,6 +463,12 @@
         }
       }.bind(this));
 
+      if (this.config.data.columns.length && this.config.data.columns[0].length) {
+        if (this.config.data.columns[0][0] === 'x' && this.config.data.columns.length !== ordered_columns.length) {
+          ordered_columns.unshift(this.config.data.columns[0]);
+        }
+      }
+
       if (this.config.data.columns.length === ordered_columns.length) {
         this.config.data.columns = ordered_columns;
       }
