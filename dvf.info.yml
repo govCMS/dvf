@@ -3,3 +3,4 @@ description: 'Data Visualisation Framework makes it easy to generate visualisati
 type: module
 package: Data Visualisation Framework
 core: 8.x
+core_version_requirement: ^8 || ^9

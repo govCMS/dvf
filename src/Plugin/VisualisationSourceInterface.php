@@ -2,14 +2,15 @@
 
 namespace Drupal\dvf\Plugin;
 
-use Drupal\Component\Plugin\ConfigurablePluginInterface;
+use Drupal\Component\Plugin\ConfigurableInterface;
+use Drupal\Component\Plugin\DependentPluginInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Provides an interface defining a VisualisationSource plugin.
  */
-interface VisualisationSourceInterface extends \Countable, \Iterator, ConfigurablePluginInterface, PluginInspectionInterface {
+interface VisualisationSourceInterface extends \Countable, \Iterator, ConfigurableInterface, DependentPluginInterface, PluginInspectionInterface {
 
   /**
    * Returns a form to configure settings for this plugin.
