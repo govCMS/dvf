@@ -96,6 +96,7 @@ class Table extends TableVisualisationStyleBase {
       $build[$group_key]['table'] = [
         '#type' => 'container',
         '#attributes' => ['class' => ['dvf-table']],
+        'heading' => $this->buildSplitHeading($group_key),
         'content' => $this->buildTable($group_records),
       ];
     }
