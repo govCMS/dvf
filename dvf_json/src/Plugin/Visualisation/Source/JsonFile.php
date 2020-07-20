@@ -114,7 +114,7 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
   public function defaultConfiguration() {
     return [
       'json' => [
-        'expression' => '',
+        'expression' => '$[*]',
       ],
     ];
   }
@@ -133,7 +133,7 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
     $form['json']['expression'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Expression'),
-      '#description' => $this->t('JSONPath expression used to extract the data. Visit the <a href="https://github.com/govCMS/dvf/tree/8.x-1.x/dvf_json">online documentation</a> for more information on how to use JSONPath expressions.'),
+      '#description' => $this->t('JSONPath expression used to extract the data. Default is $[*] which represents the root of the document. Visit the <a href="https://github.com/govCMS/dvf/tree/8.x-1.x/dvf_json">online documentation</a> for more information on how to use JSONPath expressions.'),
       '#default_value' => $this->config('json', 'expression'),
     ];
 
