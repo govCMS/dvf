@@ -1,19 +1,19 @@
 c3:
   remote: https://github.com/c3js/c3
-  version: "0.4.12"
+  version: "0.7.1"
   license:
     name: MIT
     url: https://github.com/c3js/c3/blob/master/LICENSE
     gpl-compatible: true
   js:
-    https://cdnjs.cloudflare.com/ajax/libs/c3/0.6.2/c3.min.js: { type: external, minified: true }
+    https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.1/c3.min.js: { type: external, minified: true }
   css:
     component:
-      https://cdnjs.cloudflare.com/ajax/libs/c3/0.6.2/c3.min.css: { type: external, minified: true }
+      https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.1/c3.min.css: { type: external, minified: true }
 
 d3:
   remote: https://github.com/d3/d3
-  version: "3.5.17"
+  version: "5.5.0"
   license:
     name: BSD-3
     url: https://github.com/d3/d3/blob/master/LICENSE
@@ -34,9 +34,19 @@ datatables:
     component:
       https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.15/css/jquery.dataTables.css: { type: external, minified: true }
 
+filesaver:
+  remote: https://github.com/eligrey/FileSaver.js
+  version: "1.3.8"
+  license:
+    name: MIT
+    url: https://github.com/eligrey/FileSaver.js/blob/master/LICENSE.md
+  js:
+    https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js: { type: external, minified: true }
+
 jquery.dvfCharts:
   version: "1.0.0"
   js:
+    js/jquery.chart_export.js: {}
     js/jquery.dvfCharts.js: {}
   dependencies:
     - core/jquery
@@ -44,6 +54,7 @@ jquery.dvfCharts:
     - core/drupalSettings
     - dvf/d3
     - dvf/c3
+    - dvf/filesaver
 
 dvfCharts:
   version: "1.0.0"
@@ -68,3 +79,11 @@ jquery.dvfTables:
     - core/drupal
     - core/drupalSettings
     - dvf/datatables
+
+dvfAdmin:
+  version: "1.0.0"
+  js:
+    js/dvfAdmin.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

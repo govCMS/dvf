@@ -7,6 +7,7 @@ use Drupal\ckan_connect\Parser\CkanResourceUrlParserInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\dvf\DvfHelpers;
 use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\Visualisation\Source\VisualisationSourceBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -62,6 +63,13 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
   protected $records;
 
   /**
+   * DVF Helpers.
+   *
+   * @var \Drupal\dvf\DvfHelpers
+   */
+  protected $dvfHelpers;
+
+  /**
    * Constructs a new CkanResource.
    *
    * @param array $configuration
@@ -80,12 +88,25 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
    *   The CKAN client.
    * @param \Drupal\ckan_connect\Parser\CkanResourceUrlParserInterface $ckan_resource_url_parser
    *   The CKAN resource URL parser.
+   * @param \Drupal\dvf\DvfHelpers $dvf_helpers
+   *   The DVF helpers.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation = NULL, ModuleHandlerInterface $module_handler, CacheBackendInterface $cache, CkanClientInterface $ckan_client, CkanResourceUrlParserInterface $ckan_resource_url_parser) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    VisualisationInterface $visualisation = NULL,
+    ModuleHandlerInterface $module_handler,
+    CacheBackendInterface $cache,
+    CkanClientInterface $ckan_client,
+    CkanResourceUrlParserInterface $ckan_resource_url_parser,
+    DvfHelpers $dvf_helpers
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $visualisation, $module_handler);
     $this->cache = $cache;
     $this->ckanClient = $ckan_client;
     $this->ckanResourceUrlParser = $ckan_resource_url_parser;
+    $this->dvfHelpers = $dvf_helpers;
   }
 
   /**
@@ -114,7 +135,8 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
       $container->get('module_handler'),
       $container->get('cache.dvf_ckan'),
       $container->get('ckan_connect.client'),
-      $container->get('ckan_connect.resource_url_parser')
+      $container->get('ckan_connect.resource_url_parser'),
+      $container->get('dvf.helpers')
     );
   }
 
@@ -130,7 +152,7 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
     }
     else {
       $raw_fields = $this->fetchFields();
-      $this->cache->set($cache_key, $raw_fields);
+      $this->cache->set($cache_key, $raw_fields, $this->getCacheExpiry());
     }
 
     $fields = [];
@@ -153,6 +175,8 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
       'id' => $this->getResourceId(),
       'limit' => 1,
     ];
+
+    $query = array_merge($query, $this->getDataFilters());
 
     try {
       $response = $this->ckanClient->get('action/datastore_search', $query);
@@ -177,7 +201,7 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
     }
     else {
       $raw_records = $this->fetchRecords();
-      $this->cache->set($cache_key, $raw_records);
+      $this->cache->set($cache_key, $raw_records, $this->getCacheExpiry());
     }
 
     $records = [];
@@ -213,6 +237,8 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
       'limit' => $limit,
       'offset' => $offset,
     ];
+
+    $query = array_merge($query, $this->getDataFilters());
 
     try {
       $response = $this->ckanClient->get('action/datastore_search', $query);
@@ -258,6 +284,33 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
     $resource_id = $this->getResourceId();
 
     return $plugin_id . ':' . $resource_id . ':' . $object_type;
+  }
+
+  /**
+   * Gets the optional data filters and returns them in the correct format.
+   *
+   * @return array
+   *   An array of data filters.
+   */
+  protected function getDataFilters() {
+    $configuration_options = $this->visualisation->getConfiguration('style');
+    $data_filters = [];
+
+    if (empty($configuration_options['style']['options']['data']['data_filters'])) {
+      return $data_filters;
+    }
+
+    $data_filters = $configuration_options['style']['options']['data']['data_filters'];
+
+    if (empty($data_filters['filters']) || !$this->dvfHelpers->validateJson($data_filters['filters'])) {
+      unset($data_filters['filters']);
+    }
+
+    if (empty($data_filters['q'])) {
+      unset($data_filters['q']);
+    }
+
+    return array_map('trim', $data_filters);
   }
 
 }

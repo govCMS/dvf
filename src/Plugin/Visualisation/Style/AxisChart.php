@@ -24,7 +24,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
           'rotated' => FALSE,
         ],
         'x' => [
-          'type' => 'indexed',
+          'type' => '',
           'label' => [
             'text' => '',
           ],
@@ -49,7 +49,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
               'right' => '',
             ],
             'label' => [
-              'position' => 'inner-right',
+              'position' => '',
             ],
             'tick' => [
               'rotate' => '',
@@ -60,7 +60,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
           ],
         ],
         'y' => [
-          'type' => 'indexed',
+          'type' => '',
           'label' => [
             'text' => '',
           ],
@@ -80,7 +80,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
               'bottom' => '',
             ],
             'label' => [
-              'position' => 'inner-top',
+              'position' => '',
             ],
           ],
         ],
@@ -97,8 +97,10 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       'chart' => [
         'title' => [
           'show' => TRUE,
+          'text' => '',
         ],
         'interaction' => TRUE,
+        'table' => [],
         'data' => [
           'labels' => [
             'show' => FALSE,
@@ -117,6 +119,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
             'left' => '',
           ],
         ],
+        'component' => 'table-chart',
       ],
     ] + parent::defaultConfiguration();
   }
@@ -141,7 +144,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
 
     $form['axis']['styles']['rotated'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Rotated'),
+      '#title' => $this->t('Rotate orientation'),
       '#description' => $this->t('Check to switch the X and Y axis position.'),
       '#default_value' => $this->config('axis', 'styles', 'rotated'),
     ];
@@ -157,6 +160,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       '#title' => $this->t('Axis type'),
       '#description' => $this->t('Set the data type for the X axis values. E.g. If the X axis contains numbers, select "Indexed (numeric)".'),
       '#options' => [
+        '' => $this->t('Automatic (Indexed if numeric, category if not)'),
         'indexed' => $this->t('Indexed (numeric)'),
         'category' => $this->t('Category (non-numeric)'),
         'timeseries' => $this->t('Date or time'),
@@ -193,6 +197,10 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       '#empty_option' => $this->t('- None -'),
       '#empty_value' => '',
       '#default_value' => $this->config('axis', 'x', 'tick', 'values', 'field'),
+      '#ajax' => [
+        'callback' => [$this, 'updateAxisGrouping'],
+        'wrapper' => 'x-axis-grouping',
+      ],
     ];
 
     $form['axis']['x']['tick']['values']['custom'] = [
@@ -201,6 +209,29 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       '#description' => $this->t('Override the individual X axis data-label values manually. Separate values with a comma.'),
       '#default_value' => $this->config('axis', 'x', 'tick', 'values', 'custom'),
     ];
+
+    $form['axis']['x']['x_axis_grouping'] = [
+      '#prefix' => '<div id="x-axis-grouping">',
+      '#suffix' => '</div>',
+      '#type' => 'select',
+      '#title' => $this->t('X Axis Grouping'),
+      '#options' => [
+        'keys' => $this->t('Group by keys'),
+        'values' => $this->t('Group by label values'),
+      ],
+      '#default_value' => $this->config('axis', 'x', 'x_axis_grouping'),
+      '#description' => t(
+        'The X axis can use <em>keys</em> or the <em>label key value</em> as tick values. Changing this swaps what is displayed on the X axis (or table header if viewed as a table). <em>Tick values field</em> must be set for "labels" options to work correctly. @help.',
+        ['@help' => $this->dvfHelpers->getHelpPageLink('x-axis-grouping')]),
+      '#ajax' => [
+        'callback' => [$this, 'updateColumnOverrides'],
+        'wrapper' => 'column-overrides',
+      ],
+    ];
+
+    if (!$this->config('axis', 'x', 'tick', 'values', 'field')) {
+      $form['axis']['x']['x_axis_grouping']['#attributes']['disabled'] = 'disabled';
+    }
 
     $form['axis']['x']['tick']['format']['indexed'] = [
       '#type' => 'select',
@@ -259,6 +290,8 @@ abstract class AxisChart extends TableVisualisationStyleBase {
         'outer-left' => $this->t('Outer left'),
       ],
       '#default_value' => $this->config('axis', 'x', 'styles', 'label', 'position'),
+      '#empty_option' => $this->t('- Select -'),
+      '#empty_option_value' => '',
     ];
 
     $form['axis']['x']['styles']['tick']['rotate'] = [
@@ -301,6 +334,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       '#title' => $this->t('Axis type'),
       '#description' => $this->t('Set the data type for the Y axis values. E.g. If the Y axis contains numbers, select "Indexed (numeric)".'),
       '#options' => [
+        '' => $this->t('Automatic (Indexed if numeric, category if not)'),
         'indexed' => $this->t('Indexed (numeric)'),
         'category' => $this->t('Category (non-numeric)'),
         'timeseries' => $this->t('Date or time'),
@@ -384,6 +418,8 @@ abstract class AxisChart extends TableVisualisationStyleBase {
         'outer-bottom' => $this->t('Outer bottom'),
       ],
       '#default_value' => $this->config('axis', 'y', 'styles', 'label', 'position'),
+      '#empty_option' => $this->t('- Select -'),
+      '#empty_option_value' => '',
     ];
 
     $form['grid'] = [
@@ -418,7 +454,8 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $form['grid']['lines'] = [
       '#type' => 'details',
       '#title' => $this->t('Grid lines'),
-      '#description' => t('Show additional grid lines along X or Y axis.'),
+      '#description' => t('Show additional grid lines along X or Y axis. @help',
+        ['@help' => $this->dvfHelpers->getHelpPageLink('grid-lines')]),
       '#open' => ($grid_lines_count > 0),
       '#tree' => TRUE,
       '#attributes' => [
@@ -523,6 +560,13 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       '#title' => $this->t('Enable chart interaction'),
       '#description' => $this->t('Check to enable all of interactions (E.g. Showing / hiding the tooltip when hovering on labels, etc).'),
       '#default_value' => $this->config('chart', 'interaction'),
+    ];
+
+    $form['chart']['table']['disable'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Disable table'),
+      '#description' => $this->t('Disable the "Show table" toggle button on a chart / graph.'),
+      '#default_value' => $this->config('chart', 'table', 'disable'),
     ];
 
     $form['chart']['data']['labels']['show'] = [
@@ -660,6 +704,36 @@ abstract class AxisChart extends TableVisualisationStyleBase {
   }
 
   /**
+   * Ajax callback that updates the column overrides options.
+   *
+   * @param array $form
+   *   The form structure.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return array
+   *   The updated form element.
+   */
+  public function updateColumnOverrides(array $form, FormStateInterface $form_state) {
+    return $form['field_visualisation_url']['widget'][0]['options']['visualisation_style_options']['data']['column_overrides'];
+  }
+
+  /**
+   * Ajax callback that updates the x axis grouping options.
+   *
+   * @param array $form
+   *   The form structure.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   *
+   * @return array
+   *   The updated form element.
+   */
+  public function updateAxisGrouping(array $form, FormStateInterface $form_state) {
+    return $form['field_visualisation_url']['widget'][0]['options']['visualisation_style_options']['axis']['x']['x_axis_grouping'];
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function build() {
@@ -678,6 +752,27 @@ abstract class AxisChart extends TableVisualisationStyleBase {
         '#attributes' => ['class' => ['dvf-table', 'visually-hidden']],
         'content' => $this->buildTable($group_records),
       ];
+
+      // A wrapper for the action buttons (toggle, download etc).
+      $build[$group_key]['actions'] = [
+        '#type' => 'container',
+        '#attributes' => ['class' => ['table-chart--actions']],
+      ];
+
+      // If $file_uri is empty/false, do not display download data button.
+      $file_uri = $this->getDatasetDownloadUri($this->visualisation->getEntity());
+      if (!empty($file_uri)) {
+        $build[$group_key]['actions']['file_uri'] = [
+          '#type' => 'html_tag',
+          '#tag' => 'button',
+          '#value' => $this->t('Download data'),
+          '#attributes' => [
+            'class' => ['download-data'],
+            'data-file-uri' => $file_uri,
+          ],
+        ];
+      }
+
     }
 
     return $build;
@@ -723,6 +818,11 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       'chart' => $this->config('chart'),
     ];
 
+    if (empty($records)) {
+      $this->messenger->addError(t('Invalid records.'));
+      return [];
+    }
+
     // Axis X and Y tick values from user input.
     foreach (['x', 'y'] as $axis) {
       if ($this->config('axis', $axis, 'tick', 'values', 'custom')) {
@@ -735,24 +835,56 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       $settings['axis']['x']['tick']['values']['custom'] = [];
 
       foreach ($records as $record) {
-        $settings['axis']['x']['tick']['values']['custom'][] = trim($record->{$this->config('axis', 'x', 'tick', 'values', 'field')});
+        if (property_exists($record, $this->config('axis', 'x', 'tick', 'values', 'field'))) {
+          $settings['axis']['x']['tick']['values']['custom'][] = trim($record->{$this->config('axis', 'x', 'tick', 'values', 'field')});
+        }
       }
     }
 
     // Data columns.
     foreach ($this->fields() as $field) {
-      if (!empty($this->splitField())) {
-        foreach ($records as $key => $record) {
-          $settings['chart']['data']['columns'][] = array_merge([$field], [$records[$key]->{$field}]);
-        }
-      }
-      else {
-        $settings['chart']['data']['columns'][] = array_merge([$field], $this->getSourceFieldValues($field));
-      }
+      $settings['chart']['data']['columns'][] = array_merge([$field], $this->getSourceFieldValues($field));
     }
 
     // Override fields labels if set in chart options.
     $settings['chart']['data']['names'] = $this->fieldLabels();
+
+    // Set the chart title.
+    $settings['chart']['title']['text'] = $this->visualisation->getEntity()->label();
+
+    // Column overrides.
+    $settings['chart']['data']['column_overrides'] = $this->getColumnOverrides();
+
+    // If X axis grouping occurs on labels, flip the values and the labels.
+    if ($this->config('axis', 'x', 'x_axis_grouping') === 'values') {
+      $column_labels = array_map('reset', $settings['chart']['data']['columns']);
+      $flipped_columns = [];
+
+      foreach ($records as $i => $record) {
+        $flipped_columns[] = array_merge(
+          [$settings['axis']['x']['tick']['values']['custom'][$i]],
+          array_values(array_intersect_key((array) $record, array_flip($column_labels)))
+        );
+      }
+
+      $settings['chart']['data']['columns'] = $flipped_columns;
+      $settings['axis']['x']['tick']['values']['custom'] = $column_labels;
+    }
+
+    // Check if values are auto.
+    $tick_values_field = $this->config('axis', 'x', 'tick', 'values', 'field');
+
+    if ($settings['axis']['x']['type'] === '' && !empty($record) && property_exists($record, $tick_values_field)) {
+      is_numeric($record->{$tick_values_field}) ?
+        $settings['axis']['x']['type'] = 'indexed' :
+        $settings['axis']['x']['type'] = 'category';
+    }
+
+    if ($settings['axis']['y']['type'] === '' && !empty($record) && property_exists($record, $field)) {
+      is_numeric($record->{$field}) ?
+        $settings['axis']['y']['type'] = 'indexed' :
+        $settings['axis']['y']['type'] = 'category';
+    }
 
     return $settings;
   }
@@ -769,6 +901,70 @@ abstract class AxisChart extends TableVisualisationStyleBase {
    */
   protected function rowHeaderField() {
     return $this->config('axis', 'x', 'tick', 'values', 'field');
+  }
+
+  /**
+   * Gets the column overrides settings in a nicely formatted array.
+   *
+   * @return array
+   *   An array of column override settings.
+   */
+  protected function getColumnOverrides() {
+    $allowed_overrides = [
+      'color',
+      'type',
+      'legend',
+      'style',
+      'weight',
+      'class',
+    ];
+    $column_overrides_sorted = [];
+    $pair = 2;
+
+    foreach ($this->config('data', 'column_overrides') as $field_name => $column_override) {
+      $field_overrides = explode(PHP_EOL, $column_override);
+
+      foreach ($field_overrides as $field_override) {
+        $field_override_array = explode('|', trim($field_override), $pair);
+
+        if (count($field_override_array) === $pair && in_array($field_override_array[0], $allowed_overrides)) {
+          $column_overrides_sorted[$field_name][$field_override_array[0]] = $field_override_array[1];
+        }
+      }
+    }
+
+    $column_overrides_sorted = array_merge(array_fill_keys($this->fieldLabelsOriginal(), []), $column_overrides_sorted);
+    return $this->setArrayOrder($column_overrides_sorted);
+  }
+
+  /**
+   * Re-orders the keys as per provided order array.
+   *
+   * @param array $array_to_order
+   *   An array keyed by the key (original) name, the value for each should be
+   *   an array containing a weight key. The lower the weight the higher it
+   *   appears in the list. If no weight found, default order is used.
+   * @param string $weight_key
+   *   The key that contains the weight.
+   *
+   * @return array
+   *   An ordered array.
+   */
+  protected function setArrayOrder(array $array_to_order, $weight_key = 'weight') {
+    $i = 0;
+    foreach ($array_to_order as $key => $value) {
+      $array_to_order[$key][$weight_key] = isset($value[$weight_key]) ? (int) $value[$weight_key] : $i;
+      $i++;
+    }
+
+    $weights = [];
+    foreach ($array_to_order as $key => $row) {
+      $weights[$key] = $row[$weight_key];
+    }
+    array_multisort($weights, SORT_ASC, $array_to_order);
+
+    return $array_to_order;
+
   }
 
 }

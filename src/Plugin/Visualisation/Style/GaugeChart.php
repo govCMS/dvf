@@ -59,7 +59,7 @@ class GaugeChart extends AxisChart {
     $form['gauge_chart']['gauge']['units'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Unit label'),
-      '#description' => $this->t('Enter a unit type, eg %, mm, kg etc'),
+      '#description' => $this->t('Enter a unit type, E.g. %, mm, kg etc'),
       '#default_value' => $this->config('gauge_chart', 'gauge', 'units'),
     ];
 
@@ -73,14 +73,14 @@ class GaugeChart extends AxisChart {
     $form['gauge_chart']['gauge']['width'] = [
       '#type' => 'number',
       '#title' => $this->t('Width'),
-      '#description' => $this->t('Adjust arc thickness, eg 39'),
+      '#description' => $this->t('Adjust arc thickness, E.g. 39'),
       '#default_value' => $this->config('gauge_chart', 'gauge', 'width'),
     ];
 
     $form['gauge_chart']['gauge']['min'] = [
       '#type' => 'number',
       '#title' => $this->t('Min'),
-      '#description' => $this->t('0 is default, can handle negative min, eg vacuum / voltage / current flow etc'),
+      '#description' => $this->t('0 is default, can handle negative min, E.g. vacuum / voltage / current flow etc'),
       '#default_value' => $this->config('gauge_chart', 'gauge', 'min'),
     ];
 

@@ -2,4 +2,4 @@ name: Data Visualisation Framework
 description: 'Data Visualisation Framework makes it easy to generate visualisations from different data sources.'
 type: module
 package: Data Visualisation Framework
-core: 8.x
+core_version_requirement: ^8 || ^9

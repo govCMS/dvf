@@ -34,13 +34,26 @@
         .parsePointOptions()
         .parseBarOptions()
         .parseGaugeOptions()
-        .generateChart();
+        .parseColumnOverrideOptions()
+        .generateChart()
+        .addDownloadButtons();
     },
 
+    /**
+     * Calls the C3 third party plugin with the parsed config.
+     *
+     * @returns {Plugin}
+     */
     generateChart: function () {
       c3.generate(this.config);
+      return this;
     },
 
+    /**
+     * Parses the chart options and sets them to the config.
+     *
+     * @returns {Plugin}
+     */
     parseChartOptions: function () {
       var plugin = this;
 
@@ -63,41 +76,67 @@
       this.config.interaction = { enabled: this.options.chart.interaction };
 
       if (plugin.options.chart.palette) {
-        this.config.color = {pattern: plugin.options.chart.palette.split(',')};
+        this.config.color = {
+          pattern: plugin.options.chart.palette.split(',').map(function(color) {
+            return color.trim();
+          })
+        };
+      }
+
+      // Display chart title is title.show is true.
+      if (plugin.options.chart.title.show) {
+        this.config.title = { text: plugin.options.chart.title.text };
       }
 
       return this;
     },
 
+    /**
+     * Parses the data options and sets them to the config.
+     *
+     * @returns {Plugin}
+     */
     parseDataOptions: function () {
       var data = { columns: this.options.chart.data.columns };
-
-      if (this.options.axis.x.tick.values.custom) {
-        data.x = 'x';
-        data.columns.push(['x'].concat(this.options.axis.x.tick.values.custom));
-      }
 
       if (this.options.axis.x.type === 'timeseries' && this.options.axis.x.tick.format.timeseries.input) {
         data.xFormat = this.options.axis.x.tick.format.timeseries.input;
       }
 
       data.type = this.options.chart.data.type;
-      data.labels = this.options.chart.data.labels.show;
 
       if (this.options.chart.data.stacked) {
-        data.groups = [$.map(this.options.chart.data.groups, function(g, group) { return [group]; })];
+
+        // Assign data groups depending on x axis grouping value.
+        data.groups =
+          this.options.axis.x.x_axis_grouping === 'values' ?
+          [$.map(data.columns, function(group) { return group[0]; })] :
+          [$.map(this.options.chart.data.groups, function(g, group) { return [group]; })];
+
         data.order = this.options.chart.data.order;
+      }
+
+      if (this.options.axis.x.tick.values.custom) {
+        data.x = 'x';
+        data.columns.unshift(['x'].concat(this.options.axis.x.tick.values.custom));
       }
 
       if (this.options.chart.data.names) {
         data.names = this.options.chart.data.names;
       }
 
+      data.labels = !!this.options.chart.data.labels.show;
+
       this.config.data = data;
 
       return this;
     },
 
+    /**
+     * Parses the axis options and sets them to the config.
+     *
+     * @returns {Plugin}
+     */
     parseAxisOptions: function () {
       var plugin = this, axis = {};
 
@@ -140,16 +179,6 @@
         axis.x.tick.width = this.options.axis.x.styles.tick.width;
       }
 
-      if (this.options.axis.x.styles.padding.left) {
-        axis.x.padding = axis.x.padding || {};
-        axis.x.padding.left = parseInt(this.options.axis.x.styles.padding.left);
-      }
-
-      if (this.options.axis.x.styles.padding.right) {
-        axis.x.padding = axis.x.padding || {};
-        axis.x.padding.right = parseInt(this.options.axis.x.styles.padding.right);
-      }
-
       axis.x.label = {
         text: this.options.axis.x.label.text,
         position: (this.options.axis.styles.rotated) ? this.options.axis.y.styles.label.position : this.options.axis.x.styles.label.position
@@ -186,14 +215,12 @@
         axis.y.tick.values = this.options.axis.y.tick.values.custom;
       }
 
-      if (this.options.axis.x.styles.padding.top) {
-        axis.x.padding = axis.x.padding || {};
-        axis.x.padding.top = parseInt(this.options.axis.x.styles.padding.top);
+      if (this.options.axis.y.styles.padding && typeof(this.options.axis.y.styles.padding) == 'object') {
+        axis.y.padding = this.options.axis.y.styles.padding;
       }
 
-      if (this.options.axis.y.styles.padding.bottom) {
-        axis.y.padding = axis.y.padding || {};
-        axis.y.padding.bottom = parseInt(this.options.axis.y.styles.padding.bottom);
+      if (this.options.axis.x.styles.padding && typeof(this.options.axis.x.styles.padding) == 'object') {
+        axis.x.padding = this.options.axis.x.styles.padding;
       }
 
       axis.y.label = {
@@ -206,6 +233,11 @@
       return this;
     },
 
+    /**
+     * Parses the grid options and sets them to the config.
+     *
+     * @returns {Plugin}
+     */
     parseGridOptions: function () {
       var grid = {
         x: {
@@ -227,6 +259,11 @@
       return this;
     },
 
+    /**
+     * Parses the legend options and sets them to the config.
+     *
+     * @returns {Plugin}
+     */
     parseLegendOptions: function () {
       var legend = {};
 
@@ -249,14 +286,17 @@
       return this;
     },
 
+    /**
+     * Parses the point options and sets them to the config.
+     *
+     * @returns {Plugin}
+     */
     parsePointOptions: function () {
       var point = {},
           pointShow = this.getDeepProperty(this.options, 'point.show'),
           pointRadius = this.getDeepProperty(this.options, 'point.radius');
 
-      if (pointShow) {
-        point.show = pointShow;
-      }
+      point.show = !!pointShow;
 
       if (pointRadius) {
         point.r = pointRadius;
@@ -267,6 +307,11 @@
       return this;
     },
 
+    /**
+     * Parses the bar chart options and sets them to the config.
+     *
+     * @returns {Plugin}
+     */
     parseBarOptions: function () {
       var bar = {},
           barRatio = this.getDeepProperty(this.options, 'bar.width.ratio'),
@@ -335,14 +380,175 @@
       return this;
     },
 
+    /**
+     * Adds the various download buttons below the chart.
+     *
+     * @returns {Plugin}
+     */
+    addDownloadButtons: function () {
+      if (typeof $.fn.chartExport !== 'function') {
+        return this;
+      }
+      var buttonTypes = ['png', 'svg'],
+          processedClass = 'processed-download-buttons',
+          $buttonWrapper = $(this.element)
+            .closest('.dvf-chart')
+            .nextAll('.table-chart--actions');
+
+      if ($buttonWrapper.hasClass(processedClass)) {
+        return this;
+      }
+
+      $(buttonTypes).each(function (i, format) {
+
+        $('<button/>')
+          .html('Download as ' + format)
+          .addClass(this.options.chart.component + '--download')
+          .chartExport($.extend({
+            format: format,
+            svg: $(this.element).is('svg') ? $(this.element) : $(this.element).find('svg'),
+          }, {
+            // Add optional settings if they exist.
+            width: this.options.chart.styles.width || undefined,
+            height: this.options.chart.styles.height || undefined,
+            filename: (this.config.title && this.config.title.text) ? this.config.title.text : undefined,
+          }))
+          .appendTo($buttonWrapper);
+      }.bind(this));
+
+      // Set download data click listener.
+      $('.download-data', $buttonWrapper).on('click', function() {
+        window.open($(this).data('file-uri'));
+      });
+
+      $buttonWrapper.addClass(processedClass);
+
+      return this;
+    },
+
+    /**
+     * Parses the column override settings and applies them accordingly.
+     *
+     * @returns {Plugin}
+     */
+    parseColumnOverrideOptions: function () {
+      // If column overrides do not exist, exit without processing.
+      if (this.options.chart.data.column_overrides === undefined) {
+        return this;
+      }
+
+      var column_overrides = this.options.chart.data.column_overrides;
+
+      // Colors.
+      this.overrideDataSetting(column_overrides, 'color');
+
+      // Types.
+      this.overrideDataSetting(column_overrides, 'type');
+
+      // Styles.
+      this.overrideDataSetting(column_overrides, 'style', 'regions');
+
+      // Classes.
+      this.overrideDataSetting(column_overrides, 'class', 'classes');
+
+      // Weight.
+      var ordered_columns = [];
+      $.each(column_overrides, function(name, overrides) {
+        if (overrides.weight !== undefined) {
+          $.each(this.config.data.columns, function(key, column) {
+            if (name === column[0]) {
+              ordered_columns.push(column);
+            }
+          });
+        }
+      }.bind(this));
+
+      if (this.config.data.columns.length && this.config.data.columns[0].length) {
+        if (this.config.data.columns[0][0] === 'x' && this.config.data.columns.length !== ordered_columns.length) {
+          ordered_columns.unshift(this.config.data.columns[0]);
+        }
+      }
+
+      if (this.config.data.columns.length === ordered_columns.length) {
+        this.config.data.columns = ordered_columns;
+      }
+
+      // Legend.
+      $.each(column_overrides, function(key, overrides) {
+        if (overrides.legend) {
+          this.config.legend = this.config.legend || [];
+          this.config.legend[overrides.legend] = this.config.legend[overrides.legend] || [];
+          this.config.legend[overrides.legend].push(key);
+        }
+      }.bind(this));
+
+      return this;
+    },
+
+    /**
+     * Sets custom settings or overrides for config.data.X
+     *
+     * @param column_overrides
+     *   The array of settings to get the data from.
+     * @param override_key
+     *   The key to look for in the above array.
+     * @param config_key
+     *   The key to set the new settings to in the config array.
+     *
+     * @returns {Plugin}
+     */
+    overrideDataSetting: function (column_overrides, override_key, config_key) {
+
+      config_key = config_key || override_key + 's';
+
+      $.each(column_overrides, function(key, overrides) {
+        if (overrides[override_key]) {
+          this.config.data[config_key] = this.config.data[config_key] || [];
+          this.config.data[config_key][key] = overrides[override_key];
+        }
+      }.bind(this));
+
+      return this;
+    },
+
+    /**
+     * Returns a rounded up number to a set amount of decimal points.
+     *
+     * @param number
+     *   The number to be rounded.
+     * @param decimals
+     *   The number of decimal places.
+     * @returns {number}
+     *   The rounded number.
+     */
     maxRound: function (number, decimals) {
       return Math.round(number * Math.pow(10, decimals)) / Math.pow(10, decimals);
     },
 
+    /**
+     * Returns a number with a separator format applied (e.g. 12 345 vs 12,345).
+     *
+     * @param number
+     *   The number to format.
+     * @param separator
+     *   The separator.
+     * @returns {string}
+     *   The formatted number.
+     */
     formatNumber: function (number, separator) {
       return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1' + separator);
     },
 
+    /**
+     * Gets a property nested in a JS object.
+     *
+     * @param obj
+     *   The object to traverse.
+     * @param key
+     *   The key buried in the object.
+     * @returns {*}
+     *   The result of the search.
+     */
     getDeepProperty: function(obj, key) {
       return key.split('.').reduce(function (o, k) {
         return (typeof o === 'undefined' || o === null) ? o : o[k];

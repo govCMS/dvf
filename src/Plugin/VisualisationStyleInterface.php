@@ -2,14 +2,16 @@
 
 namespace Drupal\dvf\Plugin;
 
-use Drupal\Component\Plugin\ConfigurablePluginInterface;
+use Drupal\Component\Plugin\ConfigurableInterface;
+use Drupal\Component\Plugin\DependentPluginInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Provides an interface defining a VisualisationStyle plugin.
  */
-interface VisualisationStyleInterface extends ConfigurablePluginInterface, PluginInspectionInterface {
+interface VisualisationStyleInterface extends ConfigurableInterface, DependentPluginInterface, PluginInspectionInterface {
 
   /**
    * Returns a form to configure settings for this plugin.
@@ -39,5 +41,31 @@ interface VisualisationStyleInterface extends ConfigurablePluginInterface, Plugi
    *   Current visualisation instance.
    */
   public function getVisualisation();
+
+  /**
+   * Returns the URI of a DVF file or dataset (JSON|CSV file, or CKAN dataset).
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The Drupal entity that contains the dvf_url or dvf_file.
+   * @param array $dvf_field_types
+   *   An array of field_names that provide dataset(s) for DVF visualisations.
+   *
+   *   E.g. ['dvf_url', 'dvf_file'].
+   *
+   * @return string
+   *   The URI of the file or dataset.
+   */
+  public function getDatasetDownloadUri(EntityInterface $entity, array $dvf_field_types);
+
+  /**
+   * Confirms if a URI or file download link is valid.
+   *
+   * @param string $uri
+   *   The URI to test if valid.
+   *
+   * @return string|bool
+   *   Returns the URI is valid, or false if not.
+   */
+  public function isValidDownloadUri($uri);
 
 }

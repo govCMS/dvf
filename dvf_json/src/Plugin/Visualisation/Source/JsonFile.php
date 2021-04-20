@@ -6,7 +6,6 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Url;
 use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\Visualisation\Source\VisualisationSourceBase;
 use Flow\JSONPath\JSONPath;
@@ -197,7 +196,7 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
     }
     else {
       $data = $this->fetchData();
-      $this->cache->set($cache_key, $data);
+      $this->cache->set($cache_key, $data, $this->getCacheExpiry());
     }
 
     return json_decode($data, TRUE);

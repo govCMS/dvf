@@ -6,6 +6,7 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
+use Drupal\Core\Theme\ThemeManagerInterface;
 use Drupal\dvf\ConfigurablePluginTrait;
 use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\VisualisationSourceManagerInterface;
@@ -80,6 +81,13 @@ abstract class VisualisationBase extends PluginBase implements VisualisationInte
   protected $entity;
 
   /**
+   * The theme manager.
+   *
+   * @var \Drupal\Core\Theme\ThemeManagerInterface
+   */
+  protected $themeManager;
+
+  /**
    * Constructs a new VisualisationBase.
    *
    * @param array $configuration
@@ -94,6 +102,8 @@ abstract class VisualisationBase extends PluginBase implements VisualisationInte
    *   The style plugin manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   Instance of the module handler.
+   * @param \Drupal\Core\Theme\ThemeManagerInterface $themeManager
+   *   The theme manager.
    */
   public function __construct(
     array $configuration,
@@ -101,7 +111,8 @@ abstract class VisualisationBase extends PluginBase implements VisualisationInte
     $plugin_definition,
     VisualisationSourceManagerInterface $source_plugin_manager,
     VisualisationStyleManagerInterface $style_plugin_manager,
-    ModuleHandlerInterface $module_handler
+    ModuleHandlerInterface $module_handler,
+    ThemeManagerInterface $themeManager
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->sourcePluginManager = $source_plugin_manager;
@@ -110,6 +121,7 @@ abstract class VisualisationBase extends PluginBase implements VisualisationInte
     $this->style = $configuration['style'];
     $this->moduleHandler = $module_handler;
     $this->entity = isset($configuration['entity']) ? $configuration['entity'] : NULL;
+    $this->themeManager = $themeManager;
   }
 
   /**
@@ -122,7 +134,8 @@ abstract class VisualisationBase extends PluginBase implements VisualisationInte
       $plugin_definition,
       $container->get('plugin.manager.visualisation.source'),
       $container->get('plugin.manager.visualisation.style'),
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('theme.manager')
     );
   }
 
@@ -177,8 +190,9 @@ abstract class VisualisationBase extends PluginBase implements VisualisationInte
     if (!isset($this->stylePlugin)) {
       $configuration = $this->getStyleConfiguration();
 
-      // Let other modules alter the style configuration.
+      // Let other modules/themes alter the style configuration.
       $this->moduleHandler->alter('dvf_style_configuration', $configuration['options'], $this);
+      $this->themeManager->alter('dvf_style_configuration', $configuration['options'], $this);
 
       $this->stylePlugin = $this->stylePluginManager->createInstance($configuration['plugin_id'], $configuration['options'], $this);
     }

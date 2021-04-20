@@ -2,13 +2,14 @@
 
 namespace Drupal\dvf\Plugin;
 
-use Drupal\Component\Plugin\ConfigurablePluginInterface;
+use Drupal\Component\Plugin\ConfigurableInterface;
+use Drupal\Component\Plugin\DependentPluginInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 
 /**
  * Provides an interface defining a Visualisation plugin.
  */
-interface VisualisationInterface extends ConfigurablePluginInterface, PluginInspectionInterface {
+interface VisualisationInterface extends ConfigurableInterface, DependentPluginInterface ,PluginInspectionInterface {
 
   /**
    * Returns the source plugin.
