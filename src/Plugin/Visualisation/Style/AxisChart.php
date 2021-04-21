@@ -743,6 +743,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       $build[$group_key]['chart'] = [
         '#type' => 'container',
         '#attributes' => ['class' => ['dvf-chart']],
+        'heading' => $this->buildSplitHeading($group_key),
         'content' => $this->buildChart($group_records),
       ];
 

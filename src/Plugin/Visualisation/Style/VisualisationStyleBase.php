@@ -517,4 +517,26 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
     return FALSE;
   }
 
+  /**
+   * Return markup for a split field heading.
+   *
+   * @param string $label
+   *   Label for the heading.
+   *
+   * @return array
+   *   A heading tag for the label, if label is "all" (ungrouped), return empty.
+   */
+  public function buildSplitHeading($label) {
+    if ('all' === $label) {
+      return [];
+    }
+
+    return [
+      '#type' => 'html_tag',
+      '#tag' => 'h3',
+      '#value' => htmlentities($label),
+      '#attributes' => ['class' => 'dvf-split-heading'],
+    ];
+  }
+
 }
