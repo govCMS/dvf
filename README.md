@@ -92,7 +92,7 @@ function mytheme_dvf_style_configuration_alter(array &$configuration, Visualisat
    and separate with a space or a comma, eg: txt,csv. Click `Save settings`, then click `Save field and settings`.
 6. Go to `Content` -> `Add content`, select the content type which you added visualisation field.
 7. Scroll down to the visualisation field section. Import your csv file through the file upload field, or you can use
-   <a href="#Test1">sample CSV data</a> to have a test. Open up SETTINGS,
+   <a href="#sample_csv_data">sample CSV data</a> to have a test. Open up SETTINGS,
    select `Bar chart`.
    - In DATA SETTINGS, select all the fields by pressing <strong>Shift</strong>.
    - In AXIS SETTINGS, type "Fruits" and "Number of People" in <strong>Axis title</strong> field in `X AXIS SETTINGS`
@@ -117,7 +117,7 @@ function mytheme_dvf_style_configuration_alter(array &$configuration, Visualisat
 8. Fill all the other required fields and Click `Save`.
 9. Open up the content page in the browser, your csv data will be shown in Bar Chart.
 
-#### <a id="Test 1">Sample CSV data</a>
+#### <a id="sample_csv_data">Sample CSV data</a>
 Please copy and paste the following data into a file and saved as "fruits.csv"<br/>
 Apple,Orange,Banana,Peach,Blueberry,Grapes<br/>
 35,30,10,25,40,5
