@@ -80,19 +80,26 @@ function mytheme_dvf_style_configuration_alter(array &$configuration, Visualisat
   return $configuration;
 }
 ```
+## Example of generating a table diagram through a CSV file
+1. Go to <strong>Extend</strong> to enable <strong>CSV Data Visulisation</strong>. If you want to import JSON data, make sure <strong>JSON Data Visualisation</strong> is enabled.
+2.
+3.
+4.
+5.
+6.
 
-## Development 
+## Development
 
-Development of govCMS8 is currently occurring over at 
+Development of govCMS8 is currently occurring over at
 [GitHub](https://github.com/govCMS/dvf)
 
 Issues can be logged at https://github.com/govCMS/dvf/issues
 
 ## Contributing and extending DVF
 
-The flexible design of this module allows for easily creating your own data 
-sources or visualisations via Drupal 8 Plugins. Examples of visualisations 
-[here](https://github.com/govCMS/dvf/tree/8.x-1.x/src/Plugin) and data sources 
+The flexible design of this module allows for easily creating your own data
+sources or visualisations via Drupal 8 Plugins. Examples of visualisations
+[here](https://github.com/govCMS/dvf/tree/8.x-1.x/src/Plugin) and data sources
 [here](https://github.com/govCMS/dvf/tree/8.x-1.x/dvf_csv).
 
 Submit pull requests [here](https://github.com/govCMS/dvf/pulls).
