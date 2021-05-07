@@ -80,13 +80,22 @@ function mytheme_dvf_style_configuration_alter(array &$configuration, Visualisat
   return $configuration;
 }
 ```
-## Example of generating a table diagram through a CSV file
-1. Go to <strong>Extend</strong> to enable <strong>CSV Data Visulisation</strong>. If you want to import JSON data, make sure <strong>JSON Data Visualisation</strong> is enabled.
-2.
-3.
-4.
-5.
-6.
+## Example of generating a table diagram from a CSV file
+1. Go to `Extend` to enable `CSV Data Visulisation`. If you want to import JSON data, make sure `JSON Data Visualisation` is enabled.
+2. Go to `Structure` -> `Content types`, choose the content type which you want to display the table, then click `Manage fields`.
+3. Click `Add field`.
+4. Select `Visualisation File`, then click `Save and continue`.
+   <ul>
+    <li>Visualisation File: import data from a file.</li>
+    <li>Visualisation URL: import data from an external url, eg resource API.</li>
+   </ul>
+5. Select `CSV file` for <strong>Visualisaion source</strong>, leave CSV FILE SETTINGS as default, add "csv" to <strong>Allowed file extensions</strong>
+   and separate with a space or a comma, eg: txt,csv. Click `Save settings`, then click `Save field and settings`.
+6. Go to `Content` -> `Add content`, select the content type which you added visualisation field before.
+7. Scroll down to the visualisation field section.
+8. In SETTINGS, select `Table`. In DATA SETTINGS, select all the fields by pressing <strong>Shift</strong>.
+9. Fill all the other required fields and Click `Save`.
+10. Open up the content page in the browser, your csv data will be shown in a table.
 
 ## Development
 
