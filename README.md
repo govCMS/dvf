@@ -103,7 +103,7 @@ function mytheme_dvf_style_configuration_alter(array &$configuration, Visualisat
 #### <a id="sample_csv_data">Sample CSV Data</a>
 Please copy and paste the following data into a file and saved as "fruits.csv"<br/>
 ```
-Apple,Orange,Banana,Peach,Blueberry,Grapes<br/>
+Apple,Orange,Banana,Peach,Blueberry,Grapes
 35,30,10,25,40,5
 ```
 
