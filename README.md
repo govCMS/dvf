@@ -3,51 +3,51 @@
 The govCMS-CKAN module for Drupal 7, built by Doghouse for govCMS, brought a new
 dimension to dynamic data-driven content for Drupal websites.
 
-This is the Drupal 8 evolution of the govCMS_CKAN module, now called the Data 
-Visualisation Framework. This suite of modules deliver greater customisability 
-and control, increasing the number of the data types consumed by the module, 
+This is the Drupal 8 evolution of the govCMS_CKAN module, now called the Data
+Visualisation Framework. This suite of modules deliver greater customisability
+and control, increasing the number of the data types consumed by the module,
 and providing more accessibility for developers.
 
-Now included are the popular, industry-standard, JavaScript libraries: C3.js, 
-based on D3 (for charting), and DataTables (for out-of-the-box table styling). 
-We have also updated the module to allow for more customisable visualisation 
+Now included are the popular, industry-standard, JavaScript libraries: C3.js,
+based on D3 (for charting), and DataTables (for out-of-the-box table styling).
+We have also updated the module to allow for more customisable visualisation
 placement using fields.
 
-The modular design of the data import and visualisation formats grants better 
-customisation options – now supporting CKAN portals and web hosted CSV data 
-sources with more on the way. It also enables the display of data into line, 
-bar, spline, area and scatter plots, as well as native table display, again 
+The modular design of the data import and visualisation formats grants better
+customisation options – now supporting CKAN portals and web hosted CSV data
+sources with more on the way. It also enables the display of data into line,
+bar, spline, area and scatter plots, as well as native table display, again
 with more formats possible.
 
 ## Related modules
 
-* [CKAN Data Visualisation (dvf_ckan)](https://www.drupal.org/project/dvf_ckan) 
+* [CKAN Data Visualisation (dvf_ckan)](https://www.drupal.org/project/dvf_ckan)
   The module that provides data from a CKAN instance (e.g. www.data.gov.au)
 * [CKAN Connector (ckan_connect)](https://www.drupal.org/project/ckan_connect)
   Utilised by dvf_ckan to connect to CKAN
-* [CSV Data Visualisation (dvf_csv)](https://www.drupal.org/project/dvf_csv) 
+* [CSV Data Visualisation (dvf_csv)](https://www.drupal.org/project/dvf_csv)
   The module that provides data from a csv file available on the web
 
 ## How it works
 
-DVF is a common "middle man" to build a visualisation from a data source. Eg: 
-`Data source > DVF > Visualisation` or real world example: `CKAN data > DVF > 
-Line graph`. Content editors add a data source, then choose how that data to 
+DVF is a common "middle man" to build a visualisation from a data source. Eg:
+`Data source > DVF > Visualisation` or real world example: `CKAN data > DVF >
+Line graph`. Content editors add a data source, then choose how that data to
 be displayed.
 
-*DVF provides a field* (storage, widget & formatter) which can be added to any 
-entity. Sub modules can provide data sources or visualisation plugins that use 
+*DVF provides a field* (storage, widget & formatter) which can be added to any
+entity. Sub modules can provide data sources or visualisation plugins that use
 this field type, see related modules above for modules currently available.
 
 ## Installing & Configuration
 
 * Install DVF and a suitable data source (eg. `dvf_csv`) then enable.
-* Then visit `Manage fields` for the entity type you want to add the 
+* Then visit `Manage fields` for the entity type you want to add the
   visualisation to eg `/admin/structure/types/manage/page/fields`
-* Click `Add field` and select either `Visualisation URL` or 
-  `Visualisation File` depending on if the data source will be local or remote, 
+* Click `Add field` and select either `Visualisation URL` or
+  `Visualisation File` depending on if the data source will be local or remote,
   provide a name for the field and save.
-* Select the `Source type` for the field based on the type of data (requires a 
+* Select the `Source type` for the field based on the type of data (requires a
   data source module like `dvf_ckan` or `dvf_csv`).
 * Save settings.
 
@@ -71,7 +71,7 @@ theme_dvf_style_configuration_alter();
 Example code:
 
 /**
- * Implements theme_dvf_style_configuration_alter(). 
+ * Implements theme_dvf_style_configuration_alter().
  *
  * Set a custom colour palette for all charts in a custom theme.
  */
@@ -89,13 +89,13 @@ function mytheme_dvf_style_configuration_alter(array &$configuration, Visualisat
     <li>Visualisation File: import data from a file.</li>
     <li>Visualisation URL: import data from an external url, eg resource API.</li>
    </ul>
-5. Select `CSV file` for <strong>Visualisaion source</strong>, leave CSV FILE SETTINGS as default, add "csv" to <strong>Allowed file extensions</strong>
+5. Select `CSV file` for Visualisaion source, leave CSV FILE SETTINGS as default, add "csv" to Allowed file extensions
    and separate with a space or a comma, eg: txt,csv. Click `Save settings`, then click `Save field and settings`.
-6. Go to `Content` -> `Add content`, select the content type which you added visualisation field before.
-7. Scroll down to the visualisation field section.
-8. In SETTINGS, select `Table`. In DATA SETTINGS, select all the fields by pressing <strong>Shift</strong>.
-9. Fill all the other required fields and Click `Save`.
-10. Open up the content page in the browser, your csv data will be shown in a table.
+6. Go to `Content` -> `Add content`, select the content type which you added visualisation field.
+7. Scroll down to the visualisation field section. Import your csv file through the file upload field. Open up SETTINGS,
+   select `Table`. In DATA SETTINGS, select all the fields by pressing <strong>Shift</strong>.
+8. Fill all the other required fields and Click `Save`.
+9. Open up the content page in the browser, your csv data will be shown in a table.
 
 ## Development
 
@@ -119,7 +119,7 @@ Submit pull requests [here](https://github.com/govCMS/dvf/pulls).
 
 [Doghouse Agency](http://doghouse.agency)
 
-### Sponsors 
+### Sponsors
 
 * [govCMS](https://www.govcms.gov.au/)
 * [Department of the Environment and Energy](http://www.environment.gov.au/)
