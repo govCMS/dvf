@@ -85,7 +85,7 @@ function mytheme_dvf_style_configuration_alter(array &$configuration, Visualisat
 1. Go to `Extend` and enable `CSV Data Visulisation`.
 2. Go to `Structure` -> `Content types`, choose the content type which you want to display the table, then click `Manage fields`.
 3. Click `Add field`.
-4. Select `Visualisation File`, then click `Save and continue`.
+4. Select `Visualisation File` and label as "CSV Visualisation", then click `Save and continue`.
     - Visualisation File: import data from a file.
     - Visualisation URL: import data from an external url, eg resource API.
 5. Select `CSV file` for Visualisation source, leave CSV FILE SETTINGS as default, add "csv" to Allowed file extensions
@@ -109,7 +109,7 @@ Apple,Orange,Banana,Peach,Blueberry,Grapes<br/>
 1. Go to `Extend` and enable `JSON Data Visulisation`.
 2. Go to `Structure` -> `Content types`, choose the content type which you want to display the table, then click `Manage fields`.
 3. Click `Add field`.
-4. Select `Visualisation File`, then click `Save and continue`.
+4. Select `Visualisation File` and label as "JSON Visualisation", then click `Save and continue`.
   - Visualisation File: import data from a file.
   - Visualisation URL: import data from an external url, eg resource API.
 5. Select `JSON file` for Visualisation source, add "json" to Allowed file extensions
