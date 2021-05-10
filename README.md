@@ -122,7 +122,7 @@ function mytheme_dvf_style_configuration_alter(array &$configuration, Visualisat
 1. <a href="#installation_and_configuation">Enable Data Visualisation Module and Configure your Visualisation Field</a>
 2. Go to `Content` -> `Add content`, select the content type which you added visualisation field.
 3. Scroll down to the visualisation field section. Import your CSV file through the file upload field, or you can use
-   <a href="#sample_csv_data">Sample CSV Data</a> to have a test.
+   <a href="#sample_json_data">Sample CSV Data</a> to have a test.
 4. Open up SETTINGS, select `Bar chart`.
    - In DATA SETTINGS, select all the fields except "Fruits" by pressing <strong>Shift</strong>. Select `Fruits` for <strong>Split field</strong>
    - In AXIS SETTINGS, type "Year" and "Quantity(kg)" in <strong>Axis title</strong> field in `X AXIS SETTINGS`
