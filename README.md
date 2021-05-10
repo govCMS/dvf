@@ -39,9 +39,9 @@ be displayed.
 entity. Sub modules can provide data sources or visualisation plugins that use
 this field type, see related modules above for modules currently available.
 
-## Installing & Configuration
+## <span id="installation_and_configuation">Installing & Configuration</span>
 
-* Install DVF and a suitable data source (eg. `dvf_csv`) then enable.
+* Install DVF, go to `Extend` and enable a suitable data source (eg. `dvf_csv`).
 * Then visit `Manage fields` for the entity type you want to add the
   visualisation to eg `/admin/structure/types/manage/page/fields`
 * Click `Add field` and select either `Visualisation URL` or
@@ -80,27 +80,20 @@ function mytheme_dvf_style_configuration_alter(array &$configuration, Visualisat
   return $configuration;
 }
 ```
-## Example of generating a Bar Graph from a CSV file
 
-1. Go to `Extend` and enable `CSV Data Visulisation`.
-2. Go to `Structure` -> `Content types`, choose the content type which you want to display the bar graph, then click `Manage fields`.
-3. Click `Add field`.
-4. Select `Visualisation File` and label as "CSV Visualisation", then click `Save and continue`.
-    - Visualisation File: import data from a file.
-    - Visualisation URL: import data from an external url, eg: resource API.
-5. Select `CSV file` for Visualisation source, leave CSV FILE SETTINGS as default, add "csv" to Allowed file extensions
-   and separate with a space or a comma, eg: txt,csv. Click `Save settings`, then click `Save field and settings`.
-6. Go to `Content` -> `Add content`, select the content type which you added visualisation field.
-7. Scroll down to the visualisation field section. Import your csv file through the file upload field, or you can use
+## Example of generating a Bar Graph from a CSV file
+1. <a href="#installation_and_configuation">Enable Data Visualisation Module and Configure your Visualisation Field</a>
+2. Go to `Content` -> `Add content`, select the content type which you added visualisation field.
+3. Scroll down to the visualisation field section. Import your csv file through the file upload field, or you can use
    <a href="#sample_csv_data">Sample CSV Data</a> to have a test.
-8. Open up SETTINGS, select `Bar chart`.
+4. Open up SETTINGS, select `Bar chart`.
    - In DATA SETTINGS, select all the fields by pressing <strong>Shift</strong>.
    - In AXIS SETTINGS, type "Fruits" and "Number of People" in <strong>Axis title</strong> field in `X AXIS SETTINGS`
      and `Y AXIS SETTINGS` respectively.
-9. Fill all the other required fields and click `Save`.
-10. Open up the content page in the browser, your csv data will be shown in Bar Graph.
+5. Fill all the other required fields and click `Save`.
+6. Open up the content page in the browser, your csv data will be shown in Bar Graph.
 
-#### <a id="sample_csv_data">Sample CSV Data</a>
+#### <span id="sample_csv_data">Sample CSV Data</span>
 Please copy and paste the following data into a file and saved as "fruits.csv"<br/>
 ```
 Apple,Orange,Banana,Peach,Blueberry,Grapes
@@ -108,28 +101,24 @@ Apple,Orange,Banana,Peach,Blueberry,Grapes
 ```
 
 ## Example of generating a Bar Graph from a JSON file
-1. Go to `Extend` and enable `JSON Data Visulisation`.
-2. Go to `Structure` -> `Content types`, choose the content type which you want to display the bar graph, then click `Manage fields`.
-3. Click `Add field`.
-4. Select `Visualisation File` and label as "JSON Visualisation", then click `Save and continue`.
-  - Visualisation File: import data from a file.
-  - Visualisation URL: import data from an external url, eg: resource API.
-5. Select `JSON file` for Visualisation source, add "json" to Allowed file extensions
-   and separate with a space or a comma, eg: txt,json. Click `Save settings`, then click `Save field and settings`.
-6. Go to `Content` -> `Add content`, select the content type which you added visualisation field.
-7. Scroll down to the visualisation field section. Import your JSON file through the file upload field, or you can use
+1. <a href="#installation_and_configuation">Enable Data Visualisation Module and Configure your Visualisation Field</a>
+2. Go to `Content` -> `Add content`, select the content type which you added visualisation field.
+3. Scroll down to the visualisation field section. Import your JSON file through the file upload field, or you can use
    <a href="#sample_json_data">Sample JSON Data</a> to have a test.
-8. Open up SETTINGS, select `Bar chart`.
+4. Open up SETTINGS, select `Bar chart`.
    - In DATA SETTINGS, select all the fields by pressing <strong>Shift</strong>.
    - In AXIS SETTINGS, type "Fruits" and "Number of People" in <strong>Axis title</strong> field in `X AXIS SETTINGS` and `Y AXIS SETTINGS` respectively.
-9. Fill all the other required fields and click `Save`.
-10. Open up the content page in the browser, your JSON data will be shown in Bar Graph.
+5. Fill all the other required fields and click `Save`.
+6. Open up the content page in the browser, your JSON data will be shown in Bar Graph.
 
-#### <a id="sample_json_data">Sample JSON Data</a>
+#### <span id="sample_json_data">Sample JSON Data</span>
 Please copy and paste the following data into a file and saved as "fruits.json"<br/>
 ```
 [{"Apple": 35,"Orange": 30,"Banana": 10,"Peach": 25,"Blueberry": 40,"Grapes": 5 }]
 ```
+
+## Example of splitting charts by a column from a CSV file
+1. <a href="#installation_and_configuation">Enable Data Visualisation Module and Configure your Visualisation Field</a>
 
 ## Development
 
