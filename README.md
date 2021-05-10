@@ -46,12 +46,12 @@ this field type, see related modules above for modules currently available.
   visualisation to eg `/admin/structure/types/manage/page/fields`
 * Click `Add field` and select either `Visualisation URL` or
   `Visualisation File` depending on if the data source will be local or remote,
-  provide a name for the field and save.
+  provide a name for the field and save.(Refer to <a id="usage">Usage</a>)
 * Select the `Source type` for the field based on the type of data (requires a
   data source module like `dvf_ckan` or `dvf_csv`).
 * Save settings.
 
-## Usage
+## <span id="usage">Usage</span>
 
 * Create/edit an entity that contains the field you created above.
 * If using `Visualisation URL`, provide a URL to the remote data source
@@ -119,6 +119,10 @@ Please copy and paste the following data into a file and saved as "fruits.json"<
 
 ## Example of splitting charts by a column from a CSV file
 1. <a href="#installation_and_configuation">Enable Data Visualisation Module and Configure your Visualisation Field</a>
+2. Go to `Content` -> `Add content`, select the content type which you added visualisation field.
+3. Scroll down to the visualisation field section. Import your CSV file through the file upload field, or you can use
+   <a href="#sample_json_data">Sample JSON Data</a> to have a test.
+4. Open up SETTINGS, select `Bar chart`.
 
 ## Development
 
