@@ -13,7 +13,7 @@ use Drupal\Core\DependencyInjection\ContainerBuilder;
 class DvfTest extends UnitTestCase
 {
   /**
-   * Test data for rendering.
+   * Test data.
    *
    * @var array
    */
@@ -44,7 +44,6 @@ class DvfTest extends UnitTestCase
 
     $container = new ContainerBuilder();
     \Drupal::setContainer($container);
-    $container->set('string_translation', self::getStringTranslationStub());
   }
 
   /**
