@@ -88,7 +88,7 @@ function mytheme_dvf_style_configuration_alter(array &$configuration, Visualisat
    <a href="#sample_csv_data">Sample CSV Data</a> to have a test.
 4. Open up SETTINGS, select `Bar chart`.
    - In DATA SETTINGS, select all the fields by pressing <strong>Shift</strong>.
-   - In AXIS SETTINGS, type "Fruits" and "Number of People" in <strong>Axis title</strong> field in `X AXIS SETTINGS`
+   - In AXIS SETTINGS, type "Fruits" and "Quantity(kg)" in <strong>Axis title</strong> field in `X AXIS SETTINGS`
      and `Y AXIS SETTINGS` respectively.
 5. Fill all the other required fields and click `Save`.
 6. Open up the content page in the browser, your csv data will be shown in Bar Graph.
@@ -96,8 +96,12 @@ function mytheme_dvf_style_configuration_alter(array &$configuration, Visualisat
 #### <span id="sample_csv_data">Sample CSV Data</span>
 Please copy and paste the following data into a file and saved as "fruits.csv"<br/>
 ```
-Apple,Orange,Banana,Peach,Blueberry,Grapes
-35,30,10,25,40,5
+Fruits,2001,2002,2003
+Apple,30,40,50
+Orange,70,40,20
+Banana,35,90,50
+Peach,55,40,100
+Blueberry,150,40,60
 ```
 
 ## Example of generating a Bar Graph from a JSON file
@@ -123,6 +127,11 @@ Please copy and paste the following data into a file and saved as "fruits.json"<
 3. Scroll down to the visualisation field section. Import your CSV file through the file upload field, or you can use
    <a href="#sample_json_data">Sample JSON Data</a> to have a test.
 4. Open up SETTINGS, select `Bar chart`.
+   - In DATA SETTINGS, select all the fields except "Fruits" by pressing <strong>Shift</strong>. Select `Fruits` for <strong>Split field</strong>
+   - In AXIS SETTINGS, type "Year" and "Quantity(kg)" in <strong>Axis title</strong> field in `X AXIS SETTINGS`
+       and `Y AXIS SETTINGS` respectively.
+5. Fill all the other required fields and click `Save`.
+6. Open up the content page in the browser, your CSV data will be splitted by the column.
 
 ## Development
 
