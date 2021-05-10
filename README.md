@@ -90,7 +90,7 @@ function mytheme_dvf_style_configuration_alter(array &$configuration, Visualisat
    - In DATA SETTINGS, select all the fields by pressing <strong>Shift</strong>.
    - In AXIS SETTINGS, type "Fruits" and "Quantity(kg)" in <strong>Axis title</strong> field in `X AXIS SETTINGS`
      and `Y AXIS SETTINGS` respectively. Select `Fruits` in <strong>Tick values field</strong>.
-5. Fill all the other required fields and click `Save`.
+5. Click `Save`.
 6. Open up the content page in the browser, your csv data will be shown in Bar Graph.
 
 ## Example of generating a Bar Graph from a JSON file
@@ -102,7 +102,7 @@ function mytheme_dvf_style_configuration_alter(array &$configuration, Visualisat
    - In DATA SETTINGS, select all the fields by pressing <strong>Shift</strong>.
    - In AXIS SETTINGS, type "Fruits" and "Quantity(kg)" in <strong>Axis title</strong> field in `X AXIS SETTINGS`
      and `Y AXIS SETTINGS` respectively. Select `Fruits` in <strong>Tick values field</strong>.
-5. Fill all the other required fields and click `Save`.
+5. Click `Save`.
 6. Open up the content page in the browser, your JSON data will be shown in Bar Graph.
 
 ## Example of splitting charts by a column from a CSV file
@@ -115,7 +115,7 @@ function mytheme_dvf_style_configuration_alter(array &$configuration, Visualisat
    - In AXIS SETTINGS, type "Year" and "Quantity(kg)" in <strong>Axis title</strong> field in `X AXIS SETTINGS`
      and `Y AXIS SETTINGS` respectively. Select `Fruits` in <strong>Tick values field</strong>.
      Then Select `Group by label values` for X <strong>Axis Grouping field</strong>.
-5. Fill all the other required fields and click `Save`.
+5. Click `Save`.
 6. Open up the content page in the browser, your CSV data will be splitted by the "Fruits" column.
 
 ## Example of splitting charts by a column from a JSON file
@@ -124,11 +124,11 @@ function mytheme_dvf_style_configuration_alter(array &$configuration, Visualisat
 3. Scroll down to the visualisation field section. Import your CSV file through the file upload field, or you can use
    <a href="#sample_csv_data">Sample CSV Data</a> to have a test.
 4. Open up SETTINGS, select `Bar chart`.
-  - In DATA SETTINGS, select all the fields except "Fruits" by pressing <strong>Shift</strong>. Select `Fruits` for <strong>Split field</strong>
-  - In AXIS SETTINGS, type "Year" and "Quantity(kg)" in <strong>Axis title</strong> field in `X AXIS SETTINGS`
+   - In DATA SETTINGS, select all the fields except "Fruits" by pressing <strong>Shift</strong>. Select `Fruits` for <strong>Split field</strong>
+   - In AXIS SETTINGS, type "Year" and "Quantity(kg)" in <strong>Axis title</strong> field in `X AXIS SETTINGS`
     and `Y AXIS SETTINGS` respectively. Select `Fruits` in <strong>Tick values field</strong>.
     Then Select `Group by label values` for X <strong>Axis Grouping field</strong>.
-5. Fill all the other required fields and click `Save`.
+5. Click `Save`.
 6. Open up the content page in the browser, your JSON data will be splitted by the "Fruits" column.
 
 #### <span id="sample_csv_data">Sample CSV Data</span>
