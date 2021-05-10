@@ -6,11 +6,11 @@ use Drupal\Tests\UnitTestCase;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 
 /**
- * Tests dsf.
+ * Tests dvf.
  *
  * @group doghouse
  */
-class DsfTest extends UnitTestCase
+class DvfTest extends UnitTestCase
 {
   /**
    * Test data for rendering.
