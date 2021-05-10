@@ -89,20 +89,9 @@ function mytheme_dvf_style_configuration_alter(array &$configuration, Visualisat
 4. Open up SETTINGS, select `Bar chart`.
    - In DATA SETTINGS, select all the fields by pressing <strong>Shift</strong>.
    - In AXIS SETTINGS, type "Fruits" and "Quantity(kg)" in <strong>Axis title</strong> field in `X AXIS SETTINGS`
-     and `Y AXIS SETTINGS` respectively. Select `Fruits` in Tick <strong>values field</strong>.
+     and `Y AXIS SETTINGS` respectively. Select `Fruits` in <strong>Tick values field</strong>.
 5. Fill all the other required fields and click `Save`.
 6. Open up the content page in the browser, your csv data will be shown in Bar Graph.
-
-#### <span id="sample_csv_data">Sample CSV Data</span>
-Please copy and paste the following data into a file and saved as "fruits.csv"<br/>
-```
-Fruits,2001,2002,2003
-Apple,30,40,50
-Orange,70,40,20
-Banana,35,90,50
-Peach,55,40,100
-Blueberry,150,40,60
-```
 
 ## Example of generating a Bar Graph from a JSON file
 1. <a href="#installation_and_configuation">Enable Data Visualisation Module and Configure your Visualisation Field</a>
@@ -111,15 +100,10 @@ Blueberry,150,40,60
    <a href="#sample_json_data">Sample JSON Data</a> to have a test.
 4. Open up SETTINGS, select `Bar chart`.
    - In DATA SETTINGS, select all the fields by pressing <strong>Shift</strong>.
-   - In AXIS SETTINGS, type "Fruits" and "Number of People" in <strong>Axis title</strong> field in `X AXIS SETTINGS` and `Y AXIS SETTINGS` respectively.
+   - In AXIS SETTINGS, type "Fruits" and "Quantity(kg)" in <strong>Axis title</strong> field in `X AXIS SETTINGS`
+     and `Y AXIS SETTINGS` respectively. Select `Fruits` in <strong>Tick values field</strong>.
 5. Fill all the other required fields and click `Save`.
 6. Open up the content page in the browser, your JSON data will be shown in Bar Graph.
-
-#### <span id="sample_json_data">Sample JSON Data</span>
-Please copy and paste the following data into a file and saved as "fruits.json"<br/>
-```
-[{"Apple": 35,"Orange": 30,"Banana": 10,"Peach": 25,"Blueberry": 40,"Grapes": 5 }]
-```
 
 ## Example of splitting charts by a column from a CSV file
 1. <a href="#installation_and_configuation">Enable Data Visualisation Module and Configure your Visualisation Field</a>
@@ -133,6 +117,61 @@ Please copy and paste the following data into a file and saved as "fruits.json"<
      Then Select `Group by label values` for X <strong>Axis Grouping field</strong>.
 5. Fill all the other required fields and click `Save`.
 6. Open up the content page in the browser, your CSV data will be splitted by the "Fruits" column.
+
+## Example of splitting charts by a column from a JSON file
+1. <a href="#installation_and_configuation">Enable Data Visualisation Module and Configure your Visualisation Field</a>
+2. Go to `Content` -> `Add content`, select the content type which you added visualisation field.
+3. Scroll down to the visualisation field section. Import your CSV file through the file upload field, or you can use
+   <a href="#sample_csv_data">Sample CSV Data</a> to have a test.
+4. Open up SETTINGS, select `Bar chart`.
+  - In DATA SETTINGS, select all the fields except "Fruits" by pressing <strong>Shift</strong>. Select `Fruits` for <strong>Split field</strong>
+  - In AXIS SETTINGS, type "Year" and "Quantity(kg)" in <strong>Axis title</strong> field in `X AXIS SETTINGS`
+    and `Y AXIS SETTINGS` respectively. Select `Fruits` in <strong>Tick values field</strong>.
+    Then Select `Group by label values` for X <strong>Axis Grouping field</strong>.
+5. Fill all the other required fields and click `Save`.
+6. Open up the content page in the browser, your JSON data will be splitted by the "Fruits" column.
+
+#### <span id="sample_csv_data">Sample CSV Data</span>
+Please copy and paste the following data into a file and saved as "fruits.csv"<br/>
+```
+Fruits,2001,2002,2003
+Apple,30,40,50
+Orange,70,40,20
+Banana,35,90,50
+Peach,55,40,100
+Blueberry,150,40,60
+```
+
+#### <span id="sample_json_data">Sample JSON Data</span>
+Please copy and paste the following data into a file and saved as "fruits.json"<br/>
+```
+[
+  {
+    "2001": 30,
+    "2002": 40,
+    "2003": 50,
+    "Fruits": "Apple"
+  },
+  {
+    "2001": 70,
+    "2002": 40,
+    "2003": 20,
+    "Fruits": "Orange"
+  },
+  {
+    "2001": 35,
+    "2002": 90,
+    "2003": 50,
+    "Fruits": "Banana"
+  },
+  {
+    "2001": 55,
+    "2002": 40,
+    "2003": 100,
+    "Fruits": "Peach"
+  }
+]
+```
 
 ## Development
 
