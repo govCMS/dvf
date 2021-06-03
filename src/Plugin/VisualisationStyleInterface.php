@@ -2,7 +2,8 @@
 
 namespace Drupal\dvf\Plugin;
 
-use Drupal\Component\Plugin\ConfigurablePluginInterface;
+use Drupal\Component\Plugin\ConfigurableInterface;
+use Drupal\Component\Plugin\DependentPluginInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -10,7 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Provides an interface defining a VisualisationStyle plugin.
  */
-interface VisualisationStyleInterface extends ConfigurablePluginInterface, PluginInspectionInterface {
+interface VisualisationStyleInterface extends ConfigurableInterface, DependentPluginInterface, PluginInspectionInterface {
 
   /**
    * Returns a form to configure settings for this plugin.
