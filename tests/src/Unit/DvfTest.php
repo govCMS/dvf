@@ -8,7 +8,7 @@ use Drupal\Core\DependencyInjection\ContainerBuilder;
 /**
  * Tests dvf.
  *
- * @group doghouse
+ * @group dvf
  */
 class DvfTest extends UnitTestCase
 {
