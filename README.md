@@ -46,9 +46,11 @@ this field type, see related modules above for modules currently available.
   visualisation to eg `/admin/structure/types/manage/page/fields`
 * Click `Add field` and select either `Visualisation URL` or
   `Visualisation File` depending on if the data source will be local or remote,
-  provide a name for the field and save.(Refer to <a id="usage">Usage</a>)
-* Select the `Source type` for the field based on the type of data (requires a
-  data source module like `dvf_ckan` or `dvf_csv`).
+  provide a name for the field and save.(Refer to <a id="#usage">Usage</a>)
+* If using `Visualisation File` (requires a data source module like `dvf_ckan` or `dvf_csv`)
+  * Select the `Visualisation source` (CSV or JSON)
+  * Ensure the allowed file extension matches the source
+  * All other defaults should be suitable
 * Save settings.
 
 ## <span id="usage">Usage</span>
@@ -132,7 +134,7 @@ function mytheme_dvf_style_configuration_alter(array &$configuration, Visualisat
 6. Open up the content page in the browser, your JSON data will be splitted by the "Fruits" column.
 
 #### <span id="sample_csv_data">Sample CSV Data</span>
-Please copy and paste the following data into a file and saved as "fruits.csv"<br/>
+Please copy and paste the following data into a file and saved as "fruits.csv"
 ```
 Fruits,2001,2002,2003
 Apple,30,40,50
@@ -143,7 +145,7 @@ Blueberry,150,40,60
 ```
 
 #### <span id="sample_json_data">Sample JSON Data</span>
-Please copy and paste the following data into a file and saved as "fruits.json"<br/>
+Please copy and paste the following data into a file and saved as "fruits.json"
 ```
 [
   {
