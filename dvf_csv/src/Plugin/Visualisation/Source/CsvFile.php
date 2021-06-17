@@ -8,7 +8,6 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\Visualisation\Source\VisualisationSourceBase;
-use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -32,13 +31,6 @@ class CsvFile extends VisualisationSourceBase implements ContainerFactoryPluginI
    * @var \Drupal\Core\Cache\CacheBackendInterface
    */
   protected $cache;
-
-  /**
-   * The HTTP client.
-   *
-   * @var \GuzzleHttp\Client
-   */
-  protected $httpClient;
 
   /**
    * The CSV file fields.
@@ -69,13 +61,10 @@ class CsvFile extends VisualisationSourceBase implements ContainerFactoryPluginI
    *   The module handler.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The cache backend.
-   * @param \GuzzleHttp\Client $http_client
-   *   The HTTP client.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation = NULL, ModuleHandlerInterface $module_handler, CacheBackendInterface $cache, Client $http_client) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation = NULL, ModuleHandlerInterface $module_handler, CacheBackendInterface $cache) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $visualisation, $module_handler);
     $this->cache = $cache;
-    $this->httpClient = $http_client;
   }
 
   /**
@@ -102,8 +91,7 @@ class CsvFile extends VisualisationSourceBase implements ContainerFactoryPluginI
       $plugin_definition,
       $visualisation,
       $container->get('module_handler'),
-      $container->get('cache.dvf_csv'),
-      $container->get('http_client')
+      $container->get('cache.dvf_csv')
     );
   }
 

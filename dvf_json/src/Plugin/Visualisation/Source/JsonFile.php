@@ -9,7 +9,6 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\Visualisation\Source\VisualisationSourceBase;
 use Flow\JSONPath\JSONPath;
-use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -33,13 +32,6 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
    * @var \Drupal\Core\Cache\CacheBackendInterface
    */
   protected $cache;
-
-  /**
-   * The HTTP client.
-   *
-   * @var \GuzzleHttp\Client
-   */
-  protected $httpClient;
 
   /**
    * The JSON file fields.
@@ -70,13 +62,10 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
    *   The module handler.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The cache backend.
-   * @param \GuzzleHttp\Client $http_client
-   *   The HTTP client.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation = NULL, ModuleHandlerInterface $module_handler, CacheBackendInterface $cache, Client $http_client) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation = NULL, ModuleHandlerInterface $module_handler, CacheBackendInterface $cache) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $visualisation, $module_handler);
     $this->cache = $cache;
-    $this->httpClient = $http_client;
   }
 
   /**
@@ -103,8 +92,7 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
       $plugin_definition,
       $visualisation,
       $container->get('module_handler'),
-      $container->get('cache.dvf_json'),
-      $container->get('http_client')
+      $container->get('cache.dvf_json')
     );
   }
 
