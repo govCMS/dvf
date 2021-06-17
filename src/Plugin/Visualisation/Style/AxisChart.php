@@ -715,7 +715,8 @@ abstract class AxisChart extends TableVisualisationStyleBase {
    *   The updated form element.
    */
   public function updateColumnOverrides(array $form, FormStateInterface $form_state) {
-    return $form['field_visualisation_url']['widget'][0]['options']['visualisation_style_options']['data']['column_overrides'];
+    $field_name = self::formElementCallbackParentName($form_state);
+    return $form[$field_name]['widget'][0]['options']['visualisation_style_options']['data']['column_overrides'];
   }
 
   /**
@@ -730,7 +731,8 @@ abstract class AxisChart extends TableVisualisationStyleBase {
    *   The updated form element.
    */
   public function updateAxisGrouping(array $form, FormStateInterface $form_state) {
-    return $form['field_visualisation_url']['widget'][0]['options']['visualisation_style_options']['axis']['x']['x_axis_grouping'];
+    $field_name = self::formElementCallbackParentName($form_state);
+    return $form[$field_name]['widget'][0]['options']['visualisation_style_options']['axis']['x']['x_axis_grouping'];
   }
 
   /**

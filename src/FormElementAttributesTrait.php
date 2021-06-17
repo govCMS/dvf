@@ -2,6 +2,8 @@
 
 namespace Drupal\dvf;
 
+use Drupal\Core\Form\FormStateInterface;
+
 /**
  * Provides methods to manipulate form elements.
  */
@@ -44,6 +46,20 @@ trait FormElementAttributesTrait {
     $selector = $tag . '[name="' . $name . '"]';
 
     return $selector;
+  }
+
+  /**
+   * Get the correct parent field name within a ajax callback.
+   *
+   * @param  \Drupal\Core\Form\FormStateInterface  $form_state
+   *   Form state passed in ajax callback.
+   *
+   * @return string
+   *   The parent field name for the triggering element.
+   */
+  protected static function formElementCallbackParentName(FormStateInterface $form_state) {
+    $trigger = $form_state->getTriggeringElement();
+    return $trigger['#parents'][0];
   }
 
 }
