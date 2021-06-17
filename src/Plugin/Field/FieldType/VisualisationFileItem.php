@@ -129,7 +129,7 @@ class VisualisationFileItem extends FileItem implements VisualisationItemInterfa
 
     $file = File::load($fid);
 
-    return !empty($file) ? file_create_url($file->getFileUri()) : NULL;
+    return !empty($file) ? $file->getFileUri() : NULL;
   }
 
 }

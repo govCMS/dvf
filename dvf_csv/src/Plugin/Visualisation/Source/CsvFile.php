@@ -239,7 +239,7 @@ class CsvFile extends VisualisationSourceBase implements ContainerFactoryPluginI
   protected function fetchData() {
     try {
       $uri = $this->config('uri');
-      $response = $this->httpClient->get($uri)->getBody()->getContents();
+      $response = file_get_contents($uri);
     }
     catch (\Exception $e) {
       $response = NULL;
