@@ -6,7 +6,9 @@ use Drupal\ckan_connect\Client\CkanClientInterface;
 use Drupal\ckan_connect\Parser\CkanResourceUrlParserInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\dvf\DvfHelpers;
 use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\Visualisation\Source\VisualisationSourceBase;
@@ -26,6 +28,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class CkanResource extends VisualisationSourceBase implements ContainerFactoryPluginInterface {
+
+  use MessengerTrait;
+  use StringTranslationTrait;
 
   /**
    * The cache backend.
@@ -183,6 +188,7 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
       $result = ($response->success === TRUE) ? $response->result : NULL;
     }
     catch (\Exception $e) {
+      $this->ckanResourceError($query['id'], $e->getMessage());
       $result = NULL;
     }
 
@@ -245,6 +251,7 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
       $result = ($response->success === TRUE) ? $response->result : NULL;
     }
     catch (\Exception $e) {
+      $this->ckanResourceError($query['id'], $e->getMessage());
       $result = NULL;
     }
 
@@ -311,6 +318,28 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
     }
 
     return array_map('trim', $data_filters);
+  }
+
+  /**
+   * Generic error message for errors accessing resources.
+   *
+   * @param string $type
+   *   Error type, eg "records" or "fields".
+   * @param string $resource_id
+   *   The resource ID that we attempted to access.
+   * @param string $exception_message
+   *   The exception message.
+   */
+  protected function ckanResourceError($type, $resource_id, $exception_message) {
+    $message = $this->t(
+      'There was an error getting :type data for :id. Error :message',
+      [
+        ':type' => $type,
+        ':id' => $resource_id,
+        ':message' => $exception_message,
+      ]
+    );
+    $this->messenger()->addError($message);
   }
 
 }
