@@ -5,6 +5,7 @@ namespace Drupal\dvf\Plugin;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
+use Psr\Log\LoggerInterface;
 
 /**
  * Provides a Visualisation plugin manager.
@@ -21,8 +22,10 @@ class VisualisationManager extends DefaultPluginManager implements Visualisation
    *   Cache backend instance to use.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler to invoke the alter hook with.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   Instance of the logger object.
    */
-  public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
+  public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler, LoggerInterface $logger) {
     parent::__construct('Plugin/Visualisation', $namespaces, $module_handler, 'Drupal\dvf\Plugin\VisualisationInterface', 'Drupal\dvf\Annotation\Visualisation');
     $this->setCacheBackend($cache_backend, 'dvf_plugins_visualisation');
   }

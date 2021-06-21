@@ -1,13 +1,16 @@
 services:
   plugin.manager.visualisation:
     class: Drupal\dvf\Plugin\VisualisationManager
-    arguments: ['@container.namespaces', '@cache.discovery', '@module_handler']
+    arguments: ['@container.namespaces', '@cache.discovery', '@module_handler', '@logger.channel.dvf']
   plugin.manager.visualisation.source:
     class: Drupal\dvf\Plugin\VisualisationSourceManager
-    arguments: ['@container.namespaces', '@cache.discovery', '@module_handler']
+    arguments: ['@container.namespaces', '@cache.discovery', '@module_handler', '@logger.channel.dvf']
   plugin.manager.visualisation.style:
     class: Drupal\dvf\Plugin\VisualisationStyleManager
-    arguments: ['@container.namespaces', '@cache.discovery', '@module_handler']
+    arguments: ['@container.namespaces', '@cache.discovery', '@module_handler', '@logger.channel.dvf']
   dvf.helpers:
     class: Drupal\dvf\DvfHelpers
     arguments: []
+  logger.channel.dvf:
+    parent: logger.channel_base
+    arguments: ['dvf']
