@@ -17,6 +17,7 @@ use Drupal\dvf\Plugin\VisualisationSourceInterface;
 use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 
 /**
  * Provides a base class for VisualisationSource plugins.
@@ -264,8 +265,8 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
    */
   protected function getContentFromUri($uri) {
     // Check if a stream wrapper (local file) if so return file contents.
-    $manager = \Drupal::service("stream_wrapper_manager");
-    $wrappers = array_keys($manager->getWrappers(\Drupal\Core\StreamWrapper\StreamWrapperInterface::LOCAL));
+    $manager = \Drupal::service('stream_wrapper_manager');
+    $wrappers = array_keys($manager->getWrappers(StreamWrapperInterface::LOCAL));
     foreach ($wrappers as $wrapper) {
       if (strpos($uri, $wrapper . '://') === 0) {
         return file_get_contents($uri);

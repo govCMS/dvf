@@ -244,7 +244,7 @@ class CsvFile extends VisualisationSourceBase implements ContainerFactoryPluginI
   protected function fetchData() {
     try {
       $uri = $this->config('uri');
-      $response = file_get_contents($uri);
+      $response = $this->getContentFromUri($uri);
     }
     catch (\Exception $e) {
       $this->messenger()->addError('Unable to read CSV');
