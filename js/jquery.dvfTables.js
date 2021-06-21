@@ -111,6 +111,14 @@
         return this;
       }
 
+      $('<button/>')
+        .html('Show table')
+        .addClass('table-chart--toggle')
+        .click(self.toggleView.bind(self))
+        .appendTo($buttonWrapper);
+
+      $buttonWrapper.addClass(processedClass);
+
       // Set download data click listener.
       if ($(this.element).is('table')) {
         $('.download-data', $(this.element).closest('.dvf-table')).on('click', function() {
