@@ -8,7 +8,7 @@ Visualisation Framework. This suite of modules deliver greater customisability
 and control, increasing the number of the data types consumed by the module,
 and providing more accessibility for developers.
 
-Now included are the popular, industry-standard, JavaScript libraries: C3.js,
+Now included are the popular, industry-standard, JavaScript libraries: billboard.js,
 based on D3 (for charting), and DataTables (for out-of-the-box table styling).
 We have also updated the module to allow for more customisable visualisation
 placement using fields.

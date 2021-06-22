@@ -1,4 +1,4 @@
-;(function ($, c3) {
+;(function ($, bb) {
 
   'use strict';
 
@@ -40,12 +40,12 @@
     },
 
     /**
-     * Calls the C3 third party plugin with the parsed config.
+     * Calls the billboard third party plugin with the parsed config.
      *
      * @returns {Plugin}
      */
     generateChart: function () {
-      c3.generate(this.config);
+      bb.generate(this.config);
       return this;
     },
 
@@ -331,10 +331,10 @@
     },
 
     /**
-     * Parse user settings into object suitable for use with C3 Gauge Chart.
+     * Parse user settings into object suitable for use with bb Gauge Chart.
      *
-     * @example https://c3js.org/samples/chart_gauge.html
-     * @see https://c3js.org/reference.html#gauge-label-show
+     * @example https://bbjs.org/samples/chart_gauge.html
+     * @see https://bbjs.org/reference.html#gauge-label-show
      *
      * @returns {Plugin}
      */
@@ -568,4 +568,4 @@
     });
   };
 
-})(jQuery, c3);
+})(jQuery, bb);
