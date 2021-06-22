@@ -548,11 +548,11 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       '#tree' => TRUE,
     ];
 
-    $form['chart']['title']['show'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Show chart title'),
-      '#description' => $this->t('Check to display the title as part of the chart.'),
-      '#default_value' => $this->config('chart', 'title', 'show'),
+    $form['chart']['title']['text'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Chart title'),
+      '#description' => $this->t('Title to display on the chart, this gets included when download as SVG or PNG is selected'),
+      '#default_value' => $this->config('chart', 'title', 'text'),
     ];
 
     $form['chart']['interaction'] = [
@@ -853,7 +853,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $settings['chart']['data']['names'] = $this->fieldLabels();
 
     // Set the chart title.
-    $settings['chart']['title']['text'] = $this->visualisation->getEntity()->label();
+    $settings['chart']['title']['text'] = $this->config('chart', 'title', 'text');
 
     // Column overrides.
     $settings['chart']['data']['column_overrides'] = $this->getColumnOverrides();
