@@ -365,7 +365,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
    *   The fields.
    */
   protected function fields() {
-    return array_unique(array_filter($this->config('data','fields')));
+    return array_unique(array_filter($this->config('data', 'fields')));
   }
 
   /**
