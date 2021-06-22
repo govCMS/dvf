@@ -333,8 +333,8 @@
     /**
      * Parse user settings into object suitable for use with bb Gauge Chart.
      *
-     * @example https://bbjs.org/samples/chart_gauge.html
-     * @see https://bbjs.org/reference.html#gauge-label-show
+     * @example https://naver.github.io/billboard.js/demo/#Chart.GaugeChart
+     * @see https://naver.github.io/billboard.js/release/latest/doc/Options.html#.gauge
      *
      * @returns {Plugin}
      */
