@@ -47,11 +47,11 @@
       // Export as png dimensions. When values are empty, will automatically size.
       width: '',
       height: '',
-      // Embed additional styles in svg (fixes display bugs with c3js charts)
+      // Embed additional styles in svg (fixes display bugs with billboard.js charts)
       includeExportStyles: true,
       exportStylesheets: [],
       // If an export stylesheet is provided, these styles get replaced with the stylesheet content.
-      exportStyles: 'svg{font:10px sans-serif}line,path{fill:none;stroke:#000}.c3-bar{stroke:none!important}',
+      exportStyles: 'svg{font:10px sans-serif}line,path{fill:none;stroke:#000}.bb-bar{stroke:none!important}',
       // Passed Validation requirements.
       valid: true,
       // Error message.
@@ -62,7 +62,7 @@
       ieDownloadMessage: 'Right click the graph and select "Save picture as" then in the save dialog, set the ' +
         '"Save as type" to '
     };
-    
+
     // Update defaults with passed settings.
     self.settings = $.extend(self.defaults, settings);
 
@@ -120,7 +120,7 @@
       // Add font family to texts.
       self.settings.svg.find('text').attr('font-family', '\'arial\'');
 
-      // Include c3js styles.
+      // Include billboard.js styles.
       self.includeExportStyles();
 
       // Return self for chaining.
@@ -128,7 +128,7 @@
     };
 
     /*
-     * Inject c3js styles if required.
+     * Inject billboard.js styles if required.
      */
     self.includeExportStyles = function () {
       // Check if styles need to be added first.
@@ -184,7 +184,7 @@
     // Embed current export styles.
     self.embedStyles = function () {
       // Create a style element.
-      self.$c3styles = $('<style>')
+      self.$chartStyles = $('<style>')
         .attr('type', 'text/css')
         .html("<![CDATA[\n" + self.settings.exportStyles + "\n]]>")
         .appendTo($('defs', self.settings.svg));
