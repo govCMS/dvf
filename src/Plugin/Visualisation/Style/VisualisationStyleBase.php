@@ -14,6 +14,7 @@ use Drupal\dvf\ConfigurablePluginTrait;
 use Drupal\dvf\DvfHelpers;
 use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\VisualisationStyleInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Component\Render\FormattableMarkup;
 
@@ -37,6 +38,13 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
+
+  /**
+   * The logger.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
 
   /**
    * DVF Helpers.
@@ -65,6 +73,8 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
    *   The visualisation context in which the plugin will run.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   Instance of the logger object.
    * @param \Drupal\dvf\DvfHelpers $dvf_helpers
    *   The DVF helpers.
    * @param \Drupal\Core\Messenger\MessengerInterface $messenger
@@ -76,12 +86,14 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
     $plugin_definition,
     VisualisationInterface $visualisation = NULL,
     ModuleHandlerInterface $module_handler,
+    LoggerInterface $logger,
     DvfHelpers $dvf_helpers,
     MessengerInterface $messenger
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->visualisation = $visualisation;
     $this->moduleHandler = $module_handler;
+    $this->logger = $logger;
     $this->dvfHelpers = $dvf_helpers;
     $this->messenger = $messenger;
   }
@@ -116,6 +128,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       $plugin_definition,
       $visualisation,
       $container->get('module_handler'),
+      $container->get('logger.channel.dvf'),
       $container->get('dvf.helpers'),
       $container->get('messenger')
     );
@@ -169,6 +182,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       '#type' => 'details',
       '#title' => $this->t('Data settings'),
       '#tree' => TRUE,
+      '#open' => TRUE,
     ];
 
     $form['data']['fields'] = [
@@ -180,6 +194,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       '#multiple' => TRUE,
       '#size' => 5,
       '#default_value' => $this->config('data', 'fields'),
+      '#required' => TRUE,
     ];
 
     $form['data']['field_labels'] = [

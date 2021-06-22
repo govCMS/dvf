@@ -8,6 +8,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\Visualisation\Source\VisualisationSourceBase;
+use GuzzleHttp\Client;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -59,11 +61,24 @@ class CsvFile extends VisualisationSourceBase implements ContainerFactoryPluginI
    *   The visualisation context in which the plugin will run.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   Instance of the logger object.
+   * @param \GuzzleHttp\Client $http_client
+   *   The HTTP client.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The cache backend.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation = NULL, ModuleHandlerInterface $module_handler, CacheBackendInterface $cache) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $visualisation, $module_handler);
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    VisualisationInterface $visualisation = NULL,
+    ModuleHandlerInterface $module_handler,
+    LoggerInterface $logger,
+    Client $http_client,
+    CacheBackendInterface $cache
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $visualisation, $module_handler, $logger, $http_client);
     $this->cache = $cache;
   }
 
@@ -91,6 +106,8 @@ class CsvFile extends VisualisationSourceBase implements ContainerFactoryPluginI
       $plugin_definition,
       $visualisation,
       $container->get('module_handler'),
+      $container->get('logger.channel.dvf'),
+      $container->get('http_client'),
       $container->get('cache.dvf_csv')
     );
   }
@@ -227,9 +244,12 @@ class CsvFile extends VisualisationSourceBase implements ContainerFactoryPluginI
   protected function fetchData() {
     try {
       $uri = $this->config('uri');
-      $response = file_get_contents($uri);
+      $response = $this->getContentFromUri($uri);
     }
     catch (\Exception $e) {
+      $this->messenger()->addError('Unable to read CSV');
+      $this->logger->error($this->t('Error reading CSV file :error',
+        [':error' => $e->getMessage()]));
       $response = NULL;
     }
 

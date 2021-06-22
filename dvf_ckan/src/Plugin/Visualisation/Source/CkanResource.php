@@ -10,6 +10,8 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\dvf\DvfHelpers;
 use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\Visualisation\Source\VisualisationSourceBase;
+use GuzzleHttp\Client;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -82,6 +84,10 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
    *   The visualisation context in which the plugin will run.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   Instance of the logger object.
+   * @param \GuzzleHttp\Client $http_client
+   *   The HTTP client.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The cache backend.
    * @param \Drupal\ckan_connect\Client\CkanClientInterface $ckan_client
@@ -97,12 +103,14 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
     $plugin_definition,
     VisualisationInterface $visualisation = NULL,
     ModuleHandlerInterface $module_handler,
+    LoggerInterface $logger,
+    Client $http_client,
     CacheBackendInterface $cache,
     CkanClientInterface $ckan_client,
     CkanResourceUrlParserInterface $ckan_resource_url_parser,
     DvfHelpers $dvf_helpers
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $visualisation, $module_handler);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $visualisation, $module_handler, $logger, $http_client);
     $this->cache = $cache;
     $this->ckanClient = $ckan_client;
     $this->ckanResourceUrlParser = $ckan_resource_url_parser;
@@ -126,13 +134,21 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
    * @return static
    *   Returns an instance of this plugin.
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation = NULL) {
+  public static function create(
+    ContainerInterface $container,
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    VisualisationInterface $visualisation = NULL
+  ) {
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
       $visualisation,
       $container->get('module_handler'),
+      $container->get('logger.channel.dvf'),
+      $container->get('http_client'),
       $container->get('cache.dvf_ckan'),
       $container->get('ckan_connect.client'),
       $container->get('ckan_connect.resource_url_parser'),
@@ -183,6 +199,7 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
       $result = ($response->success === TRUE) ? $response->result : NULL;
     }
     catch (\Exception $e) {
+      $this->ckanResourceError('fields', $query['id'], $e->getMessage());
       $result = NULL;
     }
 
@@ -245,6 +262,7 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
       $result = ($response->success === TRUE) ? $response->result : NULL;
     }
     catch (\Exception $e) {
+      $this->ckanResourceError('records', $query['id'], $e->getMessage());
       $result = NULL;
     }
 
@@ -311,6 +329,29 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
     }
 
     return array_map('trim', $data_filters);
+  }
+
+  /**
+   * Generic error message for errors accessing resources.
+   *
+   * @param string $type
+   *   Error type, eg "records" or "fields".
+   * @param string $resource_id
+   *   The resource ID that we attempted to access.
+   * @param string $exception_message
+   *   The exception message.
+   */
+  protected function ckanResourceError($type, $resource_id, $exception_message) {
+    $this->messenger()->addError($this->t('Error displaying CKAN data'));
+    $message = $this->t(
+      'There was an error getting CKAN :type data for :id. Error :message',
+      [
+        ':type' => $type,
+        ':id' => $resource_id,
+        ':message' => $exception_message,
+      ]
+    );
+    $this->logger->error($message);
   }
 
 }

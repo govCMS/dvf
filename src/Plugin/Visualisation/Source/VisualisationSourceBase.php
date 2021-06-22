@@ -3,14 +3,21 @@
 namespace Drupal\dvf\Plugin\Visualisation\Source;
 
 use Drupal\Component\Utility\NestedArray;
+use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\Core\Url;
 use Drupal\dvf\ConfigurablePluginTrait;
 use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\VisualisationSourceInterface;
+use GuzzleHttp\Client;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 
 /**
  * Provides a base class for VisualisationSource plugins.
@@ -18,6 +25,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class VisualisationSourceBase extends PluginBase implements VisualisationSourceInterface, ContainerFactoryPluginInterface {
 
   use ConfigurablePluginTrait;
+  use MessengerTrait;
+  use StringTranslationTrait;
 
   /**
    * The visualisation.
@@ -32,6 +41,20 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
+
+  /**
+   * The logger.
+   *
+   * @var \Psr\Log\LoggerInterface
+   */
+  protected $logger;
+
+  /**
+   * The HTTP client.
+   *
+   * @var \GuzzleHttp\Client
+   */
+  protected $httpClient;
 
   /**
    * The iterator.
@@ -53,11 +76,25 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
    *   The visualisation context in which the plugin will run.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   Instance of the logger object.
+   * @param \GuzzleHttp\Client $http_client
+   *   The HTTP client.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation = NULL, ModuleHandlerInterface $module_handler) {
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    VisualisationInterface $visualisation = NULL,
+    ModuleHandlerInterface $module_handler,
+    LoggerInterface $logger,
+    Client $http_client
+  ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->visualisation = $visualisation;
     $this->moduleHandler = $module_handler;
+    $this->logger = $logger;
+    $this->httpClient = $http_client;
   }
 
   /**
@@ -215,6 +252,33 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
     }
 
     return \Drupal::time()->getRequestTime() + $cache_object_expire;
+  }
+
+  /**
+   * Abstraction for getting the content from a URI.
+   *
+   * @param string $uri
+   *   Either a file stream wrapper (eg. public://), an absolute URL (eg http)
+   *   or an internal drupal path.
+   *
+   * @return false|string
+   */
+  protected function getContentFromUri($uri) {
+    // Check if a stream wrapper (local file) if so return file contents.
+    $manager = \Drupal::service('stream_wrapper_manager');
+    $wrappers = array_keys($manager->getWrappers(StreamWrapperInterface::LOCAL));
+    foreach ($wrappers as $wrapper) {
+      if (strpos($uri, $wrapper . '://') === 0) {
+        return file_get_contents($uri);
+      }
+    }
+
+    // If not external (eg a view route), create absolute url.
+    if (!UrlHelper::isExternal($uri)) {
+      $uri = Url::fromUserInput($uri, ['absolute' => TRUE])->toString();
+    }
+
+    return $this->httpClient->get($uri)->getBody()->getContents();
   }
 
 }

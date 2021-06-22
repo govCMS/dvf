@@ -9,6 +9,8 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\Visualisation\Source\VisualisationSourceBase;
 use Flow\JSONPath\JSONPath;
+use Psr\Log\LoggerInterface;
+use GuzzleHttp\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -60,11 +62,24 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
    *   The visualisation context in which the plugin will run.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
+   * @param \Psr\Log\LoggerInterface $logger
+   *   Instance of the logger object.
+   * @param \GuzzleHttp\Client $http_client
+   *   The HTTP client.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The cache backend.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation = NULL, ModuleHandlerInterface $module_handler, CacheBackendInterface $cache) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $visualisation, $module_handler);
+  public function __construct(
+    array $configuration,
+    $plugin_id,
+    $plugin_definition,
+    VisualisationInterface $visualisation = NULL,
+    ModuleHandlerInterface $module_handler,
+    LoggerInterface $logger,
+    Client $http_client,
+    CacheBackendInterface $cache
+  ) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $visualisation, $module_handler, $logger, $http_client);
     $this->cache = $cache;
   }
 
@@ -92,6 +107,8 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
       $plugin_definition,
       $visualisation,
       $container->get('module_handler'),
+      $container->get('logger.channel.dvf'),
+      $container->get('http_client'),
       $container->get('cache.dvf_json')
     );
   }
@@ -102,7 +119,7 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
   public function defaultConfiguration() {
     return [
       'json' => [
-        'expression' => '',
+        'expression' => '$[*]',
       ],
     ];
   }
@@ -121,7 +138,7 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
     $form['json']['expression'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Expression'),
-      '#description' => $this->t('JSONPath expression used to extract the data. Visit the <a href="https://github.com/govCMS/dvf/tree/8.x-1.x/dvf_json">online documentation</a> for more information on how to use JSONPath expressions.'),
+      '#description' => $this->t('JSONPath expression used to extract the data. Default is $[*] which represents the root of the document. Visit the <a href="https://github.com/govCMS/dvf/tree/8.x-1.x/dvf_json">online documentation</a> for more information on how to use JSONPath expressions.'),
       '#default_value' => $this->config('json', 'expression'),
     ];
 
@@ -154,6 +171,9 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
       $json = $json->find($this->config('json', 'expression'));
     }
     catch (\Exception $e) {
+      $this->messenger()->addError('Unable to parse JSON file');
+      $this->logger->error($this->t('Error parsing JSON file :error',
+        [':error' => $e->getMessage()]));
       return $records;
     }
 
@@ -199,9 +219,12 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
   protected function fetchData() {
     try {
       $uri = $this->config('uri');
-      $response = file_get_contents($uri);
+      $response = $this->getContentFromUri($uri);
     }
     catch (\Exception $e) {
+      $this->messenger()->addError('Unable to read JSON');
+      $this->logger->error($this->t('Error reading JSON file :error',
+        [':error' => $e->getMessage()]));
       $response = NULL;
     }
 
