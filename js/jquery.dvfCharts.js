@@ -299,7 +299,7 @@
       point.show = !!pointShow;
 
       if (pointRadius) {
-        point.r = pointRadius;
+        point.r = parseFloat(pointRadius);
       }
 
       this.config.point = $.isEmptyObject(point) ? null : point;

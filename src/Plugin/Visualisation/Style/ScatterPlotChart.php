@@ -57,6 +57,7 @@ class ScatterPlotChart extends AxisChart {
     $settings = parent::chartBuildSettings($records);
 
     $settings['chart']['data']['type'] = 'scatter';
+    $settings['point']['show'] = TRUE;
     $settings['point']['radius'] = $this->config('scatter_plot_chart', 'point', 'size');
 
     return $settings;
