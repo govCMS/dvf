@@ -365,7 +365,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
    *   The fields.
    */
   protected function fields() {
-    return array_filter($this->config('data', 'fields'));
+    return array_unique(array_filter($this->config('data','fields')));
   }
 
   /**
@@ -375,7 +375,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
    *   The field labels.
    */
   protected function fieldLabels() {
-    $labels = array_intersect_key($this->getSourceFieldOptions(), $this->fields());
+    $labels = array_intersect(array_values($this->getSourceFieldOptions()), $this->fields());
 
     $label_overrides = $this->config('data', 'field_labels');
     $label_overrides = preg_split('/\r\n|[\r\n]/', $label_overrides);
