@@ -389,39 +389,38 @@
       if (typeof $.fn.chartExport !== 'function') {
         return this;
       }
-      var buttonTypes = ['png', 'svg'],
-          processedClass = 'processed-download-buttons',
-          $buttonWrapper = $(this.element)
-            .closest('.dvf-chart')
-            .nextAll('.table-chart--actions');
 
-      if ($buttonWrapper.hasClass(processedClass)) {
-        return this;
-      }
+      var self = this,
+          buttonTypes = ['png', 'svg'],
+          $chartWrapper = $(this.element).closest('.dvf-chart--wrapper');
 
-      $(buttonTypes).each(function (i, format) {
+      // For each chart, add download buttons.
+      $chartWrapper.once('download-buttons').each(function(i, el){
+        var $buttonWrapper = $(el).find('.table-chart--actions'),
+          $chart = $(el).find('.dvf-chart svg');
 
-        $('<button/>')
-          .html('Download as ' + format)
-          .addClass(this.options.chart.component + '--download')
-          .chartExport($.extend({
-            format: format,
-            svg: $(this.element).is('svg') ? $(this.element) : $(this.element).find('svg'),
-          }, {
-            // Add optional settings if they exist.
-            width: this.options.chart.styles.width || undefined,
-            height: this.options.chart.styles.height || undefined,
-            filename: (this.config.title && this.config.title.text) ? this.config.title.text : undefined,
-          }))
-          .appendTo($buttonWrapper);
-      }.bind(this));
+        // Add different button types.
+        $(buttonTypes).each(function (i, format) {
+          $('<button/>')
+            .html('Download as ' + format)
+            .addClass(self.options.chart.component + '--download')
+            .chartExport($.extend({
+              format: format,
+              svg: $chart.is('svg') ? $chart : $chart.find('svg'),
+            }, {
+              // Add optional settings if they exist.
+              width: self.options.chart.styles.width || undefined,
+              height: self.options.chart.styles.height || undefined,
+              filename: (self.config.title && self.config.title.text) ? self.config.title.text : undefined,
+            }))
+            .appendTo($buttonWrapper);
+        })
 
-      // Set download data click listener.
-      $('.download-data', $buttonWrapper).on('click', function() {
-        window.open($(this).data('file-uri'));
+        // Set download data click listener.
+        $('.download-data', $buttonWrapper).on('click', function() {
+          window.open($(this).data('file-uri'));
+        });
       });
-
-      $buttonWrapper.addClass(processedClass);
 
       return this;
     },
