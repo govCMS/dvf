@@ -70,7 +70,7 @@ abstract class TableVisualisationStyleBase extends VisualisationStyleBase {
 
     return [
       'data' => $this->getTableRows($records),
-      'columns' => $this->getTableHeader(),
+      'columns' => $this->getTableHeader($records),
       'table' => !empty($config['chart']['table']) ? $config['chart']['table'] : '',
     ];
   }
@@ -94,10 +94,13 @@ abstract class TableVisualisationStyleBase extends VisualisationStyleBase {
   /**
    * Gets the table header.
    *
+   * @param array $records
+   *   The set of records that we should get the values from.
+   *
    * @return array
    *   The table header.
    */
-  protected function getTableHeader() {
+  protected function getTableHeader(array $records = []) {
     $header = [];
 
     if ($this->tableHeaderField() || $this->rowHeaderField()) {
@@ -107,7 +110,7 @@ abstract class TableVisualisationStyleBase extends VisualisationStyleBase {
     $labels = $this->fieldLabels();
 
     if ($this->tableHeaderField()) {
-      $labels = $this->getSourceFieldValues($this->tableHeaderField());
+      $labels = $this->getSourceFieldValues($this->tableHeaderField(), $records);
     }
 
     foreach ($labels as $label) {

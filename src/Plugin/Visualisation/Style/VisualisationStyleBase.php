@@ -334,20 +334,19 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
    *
    * @param string $field_id
    *   The field ID.
+   * @param array $records
+   *   The set of records that we should get the values from.
    *
    * @return array
    *   The source field values.
    */
-  protected function getSourceFieldValues($field_id) {
-    $values = [];
-
-    foreach ($this->getSourceRecords() as $group_records) {
-      foreach ($group_records as $record) {
+  protected function getSourceFieldValues($field_id, $records = []) {
+      $values = [];
+      foreach ($records as $record) {
         if (property_exists($record, $field_id)) {
           $values[] = $record->{$field_id};
         }
       }
-    }
 
     return $values;
   }
