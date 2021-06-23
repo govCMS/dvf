@@ -35,6 +35,7 @@
         .parseBarOptions()
         .parseGaugeOptions()
         .parseColumnOverrideOptions()
+        .parseConfigOverrides()
         .generateChart()
         .addDownloadButtons();
     },
@@ -376,6 +377,17 @@
       }
 
       this.config.gauge = $.isEmptyObject(gauge) ? null : gauge;
+
+      return this;
+    },
+
+    /**
+     * Allow overrides to be merged. Assumes correctly structured object.
+     */
+    parseConfigOverrides: function () {
+      if (typeof this.options.overrides === 'object') {
+        $.extend(true, this.config, this.options.overrides);
+      }
 
       return this;
     },

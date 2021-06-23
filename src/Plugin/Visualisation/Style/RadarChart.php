@@ -7,8 +7,6 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Plugin implementation of the 'dvf_radar_chart' visualisation style.
  *
- * @see https://naver.github.io/billboard.js/release/latest/doc/Options.html#.radar
- *
  * @VisualisationStyle(
  *   id = "dvf_radar_chart",
  *   label = @Translation("Radar chart")
@@ -24,6 +22,11 @@ class RadarChart extends AxisChart {
       'radar' => [
         'direction' => [
           'clockwise' => FALSE,
+        ],
+        'axis' => [
+          'line' => [
+            'show' => TRUE,
+          ],
         ],
       ],
     ] + parent::defaultConfiguration();
@@ -48,6 +51,13 @@ class RadarChart extends AxisChart {
       '#default_value' => $this->config('radar', 'direction', 'clockwise'),
     ];
 
+    $form['radar']['axis']['line']['show'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show axis lines'),
+      '#description' => $this->t('Should the axis lines be displayed'),
+      '#default_value' => $this->config('radar', 'axis', 'line', 'show'),
+    ];
+
     return $form;
   }
 
@@ -57,8 +67,15 @@ class RadarChart extends AxisChart {
   public function chartBuildSettings(array $records) {
     $settings = parent::chartBuildSettings($records);
 
+    // The billboard.js chart type.
     $settings['chart']['data']['type'] = 'radar';
-    $settings['radar'] = $this->config('radar');
+
+    // The overrides key gets merged into the billboard.js config object.
+    // @see https://naver.github.io/billboard.js/release/latest/doc/Options.html#.radar
+    $radar = [];
+    $radar['direction']['clockwise'] = (bool) $this->config('radar', 'direction', 'clockwise');
+    $radar['axis']['line']['show'] = (bool) $this->config('radar', 'axis', 'line', 'show');
+    $settings['overrides']['radar'] = $radar;
 
     return $settings;
   }
