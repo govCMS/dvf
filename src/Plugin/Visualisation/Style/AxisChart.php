@@ -551,7 +551,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $form['chart']['title']['text'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Chart title'),
-      '#description' => $this->t('Title to display on the chart, this gets included when download as SVG or PNG is selected'),
+      '#description' => $this->t('NOTE: if this is used with a split chart, the same title will display on each chart'),
       '#default_value' => $this->config('chart', 'title', 'text'),
     ];
 
