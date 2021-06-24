@@ -26,6 +26,8 @@ function dvf_theme($existing, $type, $theme, $path) {
     'help_page' => [
       'variables' => [
         'topic' => '',
+        'title' => '',
+        'css' => '',
       ],
     ],
   ];
