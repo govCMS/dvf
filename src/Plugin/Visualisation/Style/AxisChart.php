@@ -913,15 +913,6 @@ abstract class AxisChart extends TableVisualisationStyleBase {
    *   An array of column override settings.
    */
   protected function getColumnOverrides() {
-    $allowed_overrides = [
-      'color',
-      'type',
-      'legend',
-      'style',
-      'weight',
-      'class',
-    ];
-
     $column_overrides = array_fill_keys($this->fieldLabelsOriginal(), []);
 
     foreach ($this->config('data', 'column_overrides') as $field_name => $column_override) {
@@ -933,8 +924,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       $column_overrides[$real_field_name] = $this->dvfHelpers->configStringToArray($column_override);
     }
 
-    $sorted = $this->setArrayOrder($column_overrides);
-    return $sorted;
+    return $this->setArrayOrder($column_overrides);
   }
 
   /**
