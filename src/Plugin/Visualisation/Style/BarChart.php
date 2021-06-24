@@ -123,7 +123,7 @@ class BarChart extends AxisChart {
 
     $settings['chart']['data']['type'] = 'bar';
     $settings['chart']['data']['stacked'] = $this->config('bar_chart', 'stacked');
-    $settings['chart']['data']['groups'] = $this->config('data', 'fields');
+    $settings['chart']['data']['groups'] = $this->fields();
     $settings['chart']['data']['order'] = $this->config('bar_chart', 'data', 'order');
     $settings['bar']['width']['ratio'] = $this->config('bar_chart', 'bar', 'width', 'ratio');
     $settings['bar']['width']['value'] = $this->config('bar_chart', 'bar', 'width', 'value');

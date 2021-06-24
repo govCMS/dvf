@@ -922,31 +922,18 @@ abstract class AxisChart extends TableVisualisationStyleBase {
    *   An array of column override settings.
    */
   protected function getColumnOverrides() {
-    $allowed_overrides = [
-      'color',
-      'type',
-      'legend',
-      'style',
-      'weight',
-      'class',
-    ];
-    $column_overrides_sorted = [];
-    $pair = 2;
+    $column_overrides = array_fill_keys($this->fieldLabelsOriginal(), []);
 
     foreach ($this->config('data', 'column_overrides') as $field_name => $column_override) {
-      $field_overrides = explode(PHP_EOL, $column_override);
-
-      foreach ($field_overrides as $field_override) {
-        $field_override_array = explode('|', trim($field_override), $pair);
-
-        if (count($field_override_array) === $pair && in_array($field_override_array[0], $allowed_overrides)) {
-          $column_overrides_sorted[$field_name][$field_override_array[0]] = $field_override_array[1];
-        }
+      if (empty($column_override)) {
+        continue;
       }
+
+      $real_field_name = substr($field_name, 1);
+      $column_overrides[$real_field_name] = $this->dvfHelpers->configStringToArray($column_override);
     }
 
-    $column_overrides_sorted = array_merge(array_fill_keys($this->fieldLabelsOriginal(), []), $column_overrides_sorted);
-    return $this->setArrayOrder($column_overrides_sorted);
+    return $this->setArrayOrder($column_overrides);
   }
 
   /**
@@ -964,19 +951,16 @@ abstract class AxisChart extends TableVisualisationStyleBase {
    */
   protected function setArrayOrder(array $array_to_order, $weight_key = 'weight') {
     $i = 0;
+
+    // Set default weights if does not exist.
     foreach ($array_to_order as $key => $value) {
       $array_to_order[$key][$weight_key] = isset($value[$weight_key]) ? (int) $value[$weight_key] : $i;
       $i++;
     }
 
-    $weights = [];
-    foreach ($array_to_order as $key => $row) {
-      $weights[$key] = $row[$weight_key];
-    }
-    array_multisort($weights, SORT_ASC, $array_to_order);
-
+    // Sort by weight and return.
+    uasort($array_to_order, function ($a, $b) use ($weight_key) { return $a[$weight_key] - $b[$weight_key]; });
     return $array_to_order;
-
   }
 
 }
