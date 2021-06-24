@@ -4,7 +4,6 @@ namespace Drupal\dvf\Plugin\Visualisation\Style;
 
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\UrlHelper;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Messenger\MessengerInterface;
@@ -462,28 +461,14 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
   /**
    * {@inheritdoc}
    */
-  public function getDatasetDownloadUri(EntityInterface $entity, array $dvf_field_types = ['dvf_url', 'dvf_file']) {
-    $field_definitions = $entity->getFieldDefinitions();
-    $dvf_field_values = [];
-    $dvf_file_uri = '';
-
-    foreach ($field_definitions as $field_definition) {
-      if (in_array($field_definition->getType(), $dvf_field_types)) {
-
-        $field_name = $field_definition->get('field_name');
-
-        if (!empty($entity->get($field_name)->first())) {
-          $dvf_field_values = $entity->get($field_name)->first()->getValue();
-        }
-      }
+  public function getDatasetDownloadUri() {
+    try {
+      return $this->getVisualisation()->getSourcePlugin()->getDownloadUrl();
+    } catch (\Exception $e) {
+      $this->logger->error($this->t('Unable to get download url for visualisation :message',
+        [':message' => $e->getMessage()]));
     }
-
-    if (!empty($dvf_field_values['uri'])) {
-      $dvf_file_uri = $dvf_field_values['uri'];
-    }
-
-    // Check to see if we have a valid URI.
-    return $this->isValidDownloadUri($dvf_file_uri);
+    return NULL;
   }
 
   /**
