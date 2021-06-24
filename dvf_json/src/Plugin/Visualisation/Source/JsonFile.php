@@ -6,6 +6,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\dvf\DvfHelpers;
 use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\Visualisation\Source\VisualisationSourceBase;
 use Flow\JSONPath\JSONPath;
@@ -231,6 +232,11 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
     $data = '{}';
 
     if ($response) {
+      $dvfHelpers = new DvfHelpers();
+      if(!$dvfHelpers->validateJson($response)) {
+        $this->logger->error($this->t('This is invalid JSON file'));
+      }
+
       $data = $response;
     }
 
