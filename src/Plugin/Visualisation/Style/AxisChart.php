@@ -772,7 +772,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       ];
 
       // If $file_uri is empty/false, do not display download data button.
-      $file_uri = $this->getDatasetDownloadUri($this->visualisation->getEntity());
+      $file_uri = $this->getDatasetDownloadUri();
       if (!empty($file_uri)) {
         $build[$group_id]['actions']['file_uri'] = [
           '#type' => 'html_tag',

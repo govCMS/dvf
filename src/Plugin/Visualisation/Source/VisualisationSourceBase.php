@@ -236,6 +236,15 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
   /**
    * {@inheritdoc}
    */
+  public function getDownloadUrl() {
+    $uri = $this->config('uri');
+    return ('dvf_file' === $this->visualisation->getPluginId())
+      ? file_create_url($uri) : $uri;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getCacheExpiry() {
     // Get the cache time set from visualisation.
     $configuration_options = $this->visualisation->getConfiguration('style');
