@@ -742,7 +742,16 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $build = [];
 
     foreach ($this->getSourceRecords() as $group_key => $group_records) {
-      $build[$group_key]['chart'] = [
+      $group_id = strtolower(Html::cleanCssIdentifier($group_key));
+
+      $build[$group_id] = [
+        '#type' => 'container',
+        '#attributes' => [
+          'class' => ['dvf-chart--wrapper', 'dvf-chart--wrapper--' . $group_id],
+        ],
+      ];
+
+      $build[$group_id]['chart'] = [
         '#type' => 'container',
         '#attributes' => ['class' => ['dvf-chart']],
         'heading' => $this->buildSplitHeading($group_key),
@@ -750,14 +759,14 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       ];
 
       // Accessible version of the chart.
-      $build[$group_key]['table'] = [
+      $build[$group_id]['table'] = [
         '#type' => 'container',
         '#attributes' => ['class' => ['dvf-table', 'visually-hidden']],
         'content' => $this->buildTable($group_records),
       ];
 
       // A wrapper for the action buttons (toggle, download etc).
-      $build[$group_key]['actions'] = [
+      $build[$group_id]['actions'] = [
         '#type' => 'container',
         '#attributes' => ['class' => ['table-chart--actions']],
       ];
@@ -765,7 +774,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       // If $file_uri is empty/false, do not display download data button.
       $file_uri = $this->getDatasetDownloadUri($this->visualisation->getEntity());
       if (!empty($file_uri)) {
-        $build[$group_key]['actions']['file_uri'] = [
+        $build[$group_id]['actions']['file_uri'] = [
           '#type' => 'html_tag',
           '#tag' => 'button',
           '#value' => $this->t('Download data'),
@@ -846,7 +855,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
 
     // Data columns.
     foreach ($this->fields() as $field) {
-      $settings['chart']['data']['columns'][] = array_merge([$field], $this->getSourceFieldValues($field));
+      $settings['chart']['data']['columns'][] = array_merge([$field], $this->getSourceFieldValues($field, $records));
     }
 
     // Override fields labels if set in chart options.
