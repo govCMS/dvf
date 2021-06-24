@@ -247,7 +247,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       $form['data']['column_overrides'][$override] = [
         '#type' => 'textarea',
         '#rows' => 2,
-        '#title' => $override,
+        '#title' => substr($override, 1),
         '#default_value' => $this->config('data', 'column_overrides', $override),
       ];
     }
@@ -419,7 +419,8 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       unset($labels['_id']);
     }
 
-    return array_keys($labels);
+    $keys = array_keys($labels);
+    return array_map('strval', $keys);
   }
 
   /**
@@ -497,19 +498,25 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
    * Returns the column override values to make a form array.
    *
    * @return array
-   *   The array of column override values.
+   *   The array of column override values. NOTE: Each value has a underscore
+   *   prependend to ensure it is a string. Without this the field name gets
+   *   converted to a int/float during form submission.
    */
   protected function getColumnOverrideValues() {
 
     if ($this->config('axis', 'x', 'x_axis_grouping') === 'values' && $this->config('axis', 'x', 'tick', 'values', 'field')) {
       $x_tick_field = $this->config('axis', 'x', 'tick', 'values', 'field');
-      return array_map(function ($e) use ($x_tick_field) {
+      $columns = array_map(function ($e) use ($x_tick_field) {
         return $e->{$x_tick_field};
       }, $this->getVisualisation()->data());
     }
     else {
-      return $this->fieldLabelsOriginal();
+      $columns = $this->fieldLabelsOriginal();
     }
+
+    return array_map(function($item) {
+      return '_' . $item;
+    }, $columns);
   }
 
   /**

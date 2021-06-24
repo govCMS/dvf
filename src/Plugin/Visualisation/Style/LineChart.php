@@ -106,7 +106,7 @@ class LineChart extends AxisChart {
 
     $settings['chart']['data']['type'] = $this->config('line_chart', 'area', 'enabled') ? 'area' : 'line';
     $settings['chart']['data']['stacked'] = $this->config('line_chart', 'stacked');
-    $settings['chart']['data']['groups'] = $this->config('data', 'fields');
+    $settings['chart']['data']['groups'] = $this->fields();
     $settings['point']['show'] = $this->config('line_chart', 'data', 'points', 'show');
 
     return $settings;
