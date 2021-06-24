@@ -1,5 +1,16 @@
-{% if topic is not empty %}
-  {% include '@dvf/help/' ~ topic ~ '.html.twig' %}
-{% else %}
-  <p>DVF help page not found. Please check the URL and try again.</p>
-{% endif %}
+<html>
+  <head>
+    <title>{{ title }} | DVF Help</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.min.css">
+    <link rel="stylesheet" href="{{ css }}">
+  </head>
+  <body>
+    {% if topic is not empty %}
+      {% include '@dvf/help/' ~ topic ~ '.html.twig' %}
+    {% else %}
+      <p>DVF help page not found. Please check the URL and try again.</p>
+    {% endif %}
+    <p class="more-help"><a href="https://github.com/govCMS/dvf/wiki" target="_blank">More help</a></p>
+  </body>
+</html>
+

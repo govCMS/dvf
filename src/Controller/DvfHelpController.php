@@ -3,6 +3,7 @@
 namespace Drupal\dvf\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class DvfHelpController.
@@ -15,23 +16,32 @@ class DvfHelpController extends ControllerBase {
    * @param string $topic
    *   The topic or help page subject to load.
    *
-   * @return array
-   *   An array that renders the help page in the twig template.
+   * @return \Symfony\Component\HttpFoundation\Response
+   *   Raw response (not using site theme).
    */
   public function helpPage($topic) {
 
-    $file_path = drupal_get_path('module', 'dvf') . '/templates/help/';
+    $dvf_path = drupal_get_path('module', 'dvf');
+    $file_path = $dvf_path . '/templates/help/';
+    $css_path = base_path() . $dvf_path . '/css/help.css';
 
     if (!file_exists($file_path . $topic . '.html.twig')) {
       $topic = FALSE;
     }
 
-    return [
+    $build = [
       '#theme' => 'help_page',
       '#description' => $this->t('DVF help page'),
       '#attributes' => ['class' => ['dvf-help-page']],
       '#topic' => $topic,
+      '#title' => $this->getHelpPageTitle($topic),
+      '#css' => $css_path,
     ];
+
+    $output = \Drupal::service('renderer')->renderRoot($build);
+    $response = new Response();
+
+    return $response->setContent($output);
   }
 
   /**
