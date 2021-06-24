@@ -1,0 +1,103 @@
+# Schema for the configuration files of the File module.
+
+dvf.settings:
+  type: config_object
+  label: 'Dvf settings settings'
+
+field.storage_settings.dvf_file:
+  type: base_entity_reference_field_settings
+  label: 'Visualisation File field storage settings'
+  mapping:
+    display_field:
+      type: boolean
+      label: 'Enable Display field'
+    display_default:
+      type: boolean
+      label: 'Files displayed by default'
+    uri_scheme:
+      type: string
+      label: 'Upload destination'
+
+field.field_settings.dvf_file:
+  type: base_file_field_field_settings
+  label: 'Visualisation File field settings'
+  mapping:
+    description_field:
+      type: boolean
+      label: 'Enable Description field'
+    visualisation_source:
+      type: string
+      label: 'Visualisation field'
+    visualisation_source_options:
+      type: sequence
+      label: 'Visualisation source options'
+
+field.field_settings.dvf_url:
+  type: mapping
+  label: 'Visualisation URL field settings'
+  mapping:
+    visualisation_source:
+      type: string
+      label: 'Visualisation field'
+    visualisation_source_options:
+      type: sequence
+      label: 'Visualisation source options'
+
+base_field_formatter__dvf_default__axis_item:
+  type: mapping
+  label: 'Base formatting for axis'
+  mapping:
+    styles:
+      type: mapping
+      label: 'Axis style settings'
+      mapping:
+        label:
+          type: mapping
+          label: 'Axis style label settings'
+          mapping:
+            position:
+              type: string
+              label: 'Axis label position'
+        tick:
+          type: mapping
+          label: 'Axis style tick settings'
+          mapping:
+            centered:
+              type: boolean
+              label: 'Axis tick settings'
+
+field.formatter.settings.dvf_default:
+  type: mapping
+  label: 'Visualisation chart settings'
+  mapping:
+    axis:
+      type: mapping
+      label: 'Axis settings'
+      mapping:
+        x:
+          type: base_field_formatter__dvf_default__axis_item
+          label: 'X axis settings'
+        y:
+          type: base_field_formatter__dvf_default__axis_item
+          label: 'Y axis settings'
+    chart:
+      type: mapping
+      label: 'Chart settings'
+      mapping:
+        styles:
+          type: mapping
+          label: 'Fixed chart dimensions'
+          mapping:
+            width:
+              type: string
+              label: 'Optional fixed width'
+            height:
+              type: string
+              label: 'Optional fixed height'
+        palette:
+          type: string
+          label: 'Comma separated list of hex values'
+
+#field.formatter.settings.axis:
+#  type: mapping
+#  label: 'Visualisation axis settings'
