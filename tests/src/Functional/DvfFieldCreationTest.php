@@ -2,85 +2,13 @@
 
 namespace Drupal\Tests\dvf\Functional;
 
-use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Core\GeneratedLink;
-use Drupal\Core\Link;
-use Drupal\dvf\DvfHelpers;
-use Drupal\Tests\BrowserTestBase;
-use Drupal\Core\DependencyInjection\ContainerBuilder;
-
 /**
  * Functional tests for creation of dvf fields.
  *
  * @group dvf
  */
-class DvfFieldCreationTest extends BrowserTestBase
+class DvfFieldCreationTest extends DvfFieldTestBase
 {
-  /**
-   * User test account.
-   *
-   * @var \Drupal\user\Entity\User|bool
-   */
-  protected $user;
-
-  /**
-   * Modules to enable.
-   *
-   * @var array
-   */
-  protected static $modules = [
-    'file',
-    'field',
-    'field_ui',
-    'node',
-    'path',
-    'dvf',
-    'dvf_csv',
-    'dvf_json',
-    'dvf_ckan',
-    'ckan_connect',
-  ];
-
-  /**
-   * The Dvf helpers class to test.
-   *
-   * @var DvfHelpers
-   */
-  protected $dvf_helpers;
-
-  /**
-   * For tests relying on no markup at all or at least no core markup:
-   * @var string
-   */
-  protected $defaultTheme = 'stark';
-
-  /**
-   * Setup test dependencies including container and mock.
-   * @throws \Drupal\Core\Entity\EntityStorageException
-   */
-  protected function setUp(): void {
-    parent::setUp();
-
-    // Configure basic page content type.
-    $this->drupalCreateContentType(['type' => 'page', 'name' => 'Basic page']);
-
-    // Configure permissions
-    $permissions = [
-      'access administration pages',
-      'view the administration theme',
-      'administer ckan connect',
-      'administer nodes',
-      'administer node fields',
-      'create page content',
-      'access content',
-      'administer content types',
-    ];
-
-    // Create admin user and login.
-    $this->user = $this->drupalCreateUser($permissions);
-    $this->drupalLogin($this->user);
-  }
-
   /**
    * Test that the Visualisation file field can be added to an entity such as page.
    *

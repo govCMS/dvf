@@ -31,10 +31,12 @@ class VisualisationFileItem extends FileItem implements VisualisationItemInterfa
    * {@inheritdoc}
    */
   public static function defaultFieldSettings() {
-    return [
+    $default_settings = [
       'visualisation_source' => '',
       'visualisation_source_options' => [],
-    ] + parent::defaultFieldSettings();
+      'file_extensions' => 'csv json txt',
+    ];
+    return array_merge(parent::defaultFieldSettings(), $default_settings);
   }
 
   /**
