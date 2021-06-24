@@ -234,7 +234,7 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
     if ($response) {
       $dvfHelpers = new DvfHelpers();
       if(!$dvfHelpers->validateJson($response)) {
-        $this->logger->error($this->t('This is invalid JSON file'));
+        $this->logger->error($this->t('This JSON file is invalid'));
       }
       $data = $response;
     }
