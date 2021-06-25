@@ -101,7 +101,7 @@ class GaugeChart extends AxisChart {
     $settings = parent::chartBuildSettings($records);
 
     $settings['chart']['data']['type'] = 'gauge';
-    $settings['chart']['data']['groups'] = $this->fields();
+    $settings['chart']['data']['groups'] = $this->fieldsSorted();
     $settings['gauge']['label']['show'] = $this->config('gauge_chart', 'gauge', 'label', 'show');
     $settings['gauge']['label']['percentage'] = $this->config('gauge_chart', 'gauge', 'label', 'percentage');
     $settings['gauge']['units'] = $this->config('gauge_chart', 'gauge', 'units');

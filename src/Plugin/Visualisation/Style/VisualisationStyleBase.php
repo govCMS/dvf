@@ -226,7 +226,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
     ];
 
     $column_override_examples = [
-      'type|line', 'color|#000000', 'legend|hide', 'style|dashed', 'weight|20', 'class|hide-points',
+      'type|line', 'color|#000000', 'legend|hide', 'style|dashed', 'weight|20', 'class|hide-points', 'label|New label',
     ];
     $form['data']['column_overrides'] = [
       '#prefix' => '<div id="column-overrides">',
@@ -256,6 +256,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       '#suffix' => '</div>',
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
+      '#access' => ($this->getVisualisation()->getSourcePlugin()->getPluginId() === 'dvf_ckan_resource'),
       '#type' => 'details',
       '#title' => t('CKAN data filters'),
       '#description' => t('Filters can be used to refine/reduce the records returned from the CKAN datasource. @help',
@@ -389,15 +390,12 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
    */
   protected function fieldLabels() {
     $labels = array_intersect(array_values($this->getSourceFieldOptions()), $this->fields());
+    $labels = array_combine($labels, $labels);
 
-    $label_overrides = $this->config('data', 'field_labels');
-    $label_overrides = preg_split('/\r\n|[\r\n]/', $label_overrides);
-
-    foreach ($label_overrides as $label_override) {
-      $label_parts = explode('|', trim($label_override), 2);
-
-      if (count($label_parts) === 2 && array_key_exists($label_parts[0], $labels)) {
-        $labels[$label_parts[0]] = $label_parts[1];
+    $label_overrides = $this->dvfHelpers->configStringToArray($this->config('data', 'field_labels'));
+    foreach ($label_overrides as $key => $val) {
+      if (isset($labels[$key])) {
+        $labels[$key] = strval($val);
       }
     }
 
@@ -501,6 +499,69 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
     return array_map(function($item) {
       return '_' . $item;
     }, $columns);
+  }
+
+  /**
+   * Gets the column overrides settings in a nicely formatted array.
+   *
+   * @return array
+   *   An array of column override settings.
+   */
+  protected function getColumnOverrides() {
+    $columns = array_map(function($item) {
+      return substr($item, 1);
+    }, $this->getColumnOverrideValues());
+
+    $column_overrides = array_fill_keys($columns, []);
+
+    foreach ($this->config('data', 'column_overrides') as $field_name => $column_override) {
+      if (empty($column_override)) {
+        continue;
+      }
+
+      $real_field_name = substr($field_name, 1);
+      $column_overrides[$real_field_name] = $this->dvfHelpers->configStringToArray($column_override);
+    }
+
+    return $this->setArrayOrder($column_overrides);
+  }
+
+  /**
+   * Re-orders the keys as per provided order array.
+   *
+   * @param array $array_to_order
+   *   An array keyed by the key (original) name, the value for each should be
+   *   an array containing a weight key. The lower the weight the higher it
+   *   appears in the list. If no weight found, default order is used.
+   * @param string $weight_key
+   *   The key that contains the weight.
+   *
+   * @return array
+   *   An ordered array.
+   */
+  protected function setArrayOrder(array $array_to_order, $weight_key = 'weight') {
+    $i = 0;
+
+    // Set default weights if does not exist.
+    foreach ($array_to_order as $key => $value) {
+      $array_to_order[$key][$weight_key] = isset($value[$weight_key]) ? (int) $value[$weight_key] : $i;
+      $array_to_order[$key]['key'] = strval($key);
+      $i++;
+    }
+
+    // Sort by weight and return.
+    uasort($array_to_order, function ($a, $b) use ($weight_key) { return $a[$weight_key] - $b[$weight_key]; });
+    return $array_to_order;
+  }
+
+  /**
+   * Get fields that will be displayed ordered correctly by weight.
+   *
+   * @return array
+   *   Array of field values.
+   */
+  public function fieldsSorted() {
+    return array_map('strval', array_keys($this->getColumnOverrides()));
   }
 
   /**
