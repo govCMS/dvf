@@ -90,4 +90,29 @@ class DvfHelpers {
     return $array;
   }
 
+  /**
+   * Helper to transform a config string to an associative array.
+   *
+   * @param string $config_string
+   *   A string, generally from a textarea input. Each line becomes an array
+   *   item, on each line, key/value are separated with a pipe (|).
+   *
+   * @return array
+   *   Associative array
+   */
+  public function configStringToArray(string $config_string) {
+    $array = [];
+    if (empty(trim($config_string))) {
+      return $array;
+    }
+
+    $items = preg_split("(\r\n?|\n)", $config_string);
+    foreach ($items as $item) {
+      [$key, $value] = explode('|', trim($item),2);
+      $array[$key] = $value;
+    }
+
+    return $array;
+  }
+
 }

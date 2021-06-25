@@ -43,19 +43,12 @@ interface VisualisationStyleInterface extends ConfigurableInterface, DependentPl
   public function getVisualisation();
 
   /**
-   * Returns the URI of a DVF file or dataset (JSON|CSV file, or CKAN dataset).
+   * Returns the download URL for a dataset.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The Drupal entity that contains the dvf_url or dvf_file.
-   * @param array $dvf_field_types
-   *   An array of field_names that provide dataset(s) for DVF visualisations.
-   *
-   *   E.g. ['dvf_url', 'dvf_file'].
-   *
-   * @return string
-   *   The URI of the file or dataset.
+   * @return string|NULL
+   *   The URI of the file or dataset. NULL if not available.
    */
-  public function getDatasetDownloadUri(EntityInterface $entity, array $dvf_field_types);
+  public function getDatasetDownloadUri();
 
   /**
    * Confirms if a URI or file download link is valid.

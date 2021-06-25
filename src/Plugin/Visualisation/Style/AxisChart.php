@@ -742,7 +742,16 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $build = [];
 
     foreach ($this->getSourceRecords() as $group_key => $group_records) {
-      $build[$group_key]['chart'] = [
+      $group_id = strtolower(Html::cleanCssIdentifier($group_key));
+
+      $build[$group_id] = [
+        '#type' => 'container',
+        '#attributes' => [
+          'class' => ['dvf-chart--wrapper', 'dvf-chart--wrapper--' . $group_id],
+        ],
+      ];
+
+      $build[$group_id]['chart'] = [
         '#type' => 'container',
         '#attributes' => ['class' => ['dvf-chart']],
         'heading' => $this->buildSplitHeading($group_key),
@@ -750,22 +759,22 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       ];
 
       // Accessible version of the chart.
-      $build[$group_key]['table'] = [
+      $build[$group_id]['table'] = [
         '#type' => 'container',
         '#attributes' => ['class' => ['dvf-table', 'visually-hidden']],
         'content' => $this->buildTable($group_records),
       ];
 
       // A wrapper for the action buttons (toggle, download etc).
-      $build[$group_key]['actions'] = [
+      $build[$group_id]['actions'] = [
         '#type' => 'container',
         '#attributes' => ['class' => ['table-chart--actions']],
       ];
 
       // If $file_uri is empty/false, do not display download data button.
-      $file_uri = $this->getDatasetDownloadUri($this->visualisation->getEntity());
+      $file_uri = $this->getDatasetDownloadUri();
       if (!empty($file_uri)) {
-        $build[$group_key]['actions']['file_uri'] = [
+        $build[$group_id]['actions']['file_uri'] = [
           '#type' => 'html_tag',
           '#tag' => 'button',
           '#value' => $this->t('Download data'),
@@ -849,7 +858,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
 
     // Data columns.
     foreach ($this->fields() as $field) {
-      $settings['chart']['data']['columns'][] = array_merge([$field], $this->getSourceFieldValues($field));
+      $settings['chart']['data']['columns'][] = array_merge([$field], $this->getSourceFieldValues($field, $records));
     }
 
     // Override fields labels if set in chart options.
@@ -916,31 +925,18 @@ abstract class AxisChart extends TableVisualisationStyleBase {
    *   An array of column override settings.
    */
   protected function getColumnOverrides() {
-    $allowed_overrides = [
-      'color',
-      'type',
-      'legend',
-      'style',
-      'weight',
-      'class',
-    ];
-    $column_overrides_sorted = [];
-    $pair = 2;
+    $column_overrides = array_fill_keys($this->fieldLabelsOriginal(), []);
 
     foreach ($this->config('data', 'column_overrides') as $field_name => $column_override) {
-      $field_overrides = explode(PHP_EOL, $column_override);
-
-      foreach ($field_overrides as $field_override) {
-        $field_override_array = explode('|', trim($field_override), $pair);
-
-        if (count($field_override_array) === $pair && in_array($field_override_array[0], $allowed_overrides)) {
-          $column_overrides_sorted[$field_name][$field_override_array[0]] = $field_override_array[1];
-        }
+      if (empty($column_override)) {
+        continue;
       }
+
+      $real_field_name = substr($field_name, 1);
+      $column_overrides[$real_field_name] = $this->dvfHelpers->configStringToArray($column_override);
     }
 
-    $column_overrides_sorted = array_merge(array_fill_keys($this->fieldLabelsOriginal(), []), $column_overrides_sorted);
-    return $this->setArrayOrder($column_overrides_sorted);
+    return $this->setArrayOrder($column_overrides);
   }
 
   /**
@@ -958,19 +954,16 @@ abstract class AxisChart extends TableVisualisationStyleBase {
    */
   protected function setArrayOrder(array $array_to_order, $weight_key = 'weight') {
     $i = 0;
+
+    // Set default weights if does not exist.
     foreach ($array_to_order as $key => $value) {
       $array_to_order[$key][$weight_key] = isset($value[$weight_key]) ? (int) $value[$weight_key] : $i;
       $i++;
     }
 
-    $weights = [];
-    foreach ($array_to_order as $key => $row) {
-      $weights[$key] = $row[$weight_key];
-    }
-    array_multisort($weights, SORT_ASC, $array_to_order);
-
+    // Sort by weight and return.
+    uasort($array_to_order, function ($a, $b) use ($weight_key) { return $a[$weight_key] - $b[$weight_key]; });
     return $array_to_order;
-
   }
 
 }

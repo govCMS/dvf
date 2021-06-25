@@ -51,6 +51,14 @@ interface VisualisationSourceInterface extends \Countable, \Iterator, Configurab
   public function getVisualisation();
 
   /**
+   * Returns the download url for the current source.
+   *
+   * @return string|null
+   *   Returns a url to the data source or null if unavailable.
+   */
+  public function getDownloadUrl();
+
+  /**
    * Gets the cache expiry time from the DVF visualisation configuration.
    *
    * @return int
