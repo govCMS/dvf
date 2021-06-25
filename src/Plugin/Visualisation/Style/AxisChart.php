@@ -844,7 +844,8 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       }
     }
 
-    $row_header = $settings['axis']['x']['tick']['values']['custom'];
+    // Get row headers
+    $row_headers = $settings['axis']['x']['tick']['values']['custom'];
 
     // Data columns.
     foreach ($this->fields() as $field) {
@@ -880,7 +881,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $tick_values_field = $this->config('axis', 'x', 'tick', 'values', 'field');
 
     if ($settings['axis']['x']['type'] === '' && !empty($record) && property_exists($record, $tick_values_field)) {
-      is_numeric($record->{$tick_values_field} && in_array($record->{$tick_values_field}, $row_header)) ?
+      is_numeric($record->{$tick_values_field} || in_array($record->{$tick_values_field}, $row_headers)) ?
         $settings['axis']['x']['type'] = 'indexed' :
         $settings['axis']['x']['type'] = 'category';
     }
