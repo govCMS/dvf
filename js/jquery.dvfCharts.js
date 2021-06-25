@@ -456,6 +456,9 @@
       // Types.
       this.overrideDataSetting(column_overrides, 'type');
 
+      // Label.
+      this.overrideDataSetting(column_overrides, 'label', 'names');
+
       // Styles.
       this.overrideDataSetting(column_overrides, 'style', 'regions');
 
@@ -464,10 +467,10 @@
 
       // Weight.
       var ordered_columns = [];
-      $.each(column_overrides, function(name, overrides) {
+      $.each(column_overrides, function(i, overrides) {
         if (overrides.weight !== undefined) {
           $.each(this.config.data.columns, function(key, column) {
-            if (name === column[0]) {
+            if (overrides.key === column[0]) {
               ordered_columns.push(column);
             }
           });
@@ -514,7 +517,7 @@
 
       $.each(column_overrides, function(key, overrides) {
         if (overrides[override_key]) {
-          this.config.data[config_key] = this.config.data[config_key] || [];
+          this.config.data[config_key] = this.config.data[config_key] || {};
           this.config.data[config_key][key] = overrides[override_key];
         }
       }.bind(this));
