@@ -14,6 +14,7 @@ namespace Drupal\Tests\dvf\Functional;
  * All tests use the default visualisation style
  * set on parent class DvfFieldTestBase.
  *
+ * @group dvf
  * @package Drupal\Tests\dvf\Functional
  */
 class DvfFieldBasicConfigTest extends DvfFieldTestBase
