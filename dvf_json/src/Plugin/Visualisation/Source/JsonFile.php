@@ -231,8 +231,8 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
    */
   protected function fetchData() {
     try {
-      $uri = $this->config('uri');
-      $response = $this->getContentFromUri($uri);
+      $url = $this->config('uri');
+      $response = $this->getContentFromUri($url);
     }
     catch (\Exception $e) {
       $this->messenger()->addError('Unable to read JSON');
@@ -245,9 +245,9 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
 
     if ($response) {
       if(!$this->dvfHelpers->validateJson($response)) {
-        $this->messenger()->addError('This JSON file is invalid, ' . file_create_url($uri));
-        $this->logger->error($this->t('This JSON file is invalid, :url',
-          [':url' => file_create_url($uri)]));
+        $this->messenger()->addError('Invalid JSON file provided');
+        $this->logger->error($this->t('Unable to parse this json file, :url',
+          [':url' => file_create_url($url)]));
       }
       $data = $response;
     }
