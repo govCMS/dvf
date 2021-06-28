@@ -26,7 +26,7 @@ class DvfHelpersTest extends UnitTestCase
   /**
    * Setup test dependencies including container and mock.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->dvf_helpers = new DvfHelpers();
