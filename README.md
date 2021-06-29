@@ -1,6 +1,6 @@
 # DVF (Data Visualisation Framework)
 
-[[https://github.com/govCMS/dvf/wiki/images/dvf-logo.png | width=460px | alt=DVF]]
+<img src="https://github.com/govCMS/dvf/wiki/images/dvf-logo.png" alt="DVF" width="460" />
 
 The Data Visualisation Framework (DVF for short) is a Drupal 8/9 module that allows
 you to turn boring data sources (Eg CSV or JSON file) into interactive visualisation.
@@ -70,7 +70,7 @@ Documentation on extending DVF (via hooks or plugins) can be found here
 
 ## DVF core development
 
-Development of govCMS8 is currently occurring over at [GitHub](https://github.com/govCMS/dvf)
+Development of DVF is currently occurring over at [GitHub](https://github.com/govCMS/dvf)
 
 Issues are ideally logged in the [Github issue queue](https://github.com/govCMS/dvf/issues)
 but we also monitor the [Drupal issue queue](https://www.drupal.org/project/issues/dvf)
