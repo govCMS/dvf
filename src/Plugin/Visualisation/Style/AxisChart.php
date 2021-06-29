@@ -100,7 +100,10 @@ abstract class AxisChart extends TableVisualisationStyleBase {
           'text' => '',
         ],
         'interaction' => TRUE,
-        'table' => [],
+        'table' => [
+          'disabled' => FALSE,
+          'datatable' => FALSE,
+        ],
         'data' => [
           'labels' => [
             'show' => FALSE,
@@ -608,6 +611,27 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       ];
     }
 
+    $form['table'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Table settings'),
+      '#description' => t('Settings for fallback table'),
+      '#tree' => TRUE,
+    ];
+
+    $form['table']['disabled'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Disable fallback table'),
+      '#description' => t('Disable the option to view data as a table via a "Show table" button'),
+      '#default_value' => $this->config('table', 'disabled'),
+    ];
+
+    $form['table']['datatable'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Fallback table uses datatables'),
+      '#description' => t('Render the fallback table using datatables.js. This may reduce accessibility as Javascript is required'),
+      '#default_value' => $this->config('table', 'datatable'),
+    ];
+
     return $form;
   }
 
@@ -747,7 +771,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       $build[$group_id] = [
         '#type' => 'container',
         '#attributes' => [
-          'class' => ['dvf-chart--wrapper', 'dvf-chart--wrapper--' . $group_id],
+          'class' => ['dvf--wrapper', 'dvf-chart--wrapper', 'dvf-chart--wrapper--' . $group_id],
         ],
       ];
 
@@ -759,11 +783,13 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       ];
 
       // Accessible version of the chart.
-      $build[$group_id]['table'] = [
-        '#type' => 'container',
-        '#attributes' => ['class' => ['dvf-table', 'visually-hidden']],
-        'content' => $this->buildTable($group_records),
-      ];
+      if (!$this->config('table', 'disabled')) {
+        $build[$group_id]['table'] = [
+          '#type' => 'container',
+          '#attributes' => ['class' => ['dvf-table', 'visually-hidden']],
+          'content' => $this->buildTable($group_records, (bool) $this->config('table', 'datatable')),
+        ];
+      }
 
       // A wrapper for the action buttons (toggle, download etc).
       $build[$group_id]['actions'] = [

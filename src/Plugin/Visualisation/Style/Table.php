@@ -2,6 +2,7 @@
 
 namespace Drupal\dvf\Plugin\Visualisation\Style;
 
+use Drupal\Component\Utility\Html;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -20,6 +21,7 @@ class Table extends TableVisualisationStyleBase {
   public function defaultConfiguration() {
     return [
       'table' => [
+        'datatable' => TRUE,
         'table_header_field' => '',
         'row_header_field' => '',
         'options' => [
@@ -40,6 +42,13 @@ class Table extends TableVisualisationStyleBase {
       '#type' => 'details',
       '#title' => $this->t('Table settings'),
       '#tree' => TRUE,
+    ];
+
+    $form['table']['datatable'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Display as datatable'),
+      '#description' => $this->t('Render table using datatables.js. This may reduce accessibility as requires Javascript enabled to view data.'),
+      '#default_value' => $this->config('table', 'datatable'),
     ];
 
     $form['table']['table_header_field'] = [
@@ -64,7 +73,7 @@ class Table extends TableVisualisationStyleBase {
 
     $form['table']['options'] = [
       '#type' => 'details',
-      '#title' => $this->t('Table options'),
+      '#title' => $this->t('Datatable options'),
       '#tree' => TRUE,
     ];
 
@@ -91,13 +100,23 @@ class Table extends TableVisualisationStyleBase {
    */
   public function build() {
     $build = [];
+    $datatable = (bool) $this->config('table', 'datatable');
 
     foreach ($this->getSourceRecords() as $group_key => $group_records) {
+      $group_id = strtolower(Html::cleanCssIdentifier($group_key));
+
+      $build[$group_id] = [
+        '#type' => 'container',
+        '#attributes' => [
+          'class' => ['dvf--wrapper', 'dvf-table--wrapper', 'dvf-table--wrapper--' . $group_id],
+        ],
+      ];
+
       $build[$group_key]['table'] = [
         '#type' => 'container',
         '#attributes' => ['class' => ['dvf-table']],
         'heading' => $this->buildSplitHeading($group_key),
-        'content' => $this->buildTable($group_records),
+        'content' => $this->buildTable($group_records, $datatable),
       ];
     }
 

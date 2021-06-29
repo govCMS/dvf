@@ -37,6 +37,7 @@
         .parseColumnOverrideOptions()
         .parseConfigOverrides()
         .generateChart()
+        .addToggleButton()
         .addDownloadButtons();
     },
 
@@ -404,7 +405,7 @@
 
       var self = this,
           buttonTypes = ['png', 'svg'],
-          $chartWrapper = $(this.element).closest('.dvf-chart--wrapper');
+          $chartWrapper = $(this.element).closest('.dvf--wrapper');
 
       // For each chart, add download buttons.
       $chartWrapper.once('download-buttons').each(function(i, el){
@@ -415,6 +416,7 @@
         $(buttonTypes).each(function (i, format) {
           $('<button/>')
             .html('Download as ' + format)
+            .addClass('dvf-chart--download')
             .addClass(self.options.chart.component + '--download')
             .chartExport($.extend({
               format: format,
@@ -429,10 +431,41 @@
         })
 
         // Set download data click listener.
-        $('.download-data', $buttonWrapper).on('click', function() {
-          window.open($(this).data('file-uri'));
-        });
+        $('.download-data', $buttonWrapper).once('download-data').each(function(i, dlEl) {
+          $(this).on('click', function() {
+            window.open($(this).data('file-uri'));
+          });
+        })
       });
+
+      return this;
+    },
+
+    /**
+     * Add toggle table / chart button.
+     *
+     * @returns {Plugin}
+     */
+    addToggleButton: function () {
+      var $chartWrapper = $(this.element).closest('.dvf--wrapper');
+
+      // For each chart, add download buttons.
+      $chartWrapper.once('table-toggle').each(function(i, el){
+        var $buttonWrapper = $(el).find('.table-chart--actions');
+
+        if ( $('.dvf-table', el).length === 0) {
+          return;
+        }
+
+        $('<button/>')
+          .html('Show table')
+          .addClass('table-chart--toggle')
+          .click(function() {
+            $('.dvf-chart, .dvf-table, button.dvf-chart--download', el).toggleClass('visually-hidden');
+            $(this).text($(this).text().toLowerCase().trim() === 'show chart' ? 'Show table' : 'Show chart');
+          })
+          .appendTo($buttonWrapper);
+      })
 
       return this;
     },
