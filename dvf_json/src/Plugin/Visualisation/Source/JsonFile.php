@@ -6,6 +6,7 @@ use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\dvf\DvfHelpers;
 use Drupal\dvf\Plugin\VisualisationInterface;
 use Drupal\dvf\Plugin\Visualisation\Source\VisualisationSourceBase;
 use Flow\JSONPath\JSONPath;
@@ -50,6 +51,13 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
   protected $records;
 
   /**
+   * DVF Helpers.
+   *
+   * @var \Drupal\dvf\DvfHelpers
+   */
+  protected $dvfHelpers;
+
+  /**
    * Constructs a new JsonFile.
    *
    * @param array $configuration
@@ -68,6 +76,8 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
    *   The HTTP client.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The cache backend.
+   * @param \Drupal\dvf\DvfHelpers $dvf_helpers
+   *   The DVF helpers.
    */
   public function __construct(
     array $configuration,
@@ -77,10 +87,12 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
     ModuleHandlerInterface $module_handler,
     LoggerInterface $logger,
     Client $http_client,
-    CacheBackendInterface $cache
+    CacheBackendInterface $cache,
+    DvfHelpers $dvf_helpers
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $visualisation, $module_handler, $logger, $http_client);
     $this->cache = $cache;
+    $this->dvfHelpers = $dvf_helpers;
   }
 
   /**
@@ -109,7 +121,8 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
       $container->get('module_handler'),
       $container->get('logger.channel.dvf'),
       $container->get('http_client'),
-      $container->get('cache.dvf_json')
+      $container->get('cache.dvf_json'),
+      $container->get('dvf.helpers')
     );
   }
 
@@ -231,6 +244,11 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
     $data = '{}';
 
     if ($response) {
+      if(!$this->dvfHelpers->validateJson($response)) {
+        $this->messenger()->addError('Invalid JSON file provided');
+        $this->logger->error($this->t('Unable to parse this json file :url',
+          [':url' => $uri]));
+      }
       $data = $response;
     }
 
