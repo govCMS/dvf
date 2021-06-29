@@ -37,7 +37,7 @@
         .parseColumnOverrideOptions()
         .parseConfigOverrides()
         .generateChart()
-        .addToggleButton()
+        .addToggleTableButton()
         .addDownloadButtons();
     },
 
@@ -415,7 +415,7 @@
         // Add different button types.
         $(buttonTypes).each(function (i, format) {
           $('<button/>')
-            .html('Download as ' + format)
+            .html('Download as ' + format.toUpperCase())
             .addClass('dvf-chart--download')
             .addClass(self.options.chart.component + '--download')
             .chartExport($.extend({
@@ -446,7 +446,7 @@
      *
      * @returns {Plugin}
      */
-    addToggleButton: function () {
+    addToggleTableButton: function () {
       var $chartWrapper = $(this.element).closest('.dvf--wrapper');
 
       // For each chart, add download buttons.
