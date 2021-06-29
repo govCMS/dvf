@@ -12,30 +12,46 @@ abstract class TableVisualisationStyleBase extends VisualisationStyleBase {
    *
    * @param array $records
    *   The records.
+   * @param bool $data_table
+   *   If set to TRUE the table will be outputted as a JS datatable, if FALSE
+   *   the table will be outputted as a more accessible HTML table.
    *
    * @return array
    *   A table renderable array.
    */
-  protected function buildTable(array $records) {
+  protected function buildTable(array $records, $data_table = FALSE) {
     $table_id = hash('sha256', time() . mt_rand());
-    $configuration = $this->getConfiguration();
 
     $table = [
       '#type' => 'container',
       '#attributes' => ['class' => 'single-table'],
     ];
 
-    $table['table'] = [
-      '#type' => 'html_tag',
-      '#tag' => 'table',
-      '#attributes' => ['data-dvftables' => $table_id],
-    ];
+    if ($data_table) {
+      // Displayed as a JS datatable.
+      $table['table'] = [
+        '#type' => 'html_tag',
+        '#tag' => 'table',
+        '#attributes' => ['data-dvftables' => $table_id],
+      ];
 
-    $table['#attached']['library'] = ['dvf/dvfTables'];
-    $table['#attached']['drupalSettings']['dvf']['tables'][$table_id] = $this->tableBuildSettings($records);
+      $table['#attached']['library'] = ['dvf/dvfTables'];
+      $table['#attached']['drupalSettings']['dvf']['tables'][$table_id] = $this->tableBuildSettings($records);
+    }
+    else {
+      // Displayed as an accessible html table.
+      $table['table'] = [
+        '#type' => 'table',
+        '#attributes' => ['data-html-dvftables' => $table_id],
+      ];
 
-    // If our table is not the primary visualisation, exit here.
-    if (!array_key_exists('table', $configuration)) {
+      $table['table']['#header'] = $this->getTableHeader($records);
+      $table['table']['#rows'] = $this->getTableRows($records);
+    }
+
+    // If our table is not the primary visualisation, exit here so we don't get
+    // a duplicate of download data buttons.
+    if ('dvf_table' !== $this->getPluginId()) {
       return $table;
     }
 

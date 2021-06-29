@@ -29,7 +29,6 @@
         .parseData()
         .parseColumns()
         .parseTableOptions()
-        .addToggleButton()
         .generateTable();
     },
 
@@ -91,59 +90,24 @@
     },
 
     /**
-     * Add toggle table / chart button.
+     * Add download data button, this may also get added by charts so .once()
+     * is important.
      *
      * @returns {Plugin}
      */
-    addToggleButton: function () {
-
-      if (this.options.table.disable) {
-        return this;
-      }
-
-      var self = this,
-        processedClass = 'processed-toggle-button',
-        $buttonWrapper = $(this.element)
-          .closest('.dvf-table')
-          .nextAll('.table-chart--actions');
-
-      if ($buttonWrapper.hasClass(processedClass)) {
-        return this;
-      }
-
-      $('<button/>')
-        .html('Show table')
-        .addClass('table-chart--toggle')
-        .click(self.toggleView.bind(self))
-        .appendTo($buttonWrapper);
-
-      $buttonWrapper.addClass(processedClass);
+    downloadDataButton: function() {
+      var $buttonWrapper = $(this.element).closest('.dvf--wrapper')
+        .find('.table-chart--actions');
 
       // Set download data click listener.
-      if ($(this.element).is('table')) {
-        $('.download-data', $(this.element).closest('.dvf-table')).on('click', function() {
+      $('.download-data', $buttonWrapper).once('download-data').each(function(i, dlEl) {
+        $(this).on('click', function() {
           window.open($(this).data('file-uri'));
         });
-      }
+      })
 
       return this;
-    },
-
-    /**
-     * Toggles the visibility of the table / chart, and the button text.
-     *
-     * @returns {Plugin}
-     */
-    toggleView: function () {
-
-      var $dvfParent = $(this.element).closest('.dvf-table').parent(),
-        $toggleButton = $('.table-chart--toggle', $dvfParent);
-
-      $('.dvf-chart, .dvf-table', $dvfParent).toggleClass('visually-hidden');
-      $toggleButton.text($toggleButton.text().toLowerCase().trim() === 'show chart' ? 'Show table' : 'Show chart');
-
-      return this;
-    },
+    }
 
   };
 
