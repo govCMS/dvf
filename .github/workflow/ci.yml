@@ -1,0 +1,13 @@
+name: Code standards & tests
+on: [push]
+jobs:
+  testing:
+    name: Php code standard check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the dvf repo
+        uses: actions/checkout@v2
+      - name: Check coding standards for modules and theme
+          uses: docker://hussainweb/drupalqa:php7.4
+          with:
+            args: phpcs -p -n --standard="Drupal" --extensions="php,module,inc,install,test,profile,theme,css,info,txt,md,yml" .
