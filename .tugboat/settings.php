@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * @file
  * GovCMS Drupal settings for Tugboat only.
  *
  * Most settings based on Drupal defaults.
