@@ -916,7 +916,8 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $tick_values_field = $this->config('axis', 'x', 'tick', 'values', 'field');
 
     if ($settings['axis']['x']['type'] === '' && !empty($record) && property_exists($record, $tick_values_field)) {
-      // Check whether $tick_values_field is a number and $tick_values_field cannot be one of the row header values.
+      // Check whether $tick_values_field is a number and $tick_values_field
+      // cannot be one of the row header values.
       is_numeric($record->{$tick_values_field}) && !in_array($record->{$tick_values_field}, $ticks_custom) ?
         $settings['axis']['x']['type'] = 'indexed' :
         $settings['axis']['x']['type'] = 'category';
