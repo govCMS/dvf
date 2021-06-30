@@ -51,7 +51,7 @@ trait FormElementAttributesTrait {
   /**
    * Get the correct parent field name within a ajax callback.
    *
-   * @param  \Drupal\Core\Form\FormStateInterface  $form_state
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   Form state passed in ajax callback.
    *
    * @return string

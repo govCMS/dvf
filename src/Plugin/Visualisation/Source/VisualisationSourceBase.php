@@ -271,6 +271,7 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
    *   or an internal drupal path.
    *
    * @return false|string
+   *   The data content. false if no content found.
    */
   protected function getContentFromUri($uri) {
     // Check if a stream wrapper (local file) if so return file contents.

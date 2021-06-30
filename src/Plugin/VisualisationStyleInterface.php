@@ -5,7 +5,6 @@ namespace Drupal\dvf\Plugin;
 use Drupal\Component\Plugin\ConfigurableInterface;
 use Drupal\Component\Plugin\DependentPluginInterface;
 use Drupal\Component\Plugin\PluginInspectionInterface;
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -45,7 +44,7 @@ interface VisualisationStyleInterface extends ConfigurableInterface, DependentPl
   /**
    * Returns the download URL for a dataset.
    *
-   * @return string|NULL
+   * @return string|null
    *   The URI of the file or dataset. NULL if not available.
    */
   public function getDatasetDownloadUri();

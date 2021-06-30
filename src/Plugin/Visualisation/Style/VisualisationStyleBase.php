@@ -340,13 +340,13 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
    * @return array
    *   The source field values.
    */
-  protected function getSourceFieldValues($field_id, $records = []) {
-      $values = [];
-      foreach ($records as $record) {
-        if (property_exists($record, $field_id)) {
-          $values[] = $record->{$field_id};
-        }
+  protected function getSourceFieldValues($field_id, array $records = []) {
+    $values = [];
+    foreach ($records as $record) {
+      if (property_exists($record, $field_id)) {
+        $values[] = $record->{$field_id};
       }
+    }
 
     return $values;
   }
@@ -462,7 +462,8 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
   public function getDatasetDownloadUri() {
     try {
       return $this->getVisualisation()->getSourcePlugin()->getDownloadUrl();
-    } catch (\Exception $e) {
+    }
+    catch (\Exception $e) {
       $this->logger->error($this->t('Unable to get download url for visualisation :message',
         [':message' => $e->getMessage()]));
     }
@@ -496,7 +497,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       $columns = $this->fieldLabelsOriginal();
     }
 
-    return array_map(function($item) {
+    return array_map(function ($item) {
       return '_' . $item;
     }, $columns);
   }
@@ -508,7 +509,7 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
    *   An array of column override settings.
    */
   protected function getColumnOverrides() {
-    $columns = array_map(function($item) {
+    $columns = array_map(function ($item) {
       return substr($item, 1);
     }, $this->getColumnOverrideValues());
 
@@ -550,7 +551,9 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
     }
 
     // Sort by weight and return.
-    uasort($array_to_order, function ($a, $b) use ($weight_key) { return $a[$weight_key] - $b[$weight_key]; });
+    uasort($array_to_order, function ($a, $b) use ($weight_key) {
+      return $a[$weight_key] - $b[$weight_key];
+    });
     return $array_to_order;
   }
 

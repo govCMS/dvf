@@ -7,7 +7,7 @@ use Drupal\Core\Url;
 use Drupal\Component\Render\FormattableMarkup;
 
 /**
- * Class DvfHelpers.
+ * Provide functions for help pages.
  */
 class DvfHelpers {
 
@@ -108,7 +108,7 @@ class DvfHelpers {
 
     $items = preg_split("(\r\n?|\n)", $config_string);
     foreach ($items as $item) {
-      [$key, $value] = explode('|', trim($item),2);
+      [$key, $value] = explode('|', trim($item), 2);
       $array[$key] = $value;
     }
 

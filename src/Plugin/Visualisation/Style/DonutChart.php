@@ -25,7 +25,7 @@ class DonutChart extends PieChart {
       'donut_chart' => [
         'label' => [
           'show' => TRUE,
-        ]
+        ],
       ],
     ] + parent::defaultConfiguration();
   }
