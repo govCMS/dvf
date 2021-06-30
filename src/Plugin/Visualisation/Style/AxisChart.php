@@ -757,7 +757,11 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       $build[$group_id] = [
         '#type' => 'container',
         '#attributes' => [
-          'class' => ['dvf--wrapper', 'dvf-chart--wrapper', 'dvf-chart--wrapper--' . $group_id],
+          'class' => [
+            'dvf--wrapper',
+            'dvf-chart--wrapper',
+            'dvf-chart--wrapper--' . $group_id,
+          ],
         ],
       ];
 
@@ -767,8 +771,6 @@ abstract class AxisChart extends TableVisualisationStyleBase {
         'heading' => $this->buildSplitHeading($group_key),
         'content' => $this->buildChart($group_records),
       ];
-
-
 
       // Accessible version of the chart.
       if (!$this->config('chart', 'table', 'disable')) {

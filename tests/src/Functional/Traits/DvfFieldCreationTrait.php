@@ -6,7 +6,7 @@ use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\field\Entity\FieldConfig;
 
 /**
- * Trait DvfFieldCreationTrait
+ * Trait DvfFieldCreationTrait.
  *
  * Provides methods for creating dvf fields.
  *
@@ -19,34 +19,34 @@ trait DvfFieldCreationTrait {
    *
    * @var string
    */
-  public $default_field_formatter = 'dvf_default';
+  public $defaultFieldFormatter = 'dvf_default';
 
   /**
    * Default subdirectory where test files uploaded via field will be stored.
    *
    * @var string
    */
-  public $default_file_subdir = 'dvf_tests_files';
+  public $defaultFileSubdir = 'dvf_tests_files';
 
   /**
    * List of default extensions to be supported by file field.
    *
    * @var string
    */
-  public $default_file_extensions = 'csv txt json';
+  public $defaultFileExtensions = 'csv txt json';
 
   /**
    * Default visualisation source to be used when creating a new field.
    *
    * @var string
    */
-  public $default_visualisation_source = 'dvf_csv_file';
+  public $defaultVisualisationSource = 'dvf_csv_file';
 
   /**
    * Creates a new dvf file field and attach to entity.
    *
    * @param string $field_name
-   *   Name of new field to created
+   *   Name of new field to created.
    * @param array $field_settings
    *   A list of instance settings that will be added to the instance defaults.
    * @param array $widget_settings
@@ -57,19 +57,21 @@ trait DvfFieldCreationTrait {
    *   The bundle that this field will be added to.
    *
    * @return \Drupal\Core\Entity\EntityInterface
+   *   Created field.
+   *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function createDvfFileField($field_name, $field_settings = [], $widget_settings = [], $entity_type = 'node', $bundle = 'page') {
+  public function createDvfFileField($field_name, array $field_settings = [], array $widget_settings = [], $entity_type = 'node', $bundle = 'page') {
     $field_storage_settings = [
       'display_field' => '1',
-      'display_default' => '1'
+      'display_default' => '1',
     ];
 
     $default_field_settings = [
       'description_field' => 'A dvf file field for testing purposes',
-      'visualisation_source' => $this->default_visualisation_source,
-      'file_directory' => $this->default_file_subdir,
-      'file_extensions' => $this->default_file_extensions
+      'visualisation_source' => $this->defaultVisualisationSource,
+      'file_directory' => $this->defaultFileSubdir,
+      'file_extensions' => $this->defaultFileExtensions,
     ];
     $field_settings = array_merge($default_field_settings, $field_settings);
 
@@ -82,7 +84,7 @@ trait DvfFieldCreationTrait {
    * @param string $field_type
    *   Type of dvf field to be created (dvf_file or dvf_url).
    * @param string $field_name
-   *   Name of new field to created
+   *   Name of new field to created.
    * @param string $entity_type
    *   The entity type.
    * @param string $bundle
@@ -99,7 +101,7 @@ trait DvfFieldCreationTrait {
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function createDvfField($field_type, $field_name, $entity_type, $bundle, $storage_settings = [], $field_settings = [], $widget_settings = []) {
+  public function createDvfField($field_type, $field_name, $entity_type, $bundle, array $storage_settings = [], array $field_settings = [], array $widget_settings = []) {
     $field_storage = FieldStorageConfig::create([
       'entity_type' => $entity_type,
       'field_name' => $field_name,
@@ -132,7 +134,7 @@ trait DvfFieldCreationTrait {
    *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
-  public function attachDvfFieldToBundle($field_type, $field_name, $entity_type, $bundle, $field_settings = [], $widget_settings = []) {
+  public function attachDvfFieldToBundle($field_type, $field_name, $entity_type, $bundle, array $field_settings = [], array $widget_settings = []) {
     $field = [
       'field_name' => $field_name,
       'label' => $field_name,
@@ -155,8 +157,9 @@ trait DvfFieldCreationTrait {
     \Drupal::service('entity_display.repository')->getViewDisplay($entity_type, $bundle)
       ->setComponent($field_name, [
         'label' => 'hidden',
-        'type' => $this->default_field_formatter,
+        'type' => $this->defaultFieldFormatter,
       ])
       ->save();
   }
+
 }

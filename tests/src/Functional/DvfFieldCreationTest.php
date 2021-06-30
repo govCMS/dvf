@@ -7,16 +7,17 @@ namespace Drupal\Tests\dvf\Functional;
  *
  * @group dvf
  */
-class DvfFieldCreationTest extends DvfFieldTestBase
-{
+class DvfFieldCreationTest extends DvfFieldTestBase {
+
   /**
-   * Test that the Visualisation file field can be added to an entity such as page.
+   * Test that the Visualisation file field can be added.
+   *
+   * (... to an entity such as page.)
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    * @throws \Behat\Mink\Exception\ResponseTextException
    */
-  public function testAddFieldVisualisationFile()
-  {
+  public function testAddFieldVisualisationFile() {
     $new_field_label = 'Testing visualisation file field';
     $new_field_name = 'testing_vis_file_field';
     $storage_type = 'dvf_file';
@@ -25,13 +26,14 @@ class DvfFieldCreationTest extends DvfFieldTestBase
   }
 
   /**
-   * Test that the Visualisation url field can be added to an entity such as page.
+   * Test that the Visualisation url field can be added.
+   *
+   * (... to an entity such as page.)
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    * @throws \Behat\Mink\Exception\ResponseTextException
    */
-  public function testAddFieldVisualisationUrl()
-  {
+  public function testAddFieldVisualisationUrl() {
     $new_field_label = 'Testing visualisation url field';
     $new_field_name = 'testing_vis_url_field';
     $storage_type = 'dvf_url';
@@ -43,17 +45,16 @@ class DvfFieldCreationTest extends DvfFieldTestBase
    * Helper function to add and configure a new field to page entity.
    *
    * @param string $new_field_label
-   *  Label setting of the new field.
-   * @param $new_field_name
-   *  Name setting of the new field.
-   * @param $storage_type
-   *  New field storage type (dvf_url or dvf_file).
+   *   Label setting of the new field.
+   * @param string $new_field_name
+   *   Name setting of the new field.
+   * @param string $storage_type
+   *   New field storage type (dvf_url or dvf_file).
    *
    * @throws \Behat\Mink\Exception\ElementNotFoundException
    * @throws \Behat\Mink\Exception\ResponseTextException
    */
-  public function addNewFieldToPage($new_field_label, $new_field_name, $storage_type)
-  {
+  public function addNewFieldToPage($new_field_label, $new_field_name, $storage_type) {
     $page_path = 'admin/structure/types/manage/page/fields/add-field';
     $visualisation_source_test = 'dvf_csv_file';
 
@@ -75,12 +76,12 @@ class DvfFieldCreationTest extends DvfFieldTestBase
     $assert_session->buttonExists('edit-submit')
       ->press();
 
-    // Make sure that we moved to the field settings page,
-    // and submit default settings (display and upload destination).
+    // Make sure that we moved to the field settings page.
+    // And submit default settings (display and upload destination).
     $assert_session->buttonExists('Save field settings')
       ->press();
 
-    // Make sure that we moved to the field settings page,
+    // Make sure that we moved to the field settings page.
     $assert_session->pageTextContains($new_field_label . ' settings');
 
     // Test update of visualisation source using a csv file.
@@ -93,4 +94,5 @@ class DvfFieldCreationTest extends DvfFieldTestBase
     // Make sure that all field settings have been saved.
     $assert_session->pageTextContains('Saved ' . $new_field_label . ' configuration');
   }
+
 }

@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\dvf\Unit;
 
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\GeneratedLink;
 use Drupal\Core\Link;
 use Drupal\dvf\DvfHelpers;
@@ -14,14 +13,13 @@ use Drupal\Core\DependencyInjection\ContainerBuilder;
  *
  * @group dvf
  */
-class DvfHelpersTest extends UnitTestCase
-{
+class DvfHelpersTest extends UnitTestCase {
   /**
    * The Dvf helpers class to test.
    *
-   * @var DvfHelpers
+   * @var \Drupal\dvf\DvfHelpers
    */
-  protected $dvf_helpers;
+  protected $dvfHelpers;
 
   /**
    * Setup test dependencies including container and mock.
@@ -29,7 +27,7 @@ class DvfHelpersTest extends UnitTestCase
   protected function setUp(): void {
     parent::setUp();
 
-    $this->dvf_helpers = new DvfHelpers();
+    $this->dvfHelpers = new DvfHelpers();
 
     // Create dummy Drupal container for DI services.
     $container = new ContainerBuilder();
@@ -37,11 +35,13 @@ class DvfHelpersTest extends UnitTestCase
 
     // Mock the link generator for testGetHelpPageLink().
     $linkGenerator = $this->createMock('Drupal\Core\Utility\LinkGeneratorInterface');
-    // Mock its generateFromLink function by creating link markup using generated Uri.
+    // Mock its generateFromLink function by creating
+    // link markup using generated Uri.
     $linkGenerator->expects($this->any())
       ->method('generateFromLink')
       ->willReturnCallback(function (Link $link) {
-        // Since path validator mock returns null, link has been built with Link::fromInternalUri('base:...')
+        // Since path validator mock returns null,
+        // link has been built with Link::fromInternalUri('base:...')
         $uri = str_replace('base:', '/', $link->getUrl()->getUri());
         $markup = '<a href="' . $uri . '">' . $link->getText() . '</a>';
         $generated_link = new GeneratedLink();
@@ -64,9 +64,8 @@ class DvfHelpersTest extends UnitTestCase
    * @cover ::validateJson()
    * @dataProvider providerTestValidateJson()
    */
-  public function testValidateJson(string $input, string $message, bool $expected)
-  {
-    $output = $this->dvf_helpers->validateJson($input);
+  public function testValidateJson(string $input, string $message, bool $expected) {
+    $output = $this->dvfHelpers->validateJson($input);
 
     $this->expectedEqualOutput($message, $expected, $output);
   }
@@ -74,18 +73,17 @@ class DvfHelpersTest extends UnitTestCase
   /**
    * Provider for testValidateJson().
    */
-  public function providerTestValidateJson()
-  {
+  public function providerTestValidateJson() {
     return [[
       'input' => '[{"2001": 30,"2002": 40,"2003": 50,"Fruits": "Apple"}]',
       'message' => 'Provided json is valid',
       'expected' => TRUE,
-      ],
-      [
-        'input' => '[{{"2001": 30,"2002": 40,"2003": 50,"Fruits": "Apple"}]',
-        'message' => 'Provided json is valid',
-        'expected' => FALSE,
-      ]
+    ],
+    [
+      'input' => '[{{"2001": 30,"2002": 40,"2003": 50,"Fruits": "Apple"}]',
+      'message' => 'Provided json is valid',
+      'expected' => FALSE,
+    ],
     ];
   }
 
@@ -94,12 +92,11 @@ class DvfHelpersTest extends UnitTestCase
    *
    * @covers ::transformMachineName()
    */
-  public function testTransformMachineName()
-  {
+  public function testTransformMachineName() {
     $message = 'Text transformed to machine name';
     $input = 'Non Machine Name';
     $expected = 'non_machine_name';
-    $output = $this->dvf_helpers->transformMachineName($input);
+    $output = $this->dvfHelpers->transformMachineName($input);
 
     $this->expectedEqualOutput($message, $expected, $output);
   }
@@ -109,15 +106,14 @@ class DvfHelpersTest extends UnitTestCase
    *
    * @covers ::getHelpPageLink()
    */
-  public function testGetHelpPageLink()
-  {
+  public function testGetHelpPageLink() {
     $message = 'Help page page link rendered';
     $template_name = 'label-overrides';
     $base_path = '/dvf/help/';
     $expected = '<span class="dvf-admin-popup"><a href="' . $base_path . $template_name . '">Help</a> &#x29c9;</span>';
 
-    /** @var FormattableMarkup $output */
-    $result = $this->dvf_helpers->getHelpPageLink($template_name);
+    /** @var \Drupal\Component\Render\FormattableMarkup $output */
+    $result = $this->dvfHelpers->getHelpPageLink($template_name);
     $output = $result->__toString();
 
     $this->expectedEqualOutput($message, $expected, $output);
@@ -128,8 +124,7 @@ class DvfHelpersTest extends UnitTestCase
    *
    * @covers ::filterArrayRecursive()
    */
-  public function testFilterArrayRecursive()
-  {
+  public function testFilterArrayRecursive() {
     $message = 'Empty elements removed from nested array';
     $input = [
       'to_keep' => '1',
@@ -141,7 +136,7 @@ class DvfHelpersTest extends UnitTestCase
       'to_keep' => '1',
       'to_keep_nested' => ['2'],
     ];
-    $output = $this->dvf_helpers->filterArrayRecursive($input);
+    $output = $this->dvfHelpers->filterArrayRecursive($input);
 
     $this->expectedEqualOutput($message, $expected, $output);
   }
@@ -158,8 +153,7 @@ class DvfHelpersTest extends UnitTestCase
    * @param mixed $output
    *   Output value that can be compared with '===' operator.
    */
-  protected function expectedEqualOutput($message, $expected, $output)
-  {
+  protected function expectedEqualOutput($message, $expected, $output) {
     // Display output vs expected in case of failure.
     if ($output !== $expected) {
       print_r([

@@ -108,7 +108,11 @@ class Table extends TableVisualisationStyleBase {
       $build[$group_id] = [
         '#type' => 'container',
         '#attributes' => [
-          'class' => ['dvf--wrapper', 'dvf-table--wrapper', 'dvf-table--wrapper--' . $group_id],
+          'class' => [
+            'dvf--wrapper',
+            'dvf-table--wrapper',
+            'dvf-table--wrapper--' . $group_id,
+          ],
         ],
       ];
 
