@@ -7,7 +7,7 @@
    */
   Drupal.behaviors.dvfCharts = {
     attach: function (context) {
-      $('[data-dvfcharts]', context).each(function () {
+      $('[data-dvfcharts]', context).once('dvf-charts').each(function () {
         var $chart = $(this),
             chartId = $chart.data('dvfcharts');
         $chart.dvfCharts(drupalSettings.dvf.charts[chartId]);

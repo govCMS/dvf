@@ -19,12 +19,13 @@ abstract class TableVisualisationStyleBase extends VisualisationStyleBase {
    * @return array
    *   A table renderable array.
    */
-  protected function buildTable(array $records, $data_table = FALSE) {
+  protected function buildTable(array $records, bool $data_table = FALSE) {
     $table_id = hash('sha256', time() . mt_rand());
 
     $table = [
       '#type' => 'container',
       '#attributes' => ['class' => 'single-table'],
+      '#attached' => ['library' => ['dvf/dvfTables']],
     ];
 
     if ($data_table) {
@@ -35,7 +36,6 @@ abstract class TableVisualisationStyleBase extends VisualisationStyleBase {
         '#attributes' => ['data-dvftables' => $table_id],
       ];
 
-      $table['#attached']['library'] = ['dvf/dvfTables'];
       $table['#attached']['drupalSettings']['dvf']['tables'][$table_id] = $this->tableBuildSettings($records);
     }
     else {

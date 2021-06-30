@@ -101,7 +101,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
         ],
         'interaction' => TRUE,
         'table' => [
-          'disabled' => FALSE,
+          'disable' => FALSE,
           'datatable' => FALSE,
         ],
         'data' => [
@@ -567,9 +567,16 @@ abstract class AxisChart extends TableVisualisationStyleBase {
 
     $form['chart']['table']['disable'] = [
       '#type' => 'checkbox',
-      '#title' => $this->t('Disable table'),
-      '#description' => $this->t('Disable the "Show table" toggle button on a chart / graph.'),
+      '#title' => $this->t('Disable fallback table'),
+      '#description' => t('Disable the option to view data as a table via a "Show table" button'),
       '#default_value' => $this->config('chart', 'table', 'disable'),
+    ];
+
+    $form['chart']['table']['datatable'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Fallback table uses datatables'),
+      '#description' => t('Render the fallback table using datatables.js. This may reduce accessibility as Javascript is required'),
+      '#default_value' => $this->config('chart', 'table', 'datatable'),
     ];
 
     $form['chart']['data']['labels']['show'] = [
@@ -610,27 +617,6 @@ abstract class AxisChart extends TableVisualisationStyleBase {
         '#default_value' => $this->config('chart', 'styles', 'padding', $edge),
       ];
     }
-
-    $form['table'] = [
-      '#type' => 'details',
-      '#title' => $this->t('Table settings'),
-      '#description' => t('Settings for fallback table'),
-      '#tree' => TRUE,
-    ];
-
-    $form['table']['disabled'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Disable fallback table'),
-      '#description' => t('Disable the option to view data as a table via a "Show table" button'),
-      '#default_value' => $this->config('table', 'disabled'),
-    ];
-
-    $form['table']['datatable'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Fallback table uses datatables'),
-      '#description' => t('Render the fallback table using datatables.js. This may reduce accessibility as Javascript is required'),
-      '#default_value' => $this->config('table', 'datatable'),
-    ];
 
     return $form;
   }
@@ -782,12 +768,14 @@ abstract class AxisChart extends TableVisualisationStyleBase {
         'content' => $this->buildChart($group_records),
       ];
 
+
+
       // Accessible version of the chart.
-      if (!$this->config('table', 'disabled')) {
+      if (!$this->config('chart', 'table', 'disable')) {
         $build[$group_id]['table'] = [
           '#type' => 'container',
           '#attributes' => ['class' => ['dvf-table', 'visually-hidden']],
-          'content' => $this->buildTable($group_records, (bool) $this->config('table', 'datatable')),
+          'content' => $this->buildTable($group_records, (bool) $this->config('chart', 'table', 'datatable')),
         ];
       }
 
