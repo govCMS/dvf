@@ -244,7 +244,7 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
     $data = '{}';
 
     if ($response) {
-      if(!$this->dvfHelpers->validateJson($response)) {
+      if (!$this->dvfHelpers->validateJson($response)) {
         $this->messenger()->addError('Invalid JSON file provided');
         $this->logger->error($this->t('Unable to parse this json file :url',
           [':url' => $uri]));
