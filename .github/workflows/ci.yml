@@ -7,7 +7,7 @@ jobs:
     steps:
       - name: Checkout the dvf repo
         uses: actions/checkout@v2
-      - name: Check coding standards for modules and theme
+      - name: Check coding standards for dvf module
         uses: docker://hussainweb/drupalqa:php7.4
         with:
-         args: phpcs -p -n --standard="Drupal" --extensions="php,module,inc,install,test,profile,theme,css,info,txt,md,yml" .
+         args: phpcs -p -n --standard="Drupal" --extensions="php,module,inc,install,test,profile,theme,css,info,txt,md,yml" . --ignore=vendor
