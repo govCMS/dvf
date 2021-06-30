@@ -3,7 +3,6 @@
 namespace Drupal\Tests\dvf\Functional;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\file\Entity\File;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\Tests\dvf\Functional\Traits\DvfFileTrait;
 use Drupal\Tests\dvf\Functional\Traits\DvfNodeTrait;
@@ -12,8 +11,9 @@ use Drupal\Tests\TestFileCreationTrait;
 use Drupal\Tests\dvf\Functional\Traits\DvfFieldCreationTrait;
 
 /**
- * Base test class providing methods and test setup,
- * specifically for testing Dvf module's field handling.
+ * Base test class providing methods and test setup.
+ *
+ * Specifically for testing Dvf module's field handling.
  */
 abstract class DvfFieldTestBase extends BrowserTestBase {
 
@@ -74,11 +74,12 @@ abstract class DvfFieldTestBase extends BrowserTestBase {
     'create page content',
     'edit any page content',
     'view own unpublished content',
-    'bypass node access'
+    'bypass node access',
   ];
 
   /**
-   * For tests relying on no markup at all or at least no core markup:
+   * Theme for tests relying on no markup at all or at least no core markup.
+   *
    * @var string
    */
   protected $defaultTheme = 'stark';
@@ -89,7 +90,7 @@ abstract class DvfFieldTestBase extends BrowserTestBase {
    *
    * @var array
    */
-  protected $visualisation_styles = [
+  protected $visualisationStyles = [
     'dvf_bar_chart',
     'dvf_gauge_chart',
     'dvf_line_chart',
@@ -103,10 +104,11 @@ abstract class DvfFieldTestBase extends BrowserTestBase {
    *
    * @var string
    */
-  protected $default_visualisation_style = 'dvf_bar_chart';
+  protected $defaultVisualisationStyle = 'dvf_bar_chart';
 
   /**
    * Setup test dependencies including container and mock.
+   *
    * @throws \Drupal\Core\Entity\EntityStorageException
    */
   protected function setUp(): void {
@@ -143,7 +145,7 @@ abstract class DvfFieldTestBase extends BrowserTestBase {
    * Assumes that current page visited by test
    * is a node edit page.
    *
-   * @param \Drupal\Core\Entity\EntityInterface $file
+   * @param mixed $file
    *   File entity to be attached to the node entity.
    * @param string $field_name
    *   Name of (test) field to attach file to.
@@ -163,6 +165,7 @@ abstract class DvfFieldTestBase extends BrowserTestBase {
 
     // Attach file to field and submit upload.
     $page->attachFileToField($file_field_name, $file_path);
-    $this->submitForm([],$this->t('Upload'));
+    $this->submitForm([], $this->t('Upload'));
   }
+
 }

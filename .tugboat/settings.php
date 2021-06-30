@@ -9,6 +9,7 @@
  *
  * @see https://git.drupalcode.org/project/drupal/blob/8.8.x/sites/default/default.settings.php
  */
+
 $databases = [];
 $config_directories = [
   CONFIG_SYNC_DIRECTORY => 'sites/default/files/sync',

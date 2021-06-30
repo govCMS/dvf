@@ -7,7 +7,7 @@ use Drupal\Core\Url;
 use Drupal\Component\Render\FormattableMarkup;
 
 /**
- * Provide functions for help pages.
+ * Provide helpers functions for the whole module.
  */
 class DvfHelpers {
 

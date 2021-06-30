@@ -2,14 +2,11 @@
 
 namespace Drupal\Tests\dvf\Functional\Traits;
 
-use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\StreamWrapper\PublicStream;
-use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\field\Entity\FieldConfig;
 use Drupal\file\Entity\File;
 
 /**
- * Trait DvfFileTrait
+ * Trait DvfFileTrait.
  *
  * Provides handy functions for file manipulations
  * required by dvf_file field testing.
@@ -22,18 +19,18 @@ trait DvfFileTrait {
    *
    * @var string
    */
-  protected $dvf_sample_dir_path = '/tests/src/sample_data';
+  protected $dvfSampleDirPath = '/tests/src/sample_data';
 
   /***
    * List of fields used by sample data.
    *
    * @var array
    */
-  protected $sample_file_fields = [
+  protected $sampleFileFields = [
     '2001',
     '2002',
     '2003',
-    'Fruits'
+    'Fruits',
   ];
 
   /**
@@ -56,7 +53,7 @@ trait DvfFileTrait {
    *   Full path to directory.
    */
   protected function getDvfSampleDirFullPath() {
-    return \Drupal::root() . '/' . drupal_get_path('module', 'dvf') . $this->dvf_sample_dir_path;
+    return \Drupal::root() . '/' . drupal_get_path('module', 'dvf') . $this->dvfSampleDirPath;
   }
 
   /**
@@ -88,4 +85,5 @@ trait DvfFileTrait {
       'filesize' => filesize('public://' . $sample_file_name),
     ]);
   }
+
 }

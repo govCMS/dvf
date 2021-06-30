@@ -2,13 +2,8 @@
 
 namespace Drupal\Tests\dvf\Functional\Traits;
 
-use Drupal\Core\Field\FieldStorageDefinitionInterface;
-use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\field\Entity\FieldConfig;
-use Drupal\node\Entity\Node;
-
 /**
- * Trait DvfNodeTrait
+ * Trait DvfNodeTrait.
  *
  * Provide helper methods to deal manage nodes during testing.
  *
@@ -27,8 +22,7 @@ trait DvfNodeTrait {
    * @return int
    *   Id of created node.
    */
-  public function createTestNode($bundle = 'page', $node_config = [])
-  {
+  public function createTestNode($bundle = 'page', array $node_config = []) {
     $node_config = array_merge(['type' => $bundle], $node_config);
     $node = $this->drupalCreateNode($node_config);
     $nid = $node->id();
@@ -47,12 +41,12 @@ trait DvfNodeTrait {
    * @param int $nid
    *   Unique node id.
    *
-   * @return Node
+   * @return \Drupal\node\Entity\Node
    *   Returns a node entity.
    */
-  public function getNodeById($nid)
-  {
+  public function getNodeById($nid) {
     $node_storage = $this->container->get('entity_type.manager')->getStorage('node');
-    return  $node_storage->load($nid);
+    return $node_storage->load($nid);
   }
+
 }

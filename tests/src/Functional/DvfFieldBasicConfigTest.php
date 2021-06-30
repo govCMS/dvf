@@ -3,7 +3,7 @@
 namespace Drupal\Tests\dvf\Functional;
 
 /**
- * Class DvfFieldBasicConfigTest
+ * Class DvfFieldBasicConfigTest.
  *
  * Functional tests for basic configuration of dvf fields.
  * Validates that a dvf field can be configured with minimum settings,
@@ -17,8 +17,8 @@ namespace Drupal\Tests\dvf\Functional;
  * @group dvf
  * @package Drupal\Tests\dvf\Functional
  */
-class DvfFieldBasicConfigTest extends DvfFieldTestBase
-{
+class DvfFieldBasicConfigTest extends DvfFieldTestBase {
+
   /**
    * Tests the configuration of a visualisation file with csv source.
    *
@@ -50,23 +50,27 @@ class DvfFieldBasicConfigTest extends DvfFieldTestBase
 
     // Select a visualisation style.
     $assert_session->fieldExists($field_name . '[0][options][visualisation_style]')
-      ->setValue($this->default_visualisation_style);
-    $this->submitForm([],$this->t('Save'));
+      ->setValue($this->defaultVisualisationStyle);
+    $this->submitForm([], $this->t('Save'));
     $this->drupalGet($edit_page_path);
 
     // Select visualisation style options.
+    // @codingStandardsIgnoreStart - ignore line exceed warning.
     $base_field_name_style_options = $field_name . '[0][options][visualisation_style_options][data]';
-    // Select all fields - if these appear then headers have been correctly parsed.
+    // @codingStandardsIgnoreEnd
+    // Select all fields.
+    // (if these appear then headers have been correctly parsed.)
     $assert_session->fieldExists($base_field_name_style_options . '[fields][]')
-      ->setValue($this->sample_file_fields);
+      ->setValue($this->sampleFileFields);
 
     // Save visualisation style options.
-    $this->submitForm([],$this->t('Save'));
+    $this->submitForm([], $this->t('Save'));
 
     // Visit page in frontend and confirm display of all chart headers.
     $this->drupalGet("node/$nid");
-    foreach ($this->sample_file_fields as $field) {
-       $assert_session->pageTextContains($field);
+    foreach ($this->sampleFileFields as $field) {
+      $assert_session->pageTextContains($field);
     }
   }
+
 }

@@ -7,13 +7,18 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
+ * Trait FieldTypeTrait.
+ *
  * Provides common methods for field types.
+ *
+ * @package Drupal\dvf
  */
 trait FieldTypeTrait {
 
   /**
-   * The default plugin ID to prevent errors if no visualisation style is
-   * selected.
+   * The default plugin ID to prevent errors.
+   *
+   * Used if no visualisation style is selected.
    *
    * @var string
    */

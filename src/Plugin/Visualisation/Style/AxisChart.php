@@ -757,7 +757,11 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       $build[$group_id] = [
         '#type' => 'container',
         '#attributes' => [
-          'class' => ['dvf--wrapper', 'dvf-chart--wrapper', 'dvf-chart--wrapper--' . $group_id],
+          'class' => [
+            'dvf--wrapper',
+            'dvf-chart--wrapper',
+            'dvf-chart--wrapper--' . $group_id,
+          ],
         ],
       ];
 

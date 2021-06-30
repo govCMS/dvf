@@ -1,6 +1,6 @@
 # DVF (Data Visualisation Framework)
 
-<img src="https://github.com/govCMS/dvf/wiki/images/dvf-logo.png" alt="DVF" width="460" />
+<img src="https://github.com/govCMS/dvf/wiki/images/dvf-logo.png" width="460"/>
 
 The Data Visualisation Framework (DVF for short) is a Drupal 8/9 module that
 allows you to turn boring data sources (Eg CSV or JSON file) into interactive
