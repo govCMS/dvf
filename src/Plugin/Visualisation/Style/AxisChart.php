@@ -772,8 +772,6 @@ abstract class AxisChart extends TableVisualisationStyleBase {
         'content' => $this->buildChart($group_records),
       ];
 
-
-
       // Accessible version of the chart.
       if (!$this->config('chart', 'table', 'disable')) {
         $build[$group_id]['table'] = [
