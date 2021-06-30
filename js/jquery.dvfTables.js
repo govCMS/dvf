@@ -89,26 +89,6 @@
       return this;
     },
 
-    /**
-     * Add download data button, this may also get added by charts so .once()
-     * is important.
-     *
-     * @returns {Plugin}
-     */
-    downloadDataButton: function() {
-      var $buttonWrapper = $(this.element).closest('.dvf--wrapper')
-        .find('.table-chart--actions');
-
-      // Set download data click listener.
-      $('.download-data', $buttonWrapper).once('download-data').each(function(i, dlEl) {
-        $(this).on('click', function() {
-          window.open($(this).data('file-uri'));
-        });
-      })
-
-      return this;
-    }
-
   };
 
   /**
