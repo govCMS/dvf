@@ -1,12 +1,14 @@
 # JSON Data Visualisation
 
-This module integrates with the Data Visualisation Framework module providing JSON support.
+This module integrates with the Data Visualisation Framework module providing
+JSON support.
 
 ## JSONPath
 
-JSONPath is an XPath-like expression language for filtering, flattening and extracting data. This module uses a modern
-JSONPath library based on [Stefan Goessner's script](http://goessner.net/articles/JsonPath/) to help you do exactly
-that.
+JSONPath is an XPath-like expression language for filtering, flattening and
+extracting data. This module uses a modern JSONPath library based on
+[Stefan Goessner's script](http://goessner.net/articles/JsonPath/) to help you
+do exactly that.
 
 ## Expression syntax
 
@@ -39,8 +41,9 @@ JSONPath                  | Result
 
 ### Real-life example
 
-Feel free to copy and paste the example below into a [JSONPath online evaluator](http://jsonpath.com/) tool and try the
-JSONPath expression syntax.
+Feel free to copy and paste the example below into a
+[JSONPath online evaluator](http://jsonpath.com/) tool and try the JSONPath
+expression syntax.
 
 ```json
 {
@@ -68,8 +71,9 @@ JSONPath expression syntax.
 }
 ```
 
-In the above example, you would use `$.books[*]` to retrieve all the books in the dataset. Alternatively,
-`$.books[?(@.price>10)]` would only return books priced at $10.00 or more.
+In the above example, you would use `$.books[*]` to retrieve all the books in
+the dataset. Alternatively,`$.books[?(@.price>10)]` would only return books
+priced at $10.00 or more.
 
 ## Important notes
 
@@ -85,5 +89,7 @@ For Drupal, a single data record would look like this:
 
 With that in mind, it is important to note a couple of things:
 
-- All the property names of your data record will be exposed to Drupal as fields (e.g. title, author and price).
-- Nested properties in your data records can and will **break the visualisation**.
+- All the property names of your data record will be exposed to Drupal as fields
+  (e.g. title, author and price).
+- Nested properties in your data records can and will
+  **break the visualisation**.

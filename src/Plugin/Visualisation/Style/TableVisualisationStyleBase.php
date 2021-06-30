@@ -55,7 +55,8 @@ abstract class TableVisualisationStyleBase extends VisualisationStyleBase {
       return $table;
     }
 
-    // If $file_uri is empty/false, do not display download data button to the table.
+    // If $file_uri is empty/false, do not display download data button to the
+    // table.
     $file_uri = $this->getDatasetDownloadUri();
     if (!empty($file_uri)) {
       $table['actions']['file_uri'] = [

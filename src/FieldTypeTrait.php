@@ -12,7 +12,8 @@ use Drupal\Core\Form\FormStateInterface;
 trait FieldTypeTrait {
 
   /**
-   * The default plugin ID to prevent errors if no visualisation style is selected.
+   * The default plugin ID to prevent errors if no visualisation style is
+   * selected.
    *
    * @var string
    */

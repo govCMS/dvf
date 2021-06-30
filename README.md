@@ -2,22 +2,23 @@
 
 <img src="https://github.com/govCMS/dvf/wiki/images/dvf-logo.png" alt="DVF" width="460" />
 
-The Data Visualisation Framework (DVF for short) is a Drupal 8/9 module that allows
-you to turn boring data sources (Eg CSV or JSON file) into interactive visualisation.
-This allows content authors to provide more meaning to raw data, illustrate trends
-and engage users.
+The Data Visualisation Framework (DVF for short) is a Drupal 8/9 module that
+allows you to turn boring data sources (Eg CSV or JSON file) into interactive
+visualisation. This allows content authors to provide more meaning to raw data,
+illustrate trends and engage users.
 
 The first version of DVF (named [govcms_ckan](https://www.drupal.org/project/govcms_ckan))
 was developed for the Australian [State of the environment report](https://soe.environment.gov.au/)
 with the goal of embedding data from [data.gov.au](https://data.gov.au/) as visualisations.
-This provided context to the data and allowed the report to clearly demonstrate evidence.
+This provided context to the data and allowed the report to clearly demonstrate
+evidence.
 
 DVF can be found on [Drupal.org here](https://www.drupal.org/project/dvf)
 
 ## What's in the box?
 
-For visualisations, DVF includes popular, industry-standard, JavaScript libraries
-such as:
+For visualisations, DVF includes popular, industry-standard, JavaScript
+libraries such as:
 
 * [billboard.js](https://naver.github.io/billboard.js/) based on D3 (for charting)
 * [DataTables](https://datatables.net/) (for out-of-the-box table styling).
@@ -77,8 +78,8 @@ but we also monitor the [Drupal issue queue](https://www.drupal.org/project/issu
 
 ## Contributing and extending DVF
 
-We welcome (and appreciate) improvements and fixes to DVF, so if you have something to add
-please submit a [Github pull request](https://github.com/govCMS/dvf/pulls).
+We welcome (and appreciate) improvements and fixes to DVF, so if you have
+something to add please submit a [Github pull request](https://github.com/govCMS/dvf/pulls).
 
 Ideally [Tests](https://github.com/govCMS/dvf/wiki/Tests) should accompany new
 features.

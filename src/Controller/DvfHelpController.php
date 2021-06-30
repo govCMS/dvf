@@ -6,7 +6,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class DvfHelpController.
+ * Provide information for DvfHelp page.
  */
 class DvfHelpController extends ControllerBase {
 

@@ -2,7 +2,6 @@
 
 namespace Drupal\dvf\Plugin\Visualisation\Style;
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\dvf\FormElementAttributesTrait;
 
 /**
