@@ -23,7 +23,7 @@ d3:
 
 datatables:
   remote: https://github.com/DataTables/DataTables
-  version: "1.10.15"
+  version: "1.10.25"
   license:
     name: MIT
     url: https://github.com/DataTables/DataTables/blob/master/license.txt
