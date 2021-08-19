@@ -23,16 +23,16 @@ d3:
 
 datatables:
   remote: https://github.com/DataTables/DataTables
-  version: "1.10.15"
+  version: "1.10.25"
   license:
     name: MIT
     url: https://github.com/DataTables/DataTables/blob/master/license.txt
     gpl-compatible: true
   js:
-    https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.15/js/jquery.dataTables.min.js: { type: external, minified: true }
+    https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js: { type: external, minified: true }
   css:
     component:
-      https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.15/css/jquery.dataTables.css: { type: external, minified: true }
+      https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css: { type: external, minified: true }
 
 filesaver:
   remote: https://github.com/eligrey/FileSaver.js
