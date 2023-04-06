@@ -33,7 +33,7 @@ class VisualisationUrlWidget extends WidgetBase {
       '#type' => 'url',
       '#title' => $this->t('URL'),
       '#description' => $this->t('External url to dataset.'),
-      '#default_value' => isset($items[$delta]->uri) ? $items[$delta]->uri : NULL,
+      '#default_value' => $items[$delta]->uri ??  NULL,
       '#maxlength' => 2048,
       '#required' => $element['#required'],
     ];
@@ -52,7 +52,7 @@ class VisualisationUrlWidget extends WidgetBase {
       '#options' => $this->getVisualisationStyleOptions(),
       '#empty_option' => $this->t('- Select -'),
       '#empty_value' => '',
-      '#default_value' => isset($items[$delta]->options['visualisation_style']) ? $items[$delta]->options['visualisation_style'] : '',
+      '#default_value' => $items[$delta]->options['visualisation_style'] ?? '',
       '#required' => $element['#required'],
       '#ajax' => [
         'callback' => [$this, 'updateVisualisationOptions'],
