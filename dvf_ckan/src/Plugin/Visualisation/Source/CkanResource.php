@@ -6,6 +6,7 @@ use Drupal\ckan_connect\Client\CkanClientInterface;
 use Drupal\ckan_connect\Parser\CkanResourceUrlParserInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\dvf\DvfHelpers;
 use Drupal\dvf\Plugin\VisualisationInterface;
@@ -96,6 +97,8 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
    *   The CKAN resource URL parser.
    * @param \Drupal\dvf\DvfHelpers $dvf_helpers
    *   The DVF helpers.
+   * @param \Drupal\Core\File\FileUrlGeneratorInterface $file_url_generator
+   *   The file URL generator.
    */
   public function __construct(
     array $configuration,
@@ -108,9 +111,10 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
     CacheBackendInterface $cache,
     CkanClientInterface $ckan_client,
     CkanResourceUrlParserInterface $ckan_resource_url_parser,
-    DvfHelpers $dvf_helpers
+    DvfHelpers $dvf_helpers,
+    FileUrlGeneratorInterface $file_url_generator
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $visualisation, $module_handler, $logger, $http_client);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $visualisation, $module_handler, $logger, $http_client, $file_url_generator);
     $this->cache = $cache;
     $this->ckanClient = $ckan_client;
     $this->ckanResourceUrlParser = $ckan_resource_url_parser;
@@ -130,6 +134,8 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
    *   The plugin implementation definition.
    * @param \Drupal\dvf\Plugin\VisualisationInterface $visualisation
    *   The visualisation context in which the plugin will run.
+   * @param \Drupal\Core\File\FileUrlGeneratorInterface $file_url_generator
+   *   The file URL generator.
    *
    * @return static
    *   Returns an instance of this plugin.
@@ -139,7 +145,8 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    VisualisationInterface $visualisation = NULL
+    VisualisationInterface $visualisation = NULL,
+    FileUrlGeneratorInterface $file_url_generator = NULL
   ) {
     return new static(
       $configuration,
@@ -152,7 +159,8 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
       $container->get('cache.dvf_ckan'),
       $container->get('ckan_connect.client'),
       $container->get('ckan_connect.resource_url_parser'),
-      $container->get('dvf.helpers')
+      $container->get('dvf.helpers'),
+      $container->get('file_url_generator')
     );
   }
 

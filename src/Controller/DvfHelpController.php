@@ -21,7 +21,7 @@ class DvfHelpController extends ControllerBase {
    */
   public function helpPage($topic) {
 
-    $dvf_path = drupal_get_path('module', 'dvf');
+    $dvf_path = \Drupal::service('extension.list.module')->getPath('dvf');
     $file_path = $dvf_path . '/templates/help/';
     $css_path = base_path() . $dvf_path . '/css/help.css';
 
