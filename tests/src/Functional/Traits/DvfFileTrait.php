@@ -53,7 +53,7 @@ trait DvfFileTrait {
    *   Full path to directory.
    */
   protected function getDvfSampleDirFullPath() {
-    return \Drupal::root() . '/' . drupal_get_path('module', 'dvf') . $this->dvfSampleDirPath;
+    return \Drupal::root() . '/' . \Drupal::service('extension.list.module')->getPath('dvf') . $this->dvfSampleDirPath;
   }
 
   /**
