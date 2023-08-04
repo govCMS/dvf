@@ -134,8 +134,6 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
    *   The plugin implementation definition.
    * @param \Drupal\dvf\Plugin\VisualisationInterface $visualisation
    *   The visualisation context in which the plugin will run.
-   * @param \Drupal\Core\File\FileUrlGeneratorInterface $file_url_generator
-   *   The file URL generator.
    *
    * @return static
    *   Returns an instance of this plugin.
@@ -145,8 +143,7 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
     array $configuration,
     $plugin_id,
     $plugin_definition,
-    VisualisationInterface $visualisation = NULL,
-    FileUrlGeneratorInterface $file_url_generator = NULL
+    VisualisationInterface $visualisation = NULL
   ) {
     return new static(
       $configuration,

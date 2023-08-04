@@ -2,10 +2,13 @@
 
 namespace Drupal\dvf\Plugin\Field\FieldWidget;
 
+use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\dvf\FieldWidgetTrait;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\dvf\Plugin\VisualisationManager;
 
 /**
  * Plugin implementation of the 'dvf_url_default' field widget.
@@ -23,6 +26,28 @@ class VisualisationUrlWidget extends WidgetBase {
   use FieldWidgetTrait;
 
   /**
+   * The visualisation manager.
+   *
+   * @var \Drupal\dvf\Plugin\VisualisationManager
+   */
+  protected $visualisationManager;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, VisualisationManager $visualisationManager) {
+    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings);
+    $this->visualisationManager = $visualisationManager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static($plugin_id, $plugin_definition, $configuration['field_definition'], $configuration['settings'], $configuration['third_party_settings'], $container->get('plugin.manager.visualisation'));
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
@@ -33,7 +58,7 @@ class VisualisationUrlWidget extends WidgetBase {
       '#type' => 'url',
       '#title' => $this->t('URL'),
       '#description' => $this->t('External url to dataset.'),
-      '#default_value' => isset($items[$delta]->uri) ? $items[$delta]->uri : NULL,
+      '#default_value' => $items[$delta]->uri ?? NULL,
       '#maxlength' => 2048,
       '#required' => $element['#required'],
     ];
@@ -52,7 +77,7 @@ class VisualisationUrlWidget extends WidgetBase {
       '#options' => $this->getVisualisationStyleOptions(),
       '#empty_option' => $this->t('- Select -'),
       '#empty_value' => '',
-      '#default_value' => isset($items[$delta]->options['visualisation_style']) ? $items[$delta]->options['visualisation_style'] : '',
+      '#default_value' => $items[$delta]->options['visualisation_style'] ?? '',
       '#required' => $element['#required'],
       '#ajax' => [
         'callback' => [$this, 'updateVisualisationOptions'],
@@ -95,9 +120,6 @@ class VisualisationUrlWidget extends WidgetBase {
   protected function getVisualisationPlugin(FieldItemListInterface $items, $delta, array $form, FormStateInterface $form_state) {
     $values = $this->getFieldValue($items, $delta, $form, $form_state);
 
-    /** @var \Drupal\dvf\Plugin\VisualisationManagerInterface $plugin_manager */
-    $plugin_manager = \Drupal::service('plugin.manager.visualisation');
-
     $plugin_id = $this->fieldDefinition->getType();
     $plugin_configuration = [
       'options' => [
@@ -122,10 +144,7 @@ class VisualisationUrlWidget extends WidgetBase {
       $plugin_configuration['style']['options'] = $values[$delta]['options']['visualisation_style_options'];
     }
 
-    /** @var \Drupal\dvf\Plugin\VisualisationInterface $plugin */
-    $plugin = $plugin_manager->createInstance($plugin_id, $plugin_configuration);
-
-    return $plugin;
+    return $this->visualisationManager->createInstance($plugin_id, $plugin_configuration);
   }
 
 }

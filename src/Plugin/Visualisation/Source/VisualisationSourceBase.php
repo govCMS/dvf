@@ -65,6 +65,8 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
   protected $iterator;
 
   /**
+   * The file URL generator.
+   *
    * @var \Drupal\Core\File\FileUrlGeneratorInterface
    */
   protected $fileUrlGenerator;
@@ -106,7 +108,7 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
     $this->httpClient = $http_client;
 
     if (!$file_url_generator) {
-      @trigger_error('Calling VisualisationSourceBase::__construct() without the $file_url_generator argument is deprecated in drupal:9.3.0 and the $file_url_generator argument will be required in drupal:10.0.0. See https://www.drupal.org/node/2940031', E_USER_DEPRECATED);
+      @trigger_error('Calling VisualisationSourceBase::__construct() without the $file_url_generator argument is deprecated in drupal:9.5.0 and the $file_url_generator argument will be required in drupal:10.0.0. See https://www.drupal.org/node/2940031', E_USER_DEPRECATED);
       $file_url_generator = \Drupal::service('file_url_generator');
     }
     $this->fileUrlGenerator = $file_url_generator;
@@ -129,14 +131,14 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
    * @return static
    *   Returns an instance of this plugin.
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation = NULL, FileUrlGeneratorInterface $file_url_generator = NULL) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation = NULL) {
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
       $visualisation,
       $container->get('module_handler'),
-      $file_url_generator
+      $container->get('file_url_generator')
     );
   }
 

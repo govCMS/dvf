@@ -1,6 +1,7 @@
 <?php
 
 namespace Drupal\dvf_json\Plugin\Visualisation\Source;
+
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
@@ -111,13 +112,11 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
    *   The plugin implementation definition.
    * @param \Drupal\dvf\Plugin\VisualisationInterface $visualisation
    *   The visualisation context in which the plugin will run.
-   * @param \Drupal\Core\File\FileUrlGeneratorInterface $file_url_generator
-   *   The file URL generator.
    *
    * @return static
    *   Returns an instance of this plugin.
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation = NULL, FileUrlGeneratorInterface $file_url_generator = NULL) {
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition, VisualisationInterface $visualisation = NULL) {
     return new static(
       $configuration,
       $plugin_id,
@@ -197,7 +196,7 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
     }
 
     foreach ($this->getFields() as $field_key => $field_label) {
-      foreach ($json->data() as $record_id => $record) {
+      foreach ($json->getData() as $record_id => $record) {
         if (!isset($records[$record_id])) {
           $records[$record_id] = new \stdClass();
         }

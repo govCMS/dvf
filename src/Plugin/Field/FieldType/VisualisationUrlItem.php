@@ -110,7 +110,7 @@ class VisualisationUrlItem extends FieldItemBase implements VisualisationItemInt
     }
 
     if (is_string($values['options'])) {
-      $values['options'] = unserialize($values['options']);
+      $values['options'] = unserialize($values['options'], ['allowed_classes' => FALSE]);
     }
 
     parent::setValue($values, $notify);
