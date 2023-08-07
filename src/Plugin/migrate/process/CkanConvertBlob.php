@@ -32,7 +32,7 @@ class CkanConvertBlob extends ProcessPluginBase {
       return $value;
     }
 
-    $ckan_values = unserialize($value);
+    $ckan_values = unserialize($value, ['allowed_classes' => FALSE]);
     $ckan_config = $ckan_values['visualisation_config'];
 
     $visualisation_style = [

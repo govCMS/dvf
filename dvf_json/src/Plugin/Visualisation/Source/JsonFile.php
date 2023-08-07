@@ -4,6 +4,7 @@ namespace Drupal\dvf_json\Plugin\Visualisation\Source;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\dvf\DvfHelpers;
@@ -78,6 +79,8 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
    *   The cache backend.
    * @param \Drupal\dvf\DvfHelpers $dvf_helpers
    *   The DVF helpers.
+   * @param \Drupal\Core\File\FileUrlGeneratorInterface $file_url_generator
+   *   The file URL generator.
    */
   public function __construct(
     array $configuration,
@@ -88,9 +91,10 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
     LoggerInterface $logger,
     Client $http_client,
     CacheBackendInterface $cache,
-    DvfHelpers $dvf_helpers
+    DvfHelpers $dvf_helpers,
+    FileUrlGeneratorInterface $file_url_generator
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $visualisation, $module_handler, $logger, $http_client);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $visualisation, $module_handler, $logger, $http_client, $file_url_generator);
     $this->cache = $cache;
     $this->dvfHelpers = $dvf_helpers;
   }
@@ -122,7 +126,8 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
       $container->get('logger.channel.dvf'),
       $container->get('http_client'),
       $container->get('cache.dvf_json'),
-      $container->get('dvf.helpers')
+      $container->get('dvf.helpers'),
+      $container->get('file_url_generator')
     );
   }
 
@@ -191,7 +196,7 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
     }
 
     foreach ($this->getFields() as $field_key => $field_label) {
-      foreach ($json->data() as $record_id => $record) {
+      foreach ($json->getData() as $record_id => $record) {
         if (!isset($records[$record_id])) {
           $records[$record_id] = new \stdClass();
         }

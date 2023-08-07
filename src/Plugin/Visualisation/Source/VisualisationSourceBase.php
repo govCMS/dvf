@@ -18,6 +18,7 @@ use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperInterface;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 
 /**
  * Provides a base class for VisualisationSource plugins.
@@ -64,6 +65,13 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
   protected $iterator;
 
   /**
+   * The file URL generator.
+   *
+   * @var \Drupal\Core\File\FileUrlGeneratorInterface
+   */
+  protected $fileUrlGenerator;
+
+  /**
    * Constructs a new VisualisationSourceBase.
    *
    * @param array $configuration
@@ -80,6 +88,8 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
    *   Instance of the logger object.
    * @param \GuzzleHttp\Client $http_client
    *   The HTTP client.
+   * @param \Drupal\Core\File\FileUrlGeneratorInterface $file_url_generator
+   *   The file URL generator.
    */
   public function __construct(
     array $configuration,
@@ -88,13 +98,20 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
     VisualisationInterface $visualisation = NULL,
     ModuleHandlerInterface $module_handler,
     LoggerInterface $logger,
-    Client $http_client
+    Client $http_client,
+    FileUrlGeneratorInterface $file_url_generator = NULL
   ) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->visualisation = $visualisation;
     $this->moduleHandler = $module_handler;
     $this->logger = $logger;
     $this->httpClient = $http_client;
+
+    if (!$file_url_generator) {
+      @trigger_error('Calling VisualisationSourceBase::__construct() without the $file_url_generator argument is deprecated in drupal:9.5.0 and the $file_url_generator argument will be required in drupal:10.0.0. See https://www.drupal.org/node/2940031', E_USER_DEPRECATED);
+      $file_url_generator = \Drupal::service('file_url_generator');
+    }
+    $this->fileUrlGenerator = $file_url_generator;
   }
 
   /**
@@ -120,7 +137,8 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
       $plugin_id,
       $plugin_definition,
       $visualisation,
-      $container->get('module_handler')
+      $container->get('module_handler'),
+      $container->get('file_url_generator')
     );
   }
 
@@ -239,7 +257,7 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
   public function getDownloadUrl() {
     $uri = $this->config('uri');
     return ('dvf_file' === $this->visualisation->getPluginId())
-      ? file_create_url($uri) : $uri;
+      ? $this->fileUrlGenerator->generateAbsoluteString($uri) : $uri;
   }
 
   /**

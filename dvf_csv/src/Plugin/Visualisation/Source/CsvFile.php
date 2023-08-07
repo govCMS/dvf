@@ -4,6 +4,7 @@ namespace Drupal\dvf_csv\Plugin\Visualisation\Source;
 
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
+use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\dvf\Plugin\VisualisationInterface;
@@ -67,6 +68,8 @@ class CsvFile extends VisualisationSourceBase implements ContainerFactoryPluginI
    *   The HTTP client.
    * @param \Drupal\Core\Cache\CacheBackendInterface $cache
    *   The cache backend.
+   * @param \Drupal\Core\File\FileUrlGeneratorInterface $file_url_generator
+   *   The file URL generator.
    */
   public function __construct(
     array $configuration,
@@ -76,9 +79,10 @@ class CsvFile extends VisualisationSourceBase implements ContainerFactoryPluginI
     ModuleHandlerInterface $module_handler,
     LoggerInterface $logger,
     Client $http_client,
-    CacheBackendInterface $cache
+    CacheBackendInterface $cache,
+    FileUrlGeneratorInterface $file_url_generator
   ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $visualisation, $module_handler, $logger, $http_client);
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $visualisation, $module_handler, $logger, $http_client, $file_url_generator);
     $this->cache = $cache;
   }
 
@@ -108,7 +112,8 @@ class CsvFile extends VisualisationSourceBase implements ContainerFactoryPluginI
       $container->get('module_handler'),
       $container->get('logger.channel.dvf'),
       $container->get('http_client'),
-      $container->get('cache.dvf_csv')
+      $container->get('cache.dvf_csv'),
+      $container->get('file_url_generator')
     );
   }
 

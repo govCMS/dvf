@@ -234,8 +234,8 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
       '#type' => 'details',
-      '#title' => t('Column/Group overrides'),
-      '#description' => '<p>' . t('Optionally override a style for a specific column, add one key|value per line and separate key value with a pipe. @help.<br />Examples: <strong>@examples</strong>.',
+      '#title' => $this->t('Column/Group overrides'),
+      '#description' => '<p>' . $this->t('Optionally override a style for a specific column, add one key|value per line and separate key value with a pipe. @help.<br />Examples: <strong>@examples</strong>.',
         [
           '@examples' => new FormattableMarkup(implode('</strong> or <strong>', $column_override_examples), []),
           '@help' => $this->dvfHelpers->getHelpPageLink('column-overrides'),
@@ -258,22 +258,22 @@ abstract class VisualisationStyleBase extends PluginBase implements Visualisatio
       '#collapsed' => TRUE,
       '#access' => ($this->getVisualisation()->getSourcePlugin()->getPluginId() === 'dvf_ckan_resource'),
       '#type' => 'details',
-      '#title' => t('CKAN data filters'),
-      '#description' => t('Filters can be used to refine/reduce the records returned from the CKAN datasource. @help',
+      '#title' => $this->t('CKAN data filters'),
+      '#description' => $this->t('Filters can be used to refine/reduce the records returned from the CKAN datasource. @help',
         ['@help' => $this->dvfHelpers->getHelpPageLink('data-filters')]),
     ];
 
     $form['data']['data_filters']['q'] = [
       '#type' => 'textfield',
-      '#title' => t('Full text query'),
-      '#description' => t('Optionally query entire dataset for any string value.'),
+      '#title' => $this->t('Full text query'),
+      '#description' => $this->t('Optionally query entire dataset for any string value.'),
       '#default_value' => $this->config('data', 'data_filters', 'q'),
     ];
 
     $form['data']['data_filters']['filters'] = [
       '#type' => 'textfield',
-      '#title' => t('Filters'),
-      '#description' => t('Filter on key/value dictionary. For example: {"code": "4000", "year": "2016"} or {"year": ["2014", "2015", "2015"]}. Case sensitive.'),
+      '#title' => $this->t('Filters'),
+      '#description' => $this->t('Filter on key/value dictionary. For example: {"code": "4000", "year": "2016"} or {"year": ["2014", "2015", "2015"]}. Case sensitive.'),
       '#default_value' => $this->config('data', 'data_filters', 'filters'),
     ];
 

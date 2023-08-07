@@ -120,7 +120,7 @@ abstract class VisualisationBase extends PluginBase implements VisualisationInte
     $this->source = $configuration['source'];
     $this->style = $configuration['style'];
     $this->moduleHandler = $module_handler;
-    $this->entity = isset($configuration['entity']) ? $configuration['entity'] : NULL;
+    $this->entity = $configuration['entity'] ?? NULL;
     $this->themeManager = $themeManager;
   }
 

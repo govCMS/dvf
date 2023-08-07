@@ -223,7 +223,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
         'values' => $this->t('Group by label values'),
       ],
       '#default_value' => $this->config('axis', 'x', 'x_axis_grouping'),
-      '#description' => t(
+      '#description' => $this->t(
         'The X axis can use <em>keys</em> or the <em>label key value</em> as tick values. Changing this swaps what is displayed on the X axis (or table header if viewed as a table). <em>Tick values field</em> must be set for "labels" options to work correctly. @help.',
         ['@help' => $this->dvfHelpers->getHelpPageLink('x-axis-grouping')]),
       '#ajax' => [
@@ -267,7 +267,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $form['axis']['x']['styles'] = [
       '#type' => 'details',
       '#title' => $this->t('X axis styles'),
-      '#description' => t('Enter whole numbers (E.g. 320). Values are set as pixels unless otherwise indicated.<br/><br/>'),
+      '#description' => $this->t('Enter whole numbers (E.g. 320). Values are set as pixels unless otherwise indicated.<br/><br/>'),
       '#tree' => TRUE,
     ];
 
@@ -395,7 +395,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $form['axis']['y']['styles'] = [
       '#type' => 'details',
       '#title' => $this->t('Y axis styles'),
-      '#description' => t('Enter whole numbers (E.g. 320). Values are set as pixels unless otherwise indicated.<br/><br/>'),
+      '#description' => $this->t('Enter whole numbers (E.g. 320). Values are set as pixels unless otherwise indicated.<br/><br/>'),
       '#tree' => TRUE,
     ];
 
@@ -457,13 +457,13 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $form['grid']['lines'] = [
       '#type' => 'details',
       '#title' => $this->t('Grid lines'),
-      '#description' => t('Show additional grid lines along X or Y axis. @help',
+      '#description' => $this->t('Show additional grid lines along X or Y axis. @help',
         ['@help' => $this->dvfHelpers->getHelpPageLink('grid-lines')]),
       '#open' => ($grid_lines_count > 0),
       '#tree' => TRUE,
       '#attributes' => [
         'id' => Html::getUniqueId('dvf-options-grid-lines'),
-        'title' => t('E.g. If a dataset contains values between 1 & 40, indicate the average numeric value by adding a Y axis line with a value of 20, and a label "Average number".'),
+        'title' => $this->t('E.g. If a dataset contains values between 1 & 40, indicate the average numeric value by adding a Y axis line with a value of 20, and a label "Average number".'),
       ],
     ];
 
@@ -568,14 +568,14 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $form['chart']['table']['disable'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Disable fallback table'),
-      '#description' => t('Disable the option to view data as a table via a "Show table" button'),
+      '#description' => $this->t('Disable the option to view data as a table via a "Show table" button'),
       '#default_value' => $this->config('chart', 'table', 'disable'),
     ];
 
     $form['chart']['table']['datatable'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Fallback table uses datatables'),
-      '#description' => t('Render the fallback table using datatables.js. This may reduce accessibility as Javascript is required'),
+      '#description' => $this->t('Render the fallback table using datatables.js. This may reduce accessibility as Javascript is required'),
       '#default_value' => $this->config('chart', 'table', 'datatable'),
     ];
 
@@ -596,7 +596,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     $form['chart']['styles'] = [
       '#type' => 'details',
       '#title' => $this->t('Chart styles'),
-      '#description' => t('Enter whole numbers (E.g. 320). Values are set as pixels unless otherwise indicated.<br/><br/>'),
+      '#description' => $this->t('Enter whole numbers (E.g. 320). Values are set as pixels unless otherwise indicated.<br/><br/>'),
       '#tree' => TRUE,
     ];
 
@@ -847,7 +847,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     ];
 
     if (empty($records)) {
-      $this->messenger->addError(t('Invalid records.'));
+      $this->messenger->addError($this->t('Invalid records.'));
       return [];
     }
 
