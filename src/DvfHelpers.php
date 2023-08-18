@@ -2,8 +2,6 @@
 
 namespace Drupal\dvf;
 
-use Drupal\Core\Link;
-use Drupal\Core\Url;
 use Drupal\Component\Render\FormattableMarkup;
 
 /**
@@ -50,8 +48,7 @@ class DvfHelpers {
    *   The link.
    */
   public function getHelpPageLink($template_name) {
-    $link = Link::fromTextAndUrl('Help', Url::fromUserInput($this->helpPageBasePath . $template_name));
-    return new FormattableMarkup('<span class="dvf-admin-popup">' . $link->toString() . ' &#x29c9;</span>', []);
+    return new FormattableMarkup('<span class="dvf-admin-popup"><a href="/dvf/help/' . $template_name . '">Help</a> &#x29c9;</span>', []);
   }
 
   /**

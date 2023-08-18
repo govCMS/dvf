@@ -197,42 +197,42 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
   /**
    * {@inheritdoc}
    */
-  public function current() {
+  public function current(): mixed {
     return $this->getIterator()->current();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function next() {
+  public function next(): void {
     $this->getIterator()->next();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function key() {
+  public function key(): mixed {
     return $this->getIterator()->key();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function valid() {
+  public function valid(): bool {
     return $this->getIterator()->valid();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function rewind() {
+  public function rewind(): void {
     $this->getIterator()->rewind();
   }
 
   /**
    * {@inheritdoc}
    */
-  public function count() {
+  public function count(): int {
     $iterator = $this->getIterator();
     return ($iterator instanceof \Countable) ? $iterator->count() : iterator_count($this->initializeIterator());
   }
