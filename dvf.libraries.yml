@@ -51,6 +51,7 @@ jquery.dvfCharts:
   dependencies:
     - core/jquery
     - core/drupal
+    - core/once
     - core/drupalSettings
     - dvf/d3
     - dvf/billboard
@@ -62,6 +63,7 @@ dvfCharts:
     js/dvfCharts.js: {}
   dependencies:
     - dvf/jquery.dvfCharts
+    - core/once
 
 dvfTables:
   version: "1.0.0"
@@ -69,14 +71,15 @@ dvfTables:
     js/dvfTables.js: {}
   dependencies:
     - dvf/jquery.dvfTables
+    - core/once
 
 jquery.dvfTables:
   version: "1.0.0"
   js:
     js/jquery.dvfTables.js: {}
   dependencies:
-    - core/jquery
     - core/drupal
+    - core/jquery
     - core/drupalSettings
     - dvf/datatables
 

@@ -1,4 +1,4 @@
-;(function ($, bb) {
+;(function ($, bb, once) {
 
   'use strict';
 
@@ -408,7 +408,7 @@
           $chartWrapper = $(this.element).closest('.dvf--wrapper');
 
       // For each chart, add download buttons.
-      $chartWrapper.once('download-buttons').each(function(i, el){
+      $(once('download-buttons', $chartWrapper)).each(function(i, el){
         var $buttonWrapper = $(el).find('.table-chart--actions'),
           $chart = $(el).find('.dvf-chart svg');
 
@@ -431,7 +431,7 @@
         })
 
         // Set download data click listener.
-        $('.download-data', $buttonWrapper).once('download-data').each(function(i, dlEl) {
+        $(once('download-data', '.download-data'), $buttonWrapper).each(function(i, dlEl) {
           $(this).on('click', function() {
             window.open($(this).data('file-uri'));
           });
@@ -450,7 +450,7 @@
       var $chartWrapper = $(this.element).closest('.dvf--wrapper');
 
       // For each chart, add download buttons.
-      $chartWrapper.once('table-toggle').each(function(i, el){
+      $(once('table-toggle', $chartWrapper)).each(function(i, el){
         var $buttonWrapper = $(el).find('.table-chart--actions');
 
         if ( $('.dvf-table', el).length === 0) {
@@ -615,4 +615,4 @@
     });
   };
 
-})(jQuery, bb);
+})(jQuery, bb, once);
