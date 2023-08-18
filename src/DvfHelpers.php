@@ -48,7 +48,7 @@ class DvfHelpers {
    *   The link.
    */
   public function getHelpPageLink($template_name) {
-    return new FormattableMarkup('<span class="dvf-admin-popup"><a href="/dvf/help/' . $template_name . '">Help</a> &#x29c9;</span>', []);
+    return new FormattableMarkup('<span class="dvf-admin-popup"><a href="/dvf/help/@template_name">Help</a> &#x29c9;</span>', ['@template_name' => $template_name]);
   }
 
   /**

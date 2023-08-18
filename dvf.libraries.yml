@@ -6,10 +6,10 @@ billboard:
     url: https://github.com/naver/billboard.js/blob/master/LICENSE
     gpl-compatible: true
   js:
-    https://cdnjs.cloudflare.com/ajax/libs/billboard.js/3.0.3/billboard.min.js: { type: external, minified: true }
+    https://cdnjs.cloudflare.com/ajax/libs/billboard.js/3.9.3/billboard.min.js: { type: external, minified: true }
   css:
     component:
-      https://cdnjs.cloudflare.com/ajax/libs/billboard.js/3.0.3/billboard.min.css: { type: external, minified: true }
+      https://cdnjs.cloudflare.com/ajax/libs/billboard.js/3.9.3/billboard.min.css: { type: external, minified: true }
 
 d3:
   remote: https://github.com/d3/d3
@@ -19,7 +19,7 @@ d3:
     url: https://github.com/d3/d3/blob/master/LICENSE
     gpl-compatible: true
   js:
-    https://cdnjs.cloudflare.com/ajax/libs/d3/6.7.0/d3.min.js: { type: external, minified: true }
+    https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js: { type: external, minified: true }
 
 datatables:
   remote: https://github.com/DataTables/DataTables
@@ -29,10 +29,10 @@ datatables:
     url: https://github.com/DataTables/DataTables/blob/master/license.txt
     gpl-compatible: true
   js:
-    https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.js: { type: external, minified: true }
+    https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js: { type: external, minified: true }
   css:
     component:
-      https://cdn.datatables.net/v/dt/dt-1.10.25/datatables.min.css: { type: external, minified: true }
+      https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css: { type: external, minified: true }
 
 filesaver:
   remote: https://github.com/eligrey/FileSaver.js
@@ -41,7 +41,7 @@ filesaver:
     name: MIT
     url: https://github.com/eligrey/FileSaver.js/blob/master/LICENSE.md
   js:
-    https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js: { type: external, minified: true }
+    https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js: { type: external, minified: true }
 
 jquery.dvfCharts:
   version: "1.0.0"
