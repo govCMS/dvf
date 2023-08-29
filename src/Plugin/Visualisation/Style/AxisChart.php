@@ -192,6 +192,8 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       '#default_value' => $this->config('axis', 'x', 'tick', 'culling'),
     ];
 
+    $ajaxWrapperId = $form['#attributes']['id'] . '--x-axis-grouping';
+
     $form['axis']['x']['tick']['values']['field'] = [
       '#type' => 'select',
       '#title' => $this->t('Tick values field'),
@@ -202,7 +204,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
       '#default_value' => $this->config('axis', 'x', 'tick', 'values', 'field'),
       '#ajax' => [
         'callback' => [$this, 'updateAxisGrouping'],
-        'wrapper' => 'x-axis-grouping',
+        'wrapper' => $ajaxWrapperId,
       ],
     ];
 
@@ -214,7 +216,7 @@ abstract class AxisChart extends TableVisualisationStyleBase {
     ];
 
     $form['axis']['x']['x_axis_grouping'] = [
-      '#prefix' => '<div id="x-axis-grouping">',
+      '#prefix' => "<div id=$ajaxWrapperId>",
       '#suffix' => '</div>',
       '#type' => 'select',
       '#title' => $this->t('X Axis Grouping'),
@@ -234,6 +236,8 @@ abstract class AxisChart extends TableVisualisationStyleBase {
 
     if (!$this->config('axis', 'x', 'tick', 'values', 'field')) {
       $form['axis']['x']['x_axis_grouping']['#attributes']['disabled'] = 'disabled';
+    } else {
+      unset($form['axis']['x']['x_axis_grouping']['#attributes']['disabled']);
     }
 
     $form['axis']['x']['tick']['format']['indexed'] = [

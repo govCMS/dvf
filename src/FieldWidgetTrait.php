@@ -123,7 +123,7 @@ trait FieldWidgetTrait {
     $parents = !empty($form['#parents']) ? $form['#parents'] : [];
     $id_prefix = implode('-', array_merge($parents, [$field_name, $delta]));
 
-    return Html::getUniqueId($id_prefix . '-dvf-options');
+    return $id_prefix . '-dvf-options';
   }
 
 }

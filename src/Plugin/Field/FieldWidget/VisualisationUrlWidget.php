@@ -70,6 +70,8 @@ class VisualisationUrlWidget extends WidgetBase {
       '#tree' => TRUE,
     ];
 
+    $ajaxWrapperId = $this->getAjaxWrapperId($form, $this->fieldDefinition->getName(), $delta);
+
     $element['options']['visualisation_style'] = [
       '#type' => 'select',
       '#title' => $this->t('Visualisation style'),
@@ -81,13 +83,13 @@ class VisualisationUrlWidget extends WidgetBase {
       '#required' => $element['#required'],
       '#ajax' => [
         'callback' => [$this, 'updateVisualisationOptions'],
-        'wrapper' => $this->getAjaxWrapperId($form, $this->fieldDefinition->getName(), $delta),
+        'wrapper' => $ajaxWrapperId,
       ],
     ];
 
     $element['options']['visualisation_style_options'] = [
       '#type' => 'container',
-      '#attributes' => ['id' => $element['options']['visualisation_style']['#ajax']['wrapper']],
+      '#attributes' => ['id' => $ajaxWrapperId],
     ];
 
     $style_id = $this->getElementOptions($items, $delta, $form, $form_state, 'visualisation_style');
