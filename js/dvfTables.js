@@ -1,4 +1,4 @@
-;(function ($, Drupal, drupalSettings) {
+;(function ($, Drupal, once, drupalSettings) {
 
   'use strict';
 
@@ -7,9 +7,9 @@
    */
   Drupal.behaviors.dvfTables = {
     attach: function (context) {
-      $('[data-dvftables]', context).once('dvf-tables').each(function () {
-        var $table = $(this),
-            tableId = $table.data('dvftables');
+      once('dvf-tables', '[data-dvftables]', context).forEach(element => {
+        var $table = $(element),
+          tableId = $table.data('dvftables');
         $table.dvfTables(drupalSettings.dvf.tables[tableId]);
       });
     }
@@ -22,12 +22,14 @@
    */
   Drupal.behaviors.dvfTablesDownloadData = {
     attach: function (context) {
-      $('.dvf-table--wrapper .download-data', context).once('download-data').each(function () {
-        $(this).click(function() {
-          window.open($(this).data('file-uri'));
+      once('download-data', '.dvf-table--wrapper .download-data', context).forEach(element => {
+        var $downloadButton = $(element);
+
+        $($downloadButton).click(function() {
+          window.open($($downloadButton).data('file-uri'));
         });
       });
     }
   }
 
-})(jQuery, Drupal, drupalSettings);
+})(jQuery, Drupal, once, drupalSettings);

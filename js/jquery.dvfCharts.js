@@ -1,4 +1,4 @@
-;(function ($, bb) {
+;(function ($, bb, once) {
 
   'use strict';
 
@@ -405,10 +405,10 @@
 
       var self = this,
           buttonTypes = ['png', 'svg'],
-          $chartWrapper = $(this.element).closest('.dvf--wrapper');
+          $chartWrapper = this.element.closest('.dvf--wrapper');
 
       // For each chart, add download buttons.
-      $chartWrapper.once('download-buttons').each(function(i, el){
+      once('download-buttons', $chartWrapper ).forEach(el => {
         var $buttonWrapper = $(el).find('.table-chart--actions'),
           $chart = $(el).find('.dvf-chart svg');
 
@@ -430,10 +430,9 @@
             .appendTo($buttonWrapper);
         })
 
-        // Set download data click listener.
-        $('.download-data', $buttonWrapper).once('download-data').each(function(i, dlEl) {
-          $(this).on('click', function() {
-            window.open($(this).data('file-uri'));
+        once('download-data', '.table-chart--actions .download-data').forEach(element => {
+          $(element).on('click', function() {
+            window.open($(element).data('file-uri'));
           });
         })
       });
@@ -447,10 +446,10 @@
      * @returns {Plugin}
      */
     addToggleTableButton: function () {
-      var $chartWrapper = $(this.element).closest('.dvf--wrapper');
+      var $chartWrapper = this.element.closest('.dvf--wrapper');
 
       // For each chart, add download buttons.
-      $chartWrapper.once('table-toggle').each(function(i, el){
+      once('table-toggle', $chartWrapper).forEach(el => {
         var $buttonWrapper = $(el).find('.table-chart--actions');
 
         if ( $('.dvf-table', el).length === 0) {
@@ -615,4 +614,4 @@
     });
   };
 
-})(jQuery, bb);
+})(jQuery, bb, once);

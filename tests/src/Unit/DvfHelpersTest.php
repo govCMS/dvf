@@ -102,21 +102,30 @@ class DvfHelpersTest extends UnitTestCase {
   }
 
   /**
-   * Tests that "help page" link can be retrieved.
+   * Tests that "help page" links can be retrieved.
    *
    * @covers ::getHelpPageLink()
    */
-  public function testGetHelpPageLink() {
+  public function testGetHelpPageLinks() {
     $message = 'Help page page link rendered';
-    $template_name = 'label-overrides';
+    $template_names = [
+      'column-overrides',
+      'data-filters',
+      'grid-lines',
+      'keys',
+      'label-overrides',
+      'split',
+      'x-axis-grouping',
+    ];
+
     $base_path = '/dvf/help/';
-    $expected = '<span class="dvf-admin-popup"><a href="' . $base_path . $template_name . '">Help</a> &#x29c9;</span>';
+    foreach ($template_names as $template_name) {
+      $expected = '<span class="dvf-admin-popup"><a href="' . $base_path . $template_name . '">Help</a> &#x29c9;</span>';
 
-    /** @var \Drupal\Component\Render\FormattableMarkup $output */
-    $result = $this->dvfHelpers->getHelpPageLink($template_name);
-    $output = $result->__toString();
-
-    $this->expectedEqualOutput($message, $expected, $output);
+      $result = $this->dvfHelpers->getHelpPageLink($template_name);
+      $output = $result->__toString();
+      $this->expectedEqualOutput($message, $expected, $output);
+    }
   }
 
   /**

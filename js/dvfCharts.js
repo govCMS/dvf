@@ -1,4 +1,4 @@
-;(function ($, Drupal, drupalSettings) {
+;(function ($, Drupal, once, drupalSettings) {
 
   'use strict';
 
@@ -7,12 +7,12 @@
    */
   Drupal.behaviors.dvfCharts = {
     attach: function (context) {
-      $('[data-dvfcharts]', context).once('dvf-charts').each(function () {
-        var $chart = $(this),
+      once('dvf-charts', '[data-dvfcharts]', context).forEach(element => {
+        var $chart = $(element),
             chartId = $chart.data('dvfcharts');
         $chart.dvfCharts(drupalSettings.dvf.charts[chartId]);
       });
     }
   };
 
-})(jQuery, Drupal, drupalSettings);
+})(jQuery, Drupal, once, drupalSettings);
