@@ -2,6 +2,7 @@
 
 namespace Drupal\dvf\Plugin\Visualisation\Style;
 
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\dvf\FormElementAttributesTrait;
 
 /**
@@ -23,6 +24,16 @@ class PieChart extends AxisChart {
     return [
       'pie_chart' => [],
     ] + parent::defaultConfiguration();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function settingsForm(array $form, FormStateInterface $form_state) {
+    $form = parent::settingsForm($form, $form_state);
+    $form['chart']['#title'] = $this->t('Pie chart settings');
+
+    return $form;
   }
 
   /**
