@@ -192,6 +192,9 @@ class VisualisationDefaultFormatter extends FormatterBase implements ContainerFa
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
+    // Processes each item's visualisation style options, and merges them with the
+    // formatter settings. The resulting configuration is used to render the
+    // visualisation plugin for each item.
     $element = [];
     $formatter_settings = $this->getSettings();
 

@@ -167,6 +167,7 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
    * {@inheritdoc}
    */
   public function getFields() {
+    // Retrieves the fields available in the data provided by the source.
     $fields = [];
     $data = $this->getData();
 
@@ -184,6 +185,7 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
   public function getRecords() {
     $records = [];
 
+    // Retrieves and structures records based on the configured JSON expression.
     try {
       $json = new JSONPath($this->getData());
       $json = $json->find($this->config('json', 'expression'));
@@ -195,6 +197,9 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
       return $records;
     }
 
+    // Loop through each field defined by getFields(), associating the field
+    // labels with their corresponding values in the parsed JSON. The resulting
+    // records are stored in the $records array, organized by record ID.
     foreach ($this->getFields() as $field_key => $field_label) {
       foreach ($json->getData() as $record_id => $record) {
         if (!isset($records[$record_id])) {
@@ -217,6 +222,7 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
     $cache_key = $this->getCacheKey();
     $cache_object = $this->cache->get($cache_key);
 
+    // Retrieves data, either from cache or by fetching it and caching it.
     if (is_object($cache_object)) {
       $data = $cache_object->data;
     }
@@ -230,6 +236,7 @@ class JsonFile extends VisualisationSourceBase implements ContainerFactoryPlugin
 
   /**
    * Fetches the JSON data.
+   * It also validates the retrieved data returns NULL if there any errors.
    *
    * @return string
    *   A string containing the JSON file data.

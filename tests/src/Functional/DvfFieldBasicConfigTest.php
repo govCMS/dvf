@@ -20,18 +20,51 @@ namespace Drupal\Tests\dvf\Functional;
 class DvfFieldBasicConfigTest extends DvfFieldTestBase {
 
   /**
-   * Tests the configuration of a visualisation file with csv source.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   * @throws \Behat\Mink\Exception\ResponseTextException
-   * @throws \Drupal\Core\Entity\EntityStorageException
+   * Tests the configuration of a visualisation files.
    */
-  public function testConfigureFieldVisualisationFileCsv() {
+  public function testConfigureFieldVisualisationFiles() {
+    $fileTypes = [
+      'csv',
+      'json',
+    ];
+
+    foreach ($fileTypes as $fileType) {
+      $this->configureFieldVisualisationFile($fileType);
+    }
+  }
+
+  /**
+   * Test that the visualisation style config properties are correct.
+   */
+  public function testVisualisationStyleProperties() {
+    $visualisation_styles = [
+      'bar_chart',
+      'bubble_chart',
+      'donut_chart',
+      'gauge_chart',
+      'line_chart',
+      'pie_chart',
+      'radar_chart',
+      'scatter_plot_chart',
+      'spline_chart',
+      'table',
+    ];
+
+    foreach ($visualisation_styles as $visualisation_style) {
+      $settingsText = ucfirst(str_replace('_', ' ', $visualisation_style)) . ' settings';
+      $this->configureVisualisationStyle('csv', "dvf_$visualisation_style", $settingsText);
+    }
+  }
+
+  /**
+   * Configure the visualisation style dropdown properties.
+   */
+  public function configureVisualisationStyle($fileType = 'csv', $style = 'dvf_bar_chart', $settingsText = '') {
     $assert_session = $this->assertSession();
-    // Create a new file field csv and attach to page bundle.
-    $field_name = 'testing_field_vis_file_csv';
+    // Create a new file field json and attach to page bundle.
+    $field_name = "field_{$fileType}_{$style}";
     $field_settings = [
-      'visualisation_source' => 'dvf_csv_file',
+      'visualisation_source' => "dvf_{$fileType}_file",
     ];
     $this->createDvfFileField($field_name, $field_settings);
 
@@ -42,7 +75,7 @@ class DvfFieldBasicConfigTest extends DvfFieldTestBase {
     $this->visitAndAssertText($edit_page_path, $field_name);
 
     // Upload a csv sample file to node page.
-    $csv_sample_filename = 'fruits.csv';
+    $csv_sample_filename = "fruits.$fileType";
     $this->uploadSampleFileToNode($csv_sample_filename, $field_name);
 
     // Confirm that file name is displayed on page.
@@ -50,9 +83,31 @@ class DvfFieldBasicConfigTest extends DvfFieldTestBase {
 
     // Select a visualisation style.
     $assert_session->fieldExists($field_name . '[0][options][visualisation_style]')
-      ->setValue($this->defaultVisualisationStyle);
+      ->setValue($style);
     $this->submitForm([], $this->t('Save'));
     $this->drupalGet($edit_page_path);
+    $assert_session->pageTextContains($settingsText);
+
+    return [
+      'field_name' => $field_name,
+      'assert_session' => $assert_session,
+      'nid' => $nid,
+    ];
+  }
+
+  /**
+   * Common test for the configuration of a visualisation file.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   * @throws \Behat\Mink\Exception\ResponseTextException
+   * @throws \Drupal\Core\Entity\EntityStorageException
+   */
+  public function configureFieldVisualisationFile($fileType = 'csv') {
+    $response = $this->configureVisualisationStyle($fileType,'dvf_bar_chart', 'Bar chart settings');
+
+    $field_name = $response['field_name'];
+    $nid = $response['nid'];
+    $assert_session = $response['assert_session'];
 
     // Select visualisation style options.
     // @codingStandardsIgnoreStart - ignore line exceed warning.
