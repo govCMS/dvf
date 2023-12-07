@@ -165,9 +165,11 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
    * {@inheritdoc}
    */
   public function getFields() {
+    // Generate a cache key for fields.
     $cache_key = $this->getCacheKey('fields');
     $cache_object = $this->cache->get($cache_key);
 
+    // Use cache data if it exists, otherwise fetch fields and store it in cache.
     if (is_object($cache_object)) {
       $raw_fields = $cache_object->data;
     }
@@ -192,13 +194,16 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
    *   An array of CKAN resource fields.
    */
   protected function fetchFields() {
+    // Construct a CKAN API query to retrieve fields for the specified resource ID.
     $query = [
       'id' => $this->getResourceId(),
       'limit' => 1,
     ];
 
+    // Merge additional data filters into the CKAN API query.
     $query = array_merge($query, $this->getDataFilters());
 
+    // Use the CKAN client to make a request to 'action/datastore_search'.
     try {
       $response = $this->ckanClient->get('action/datastore_search', $query);
       $result = ($response->success === TRUE) ? $response->result : NULL;
@@ -208,6 +213,7 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
       $result = NULL;
     }
 
+    // Return the fields obtained from the CKAN datastore or an empty array if there are issues.
     return ($result) ? $result->fields : [];
   }
 
@@ -262,6 +268,7 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
 
     $query = array_merge($query, $this->getDataFilters());
 
+    // Try to fetch records from the CKAN datastore using the CKAN client.
     try {
       $response = $this->ckanClient->get('action/datastore_search', $query);
       $result = ($response->success === TRUE) ? $response->result : NULL;
@@ -271,10 +278,13 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
       $result = NULL;
     }
 
+    // Update records, total, and offset based on the fetched result.
     $records = ($result) ? array_merge($records, $result->records) : [];
     $total = ($result) ? $result->total : 0;
     $offset = count($records);
 
+    // If there are more records to fetch (total is greater than the current offset),
+    // recursively call fetchRecords with updated parameters.
     if ($total > $offset) {
       return $this->fetchRecords($records, $limit, $offset);
     }
@@ -316,15 +326,19 @@ class CkanResource extends VisualisationSourceBase implements ContainerFactoryPl
    *   An array of data filters.
    */
   protected function getDataFilters() {
+    // Retrieve configuration options for the visualisation's style.
     $configuration_options = $this->visualisation->getConfiguration('style');
     $data_filters = [];
 
+    // We bail early if data filters are not specified in the visualisation configuration.
     if (empty($configuration_options['style']['options']['data']['data_filters'])) {
       return $data_filters;
     }
 
+    // Extract data filters from the visualisation configuration.
     $data_filters = $configuration_options['style']['options']['data']['data_filters'];
 
+    // Check and validate if 'filters' key exists and contains valid JSON.
     if (empty($data_filters['filters']) || !$this->dvfHelpers->validateJson($data_filters['filters'])) {
       unset($data_filters['filters']);
     }
