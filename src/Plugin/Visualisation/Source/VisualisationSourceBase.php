@@ -186,6 +186,7 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
   /**
    * {@inheritdoc}
    */
+  #[\ReturnTypeWillChange]
   public function next() {
     $this->getIterator()->next();
   }
@@ -193,6 +194,7 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
   /**
    * {@inheritdoc}
    */
+  #[\ReturnTypeWillChange]
   public function key() {
     return $this->getIterator()->key();
   }
@@ -200,6 +202,7 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
   /**
    * {@inheritdoc}
    */
+  #[\ReturnTypeWillChange]
   public function valid() {
     return $this->getIterator()->valid();
   }
@@ -207,6 +210,7 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
   /**
    * {@inheritdoc}
    */
+  #[\ReturnTypeWillChange]
   public function rewind() {
     $this->getIterator()->rewind();
   }
@@ -214,6 +218,7 @@ abstract class VisualisationSourceBase extends PluginBase implements Visualisati
   /**
    * {@inheritdoc}
    */
+  #[\ReturnTypeWillChange]
   public function count() {
     $iterator = $this->getIterator();
     return ($iterator instanceof \Countable) ? $iterator->count() : iterator_count($this->initializeIterator());

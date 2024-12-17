@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the dvf repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Check coding standards for dvf module
         uses: docker://hussainweb/drupalqa:php7.4
         with:
