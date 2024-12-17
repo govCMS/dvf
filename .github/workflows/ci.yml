@@ -11,3 +11,19 @@ jobs:
         uses: docker://hussainweb/drupalqa:php7.4
         with:
          args: phpcs -p -n --standard="Drupal" --extensions="php,module,inc,install,test,profile,theme,css,info,txt,md,yml" . --ignore=vendor
+  security_check:
+    name: Check codebase for security vulnerability
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the dvf repo
+        uses: actions/checkout@v2
+      - name: local-php-security-checker
+        # Checks composer dependencies for known security vulnerabilities (https://github.com/fabpot/local-php-security-checker)
+        uses: docker://jakzal/phpqa:php7.4-alpine
+        with:
+          args: local-php-security-checker .
+      - name: phpcs-security-audit
+        # Finds vulnerabilities and weaknesses related to security in PHP code (https://github.com/FloeDesignTechnologies/phpcs-security-audit)
+        uses: docker://jakzal/phpqa:php7.4-alpine
+        with:
+          args: phpcs -p -n --standard="Security" --extensions="php,module,inc,install,test,profile,theme" . --ignore=vendor
